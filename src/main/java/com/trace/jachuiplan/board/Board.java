@@ -16,9 +16,14 @@ import java.util.List;
 @Table(name = "Board")
 public class Board {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BOARD")
+    @SequenceGenerator(
+            name = "SEQ_BOARD", // JPA 내부에서 사용할 생성기 이름
+            sequenceName = "SEQ_BOARD", // 데이터베이스에 실제 존재하는 시퀀스 이름
+            allocationSize = 1  // 시퀀스 증가 크기
+    )
     @Column(name = "BNO")
-    private Integer bno;
+    private Long bno;
 
     @Column(name = "TITLE", length = 225, nullable = false)
     private String title;
@@ -40,6 +45,7 @@ public class Board {
     private Character type;
 
     @ManyToOne
+    @JoinColumn(name="WRITER", nullable = false)
     private Users users;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)

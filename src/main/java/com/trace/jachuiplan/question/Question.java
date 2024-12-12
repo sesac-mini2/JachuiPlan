@@ -15,7 +15,12 @@ import java.util.List;
 @Table(name = "Question")
 public class Question {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_QUESTION")
+    @SequenceGenerator(
+            name = "SEQ_QUESTION", // JPA 내부에서 사용할 생성기 이름
+            sequenceName = "SEQ_QUESTION", // 데이터베이스에 실제 존재하는 시퀀스 이름
+            allocationSize = 1  // 시퀀스 증가 크기
+    )
     @Column(name="QNO")
     private Long qno; // QNO (질문 번호)
 
@@ -32,10 +37,11 @@ public class Question {
     @Column(name="Q_UPDATEDATE")
     private LocalDateTime qUpdateDate; // Q_UPDATEDATE (수정일)
 
-    @Column(name="STATUS", nullable = false)
+    @Column(name="STATUS", nullable = false, columnDefinition = "CHAR DEFAULT '0'")
     private char status; // STATUS (답변 상태)
 
     @ManyToOne
+    @JoinColumn(name="Q_WRITER", nullable = false)
     private Users users; // Q_WRITER (작성자 번호)
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
