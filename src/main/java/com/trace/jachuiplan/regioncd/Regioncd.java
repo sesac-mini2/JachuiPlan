@@ -21,4 +21,7 @@ public class Regioncd {
 
     @Column(name = "LOCATADD_NM", length = 100, nullable = true)
     private String locataddNm;
+
+    @Column(name = "UMD_CD", length = 3, nullable = true)
+    private String umdCd;
 }
