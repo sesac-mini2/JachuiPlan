@@ -14,9 +14,11 @@ import lombok.Setter;
 public class Likes {
     @Id
     @ManyToOne
+    @JoinColumn(name="L_BNO")
     private Board board;
 
     @Id
     @ManyToOne
+    @JoinColumn(name="L_UNO")
     private Users users;
 }

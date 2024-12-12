@@ -12,9 +12,14 @@ import java.util.List;
 public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 사용자 번호 자동 증가
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USERS")
+    @SequenceGenerator(
+            name = "SEQ_USERS", // JPA 내부에서 사용할 생성기 이름
+            sequenceName = "SEQ_USERS", // 데이터베이스에 실제 존재하는 시퀀스 이름
+            allocationSize = 1  // 시퀀스 증가 크기
+    )
     @Column(name = "UNO")
-    private Integer uno; // 사용자 번호 (PK)
+    private Long uno; // 사용자 번호 (PK)
 
     @Column(name = "USERNAME", nullable = false, length = 50)
     private String username; // 사용자 이름
@@ -25,9 +30,8 @@ public class Users {
     @Column(name = "NICKNAME", nullable = false, length = 225)
     private String nickname; // 사용자 닉네임
 
-
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<Board> boardList;
+    private List<Board> dboardList;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Question> questionList;
