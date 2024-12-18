@@ -6,6 +6,7 @@ import com.trace.jachuiplan.question.Question;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class Users {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-
-   // 성현수정
+    }
+     // 성현수정
     public void setUno(long uno) {
         this.uno = uno;
     }
