@@ -40,7 +40,7 @@ public class OfficeHotel {
     @Column(name = "DEALDATE")
     private LocalDateTime dealdate;
 
-    @Column(name = "JIBUN", length = 10, nullable = true)
+    @Column(name = "JIBUN", length = 20, nullable = true)
     private String jibun;
 
     @Column(name = "BUILDING_NAME", length = 300, nullable = true)

@@ -4,9 +4,13 @@ import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.likes.Likes;
 import com.trace.jachuiplan.question.Question;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "Users")
 public class Users {
