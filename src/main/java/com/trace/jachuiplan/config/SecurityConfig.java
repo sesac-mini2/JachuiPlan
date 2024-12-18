@@ -21,7 +21,9 @@ public class SecurityConfig {
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/board/like")) 
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login").permitAll() // 로그인 및 회원가입 페이지는 누구나 접근 가능
+                        .requestMatchers("/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
+                                "/api/regioncd/**") // regioncd API는 누구나 접근 가능
+                        .permitAll()
                         //.requestMatchers("/public/**", "/user/signup", "/user/check-username", "/user/check-nickname").permitAll()
                         //.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
                         //.requestMatchers("/user/**").hasRole("USER")   // 사용자만 접근 가능
