@@ -19,7 +19,18 @@
      th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"
      th:onclick="|toggleLike(${board.bno})|" />
 
+<div id="replyListContainer"></div>
+<div id="paginationContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script th:src="@{/api/reply.js}"></script>
 <script>
+    $(document).ready(function(){
+        getReplyList();
+    })
+
+
     // 초기 이미지 상태를 설정
     var likeButton = document.getElementById('likeButton');
     var csrfToken = document.getElementById('csrfToken').value;

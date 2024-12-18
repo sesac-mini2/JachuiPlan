@@ -3,14 +3,21 @@ package com.trace.jachuiplan.reply;
 import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.user.Users;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "Reply")
 public class Reply {
     @Id
@@ -24,13 +31,16 @@ public class Reply {
     private Long rno;
 
     @Lob
-    @Column(name = "REPLY", nullable = false)
+    @Column(name = "REPLY", nullable = false, length = 300)
     private String reply;
 
     @Column(name = "REPLYDATE", nullable = false)
+    @CreatedDate
     private LocalDateTime replydate;
 
     @Column(name = "REPLY_UPDATEDATE", nullable = true)
+    @CreatedDate
+    @LastModifiedDate
     private LocalDateTime replyUpdatedate;
 
     @ManyToOne
