@@ -50,9 +50,5 @@ public class Users {
         this.password = password;
         this.nickname = nickname;
     }
-     // 성현수정
-    public void setUno(long uno) {
-        this.uno = uno;
-    }
 }
 
