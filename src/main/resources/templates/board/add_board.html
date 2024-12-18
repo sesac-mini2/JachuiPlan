@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>글쓰기</title>
+</head>
+<body>
+<h1>글쓰기</h1>
+
+<form th:action="@{/board/add_board}" method="post">
+
+
+    <label for="title">제목:</label>
+    <input type="text" id="title" name="title" required/>
+    <br>
+    <label for="content">내용:</label>
+    <textarea id="content" name="content" required></textarea>
+    <br>
+    <input type="hidden" name="type" th:value="${type}"/>  <!-- 전달된 type 값을 hidden으로 보냄 -->
+    <input type="hidden" name="page" th:value="${page}">
+    <input type="hidden" name="size" th:value="${size}">
+    <button type="submit">작성 완료</button>
+</form>
+
+</body>
+</html>

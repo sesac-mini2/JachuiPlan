@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Detail</title>
+</head>
+<body>
+<h1>Board Detail</h1>
+
+<div>
+    <h2 th:text="${board.title}"></h2>
+    <p><strong>Content:</strong> <span th:text="${board.content}"></span></p>
+    <p><strong>Reg Date:</strong> <span th:text="${board.regdate}"></span></p>
+    <p><strong>Views:</strong> <span th:text="${board.views}"></span></p>
+</div>
+
+<!-- 좋아요 버튼 (AJAX로 좋아요 추가/제거) -->
+<img id="likeButton"
+     th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"
+     th:onclick="|toggleLike(${board.bno})|" />
+
+<script>
+    // 초기 이미지 상태를 설정
+    var likeButton = document.getElementById('likeButton');
+
+    function toggleLike(boardId) {
+        // 서버에 좋아요 상태 변경 요청을 보냄
+        fetch("/board/like?boardId=" + boardId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "boardId": boardId }) // boardId를 JSON 형식으로 보냄
+        })
+            .then(response => response.text())
+            .then(data => {
+                // 서버 응답에 따라 이미지 변경
+                if (data === "liked") {
+                    likeButton.src = '/img/like.png'; // 좋아요 상태로 변경
+                } else if (data === "unliked") {
+                    likeButton.src = '/img/unlike.png'; // 좋아요 해제 상태로 변경
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+</script>
+
+</body>
+</html>
