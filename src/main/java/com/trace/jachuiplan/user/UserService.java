@@ -11,6 +11,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // PasswordEncoder 추가
 
+    // 테스트 하드 코딩
+    public Users getUser(String username) {
+        Users users = new Users();
+        users.setUno(1L);
+        users.setUsername("user00");
+        users.setNickname("user00");
+        return users;
+    }
+
     // 회원가입 로직
     public void registerUser(UserSignupDTO dto) {
         // 비밀번호 확인
