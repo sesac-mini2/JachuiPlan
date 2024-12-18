@@ -2,22 +2,53 @@ package com.trace.jachuiplan.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                // CSRF 보호 비활성화
-                .csrf(csrf -> csrf.disable())  // CSRF 비활성화 방식으로 수정
 
-                // 인증 없이 모든 요청 허용
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**").permitAll()  // 모든 요청에 대해 인증 없이 접근 허용
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/**").permitAll()
+                        //.requestMatchers("/public/**", "/user/signup", "/user/check-username", "/user/check-nickname").permitAll()
+                        //.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
+                        //.requestMatchers("/user/**").hasRole("USER")   // 사용자만 접근 가능
+                        .anyRequest().authenticated()
+
+                )
+                .formLogin(form -> form
+                        .loginPage("/users/login")
+                        .loginProcessingUrl("/users/login") // 로그인 post
+                        .defaultSuccessUrl("/users/myPage") // 임의로 마이페이지 연결
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
                 );
 
         return http.build();
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

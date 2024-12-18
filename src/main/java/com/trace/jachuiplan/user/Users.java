@@ -4,11 +4,15 @@ import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.likes.Likes;
 import com.trace.jachuiplan.question.Question;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Users")
+@Getter
+@NoArgsConstructor
 public class Users {
 
     @Id
@@ -21,13 +25,13 @@ public class Users {
     @Column(name = "UNO")
     private Long uno; // 사용자 번호 (PK)
 
-    @Column(name = "USERNAME", nullable = false, length = 50)
+    @Column(name = "USERNAME", nullable = false, length = 50, unique = true)
     private String username; // 사용자 이름
 
     @Column(name = "PASSWORD", nullable = false, length = 225)
     private String password; // 사용자 비밀번호
 
-    @Column(name = "NICKNAME", nullable = false, length = 225)
+    @Column(name = "NICKNAME", nullable = false, length = 225, unique = true)
     private String nickname; // 사용자 닉네임
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
@@ -39,6 +43,13 @@ public class Users {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Likes> likesList;
 
+    // **새로운 생성자 추가**
+    public Users(String username, String password, String nickname) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+
+   // 성현수정
     public void setUno(long uno) {
         this.uno = uno;
     }
