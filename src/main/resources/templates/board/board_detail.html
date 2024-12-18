@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Detail</title>
+</head>
+<body>
+<h1>Board Detail</h1>
+
+<div>
+    <h2 th:text="${board.title}"></h2>
+    <p><strong>Content:</strong> <span th:text="${board.content}"></span></p>
+    <p><strong>Reg Date:</strong> <span th:text="${board.regdate}"></span></p>
+    <p><strong>Views:</strong> <span th:text="${board.views}"></span></p>
+</div>
+
+<!-- 좋아요 버튼 (AJAX로 좋아요 추가/제거) -->
+<button id="likeButton"
+        th:onclick="|toggleLike(${board.bno})|" th:text="${isLiked} ? 'Unlike' : 'Like'">
+</button>
+<script>
+    function toggleLike(boardId) {
+        fetch("/board/like?boardId=" + boardId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "boardId": boardId }) // boardId를 JSON 형식으로 보냄
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === "liked") {
+                document.getElementById("likeButton").innerText = "Unlike";
+            } else if (data === "unliked") {
+                document.getElementById("likeButton").innerText = "Like";
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+</script>
+</body>
+</html>
