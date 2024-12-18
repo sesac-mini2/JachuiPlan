@@ -65,10 +65,4 @@ public class UserController {
         return "users/myPage_form"; // 타임리프 뷰 이름
     }
 
-    // 임시 admin test
-    @GetMapping("/admin")
-    public String admin(){
-        return "users/admin_form";
-    }
-
 }
