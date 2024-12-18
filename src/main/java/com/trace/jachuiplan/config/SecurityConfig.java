@@ -18,14 +18,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/board/like")) 
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login").permitAll() // 로그인 및 회원가입 페이지는 누구나 접근 가능
                         //.requestMatchers("/public/**", "/user/signup", "/user/check-username", "/user/check-nickname").permitAll()
                         //.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
                         //.requestMatchers("/user/**").hasRole("USER")   // 사용자만 접근 가능
+                        .requestMatchers("/board/like").authenticated() // 인증된 사용자만 접근 가능
                         .anyRequest().authenticated()
-
                 )
                 .formLogin(form -> form
                         .loginPage("/users/login")

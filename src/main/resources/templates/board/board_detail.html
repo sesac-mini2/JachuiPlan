@@ -13,7 +13,7 @@
     <p><strong>Reg Date:</strong> <span th:text="${board.regdate}"></span></p>
     <p><strong>Views:</strong> <span th:text="${board.views}"></span></p>
 </div>
-
+<input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
 <!-- 좋아요 버튼 (AJAX로 좋아요 추가/제거) -->
 <img id="likeButton"
      th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"
@@ -22,13 +22,15 @@
 <script>
     // 초기 이미지 상태를 설정
     var likeButton = document.getElementById('likeButton');
+    var csrfToken = document.getElementById('csrfToken').value;
 
     function toggleLike(boardId) {
         // 서버에 좋아요 상태 변경 요청을 보냄
         fetch("/board/like?boardId=" + boardId, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken
             },
             body: JSON.stringify({ "boardId": boardId }) // boardId를 JSON 형식으로 보냄
         })
@@ -46,6 +48,5 @@
             });
     }
 </script>
-
 </body>
 </html>

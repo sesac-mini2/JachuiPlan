@@ -4,12 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // PasswordEncoder 추가
+
+    // 사용자 이름으로 사용자 찾기
+    public Optional<Users> findByUsername(String username) {
+        return userRepository.findByUsername(username);  // Repository의 findByUsername 메서드 호출
+    }
 
     // 회원가입 로직
     public void registerUser(UserSignupDTO dto) {

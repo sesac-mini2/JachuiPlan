@@ -2,17 +2,18 @@ package com.trace.jachuiplan.board;
 
 import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.likes.LikesService;
+import com.trace.jachuiplan.user.UserService;
 import com.trace.jachuiplan.user.Users;
-import com.trace.jachuiplan.user.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -25,7 +26,7 @@ public class BoardController {
     private LikesService likesService;
 
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
@@ -34,7 +35,9 @@ public class BoardController {
     @GetMapping("/infolist")
     public String getInfoBoards(Model model,
                                 @RequestParam(name = "page", defaultValue = "0") int page,
-                                @RequestParam(name = "size", defaultValue = "10") int size) {
+                                @RequestParam(name = "size", defaultValue = "10") int size,
+                                @AuthenticationPrincipal UserDetails userDetails) {
+
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getInfoBoards(pageRequest);
         model.addAttribute("boardPage", boardPage);
@@ -46,7 +49,8 @@ public class BoardController {
     @GetMapping("/generallist")
     public String getGeneralBoards(Model model,
                                    @RequestParam(name = "page", defaultValue = "0") int page,
-                                   @RequestParam(name = "size", defaultValue = "10") int size) {
+                                   @RequestParam(name = "size", defaultValue = "10") int size,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getGeneralBoards(pageRequest);
         model.addAttribute("boardPage", boardPage);
@@ -58,7 +62,8 @@ public class BoardController {
     @GetMapping("/qnalist")
     public String getQnABoards(Model model,
                                @RequestParam(name = "page", defaultValue = "0") int page,
-                               @RequestParam(name = "size", defaultValue = "10") int size) {
+                               @RequestParam(name = "size", defaultValue = "10") int size,
+                               @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getQnABoards(pageRequest);
         model.addAttribute("boardPage", boardPage);
@@ -68,7 +73,7 @@ public class BoardController {
     }
 
     @GetMapping("/menu")
-    public String menu() {
+    public String menu(@AuthenticationPrincipal UserDetails userDetails) {
         return "board/menu";
     }
 
@@ -76,7 +81,9 @@ public class BoardController {
     public String showAddBoardPage(@RequestParam(name = "type", required = false) char type,
                                    @RequestParam(name = "page") int page,
                                    @RequestParam(name = "size") int size,
+                                   @AuthenticationPrincipal UserDetails userDetails,
                                    Model model) {
+        model.addAttribute("user", userDetails);
         model.addAttribute("type", type);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -88,12 +95,17 @@ public class BoardController {
     public String addBoard(Board board,
                            @RequestParam("type") char type,
                            @RequestParam(name = "page") int page,
-                           @RequestParam(name = "size") int size) {
-        Users currentUser = new Users();
-        currentUser.setUno(1L);
+                           @RequestParam(name = "size") int size,
+                           @AuthenticationPrincipal UserDetails userDetails) {
+        // 로그인된 사용자 정보 설정
+        if (userDetails != null) {
+            String username = userDetails.getUsername();// 사용자 ID 가져오기
+            Users currentUser = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));  // Optional에서 값 꺼내기
+            board.setUsers(currentUser);  // 게시판에 작성자 설정
+        }
 
         board.setType(type);
-        board.setUsers(currentUser);
         board.setRegdate(LocalDateTime.now());
         board.setViews(0);
 
@@ -111,11 +123,18 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{id}")
-    public String getBoardDetail(@PathVariable("id") Long id, Model model) {
+    public String getBoardDetail(@PathVariable("id") Long id,
+                                 @AuthenticationPrincipal UserDetails userDetails,
+                                 Model model) {
         Board board = boardService.getBoardById(id);
 
-        Users currentUser = new Users();
-        currentUser.setUno(1L);
+        // 로그인된 사용자 정보 설정
+        Users currentUser = null;
+        if (userDetails != null) {
+            String username = userDetails.getUsername(); // 사용자 ID 가져오기
+            currentUser = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found")); // Optional에서 값 꺼내기
+        }
 
         boolean isLiked = likesService.isLiked(board, currentUser);
 
@@ -126,14 +145,24 @@ public class BoardController {
 
     @PostMapping("/like")
     @ResponseBody
-    public String toggleLike(@RequestParam("boardId") Long boardId) {
+    public String toggleLike(@RequestParam("boardId") Long boardId,
+                             @AuthenticationPrincipal UserDetails userDetails) {
+        // 로그인된 사용자 정보 설정
+        Users currentUser = null;
+        if (userDetails != null) {
+            String username = userDetails.getUsername(); // 사용자 ID 가져오기
+            currentUser = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found")); // Optional에서 값 꺼내기
+        }
+
+        // 게시물 정보 가져오기
         Board board = boardService.getBoardById(boardId);
 
-        Users user = usersService.findByUno(1L).orElseThrow(() -> new RuntimeException("User not found"));
+        // LikesId 객체 생성
+        LikesId likesId = new LikesId(board, currentUser);
 
-        LikesId likesId = new LikesId(board, user);
-
-        if (likesService.isLiked(board, user)) {
+        // 좋아요 상태 확인 및 토글
+        if (likesService.isLiked(board, currentUser)) {
             likesService.removeLike(likesId);
             return "unliked";
         } else {
