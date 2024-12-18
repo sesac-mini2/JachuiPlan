@@ -15,11 +15,16 @@
 </div>
 
 <!-- 좋아요 버튼 (AJAX로 좋아요 추가/제거) -->
-<button id="likeButton"
-        th:onclick="|toggleLike(${board.bno})|" th:text="${isLiked} ? 'Unlike' : 'Like'">
-</button>
+<img id="likeButton"
+     th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"
+     th:onclick="|toggleLike(${board.bno})|" />
+
 <script>
+    // 초기 이미지 상태를 설정
+    var likeButton = document.getElementById('likeButton');
+
     function toggleLike(boardId) {
+        // 서버에 좋아요 상태 변경 요청을 보냄
         fetch("/board/like?boardId=" + boardId, {
             method: "POST",
             headers: {
@@ -27,18 +32,20 @@
             },
             body: JSON.stringify({ "boardId": boardId }) // boardId를 JSON 형식으로 보냄
         })
-        .then(response => response.text())
-        .then(data => {
-            if (data === "liked") {
-                document.getElementById("likeButton").innerText = "Unlike";
-            } else if (data === "unliked") {
-                document.getElementById("likeButton").innerText = "Like";
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
+            .then(response => response.text())
+            .then(data => {
+                // 서버 응답에 따라 이미지 변경
+                if (data === "liked") {
+                    likeButton.src = '/img/like.png'; // 좋아요 상태로 변경
+                } else if (data === "unliked") {
+                    likeButton.src = '/img/unlike.png'; // 좋아요 해제 상태로 변경
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
     }
 </script>
+
 </body>
 </html>

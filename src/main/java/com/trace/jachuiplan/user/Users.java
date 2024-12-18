@@ -38,5 +38,9 @@ public class Users {
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Likes> likesList;
+
+    public void setUno(long uno) {
+        this.uno = uno;
+    }
 }
 
