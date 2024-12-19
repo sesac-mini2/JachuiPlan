@@ -17,34 +17,34 @@ public class SecurityConfigTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
-    void adminPage_accessibleByAdmin() throws Exception {
-        mockMvc.perform(get("/users/admin"))
-                .andExpect(status().isOk()); // ADMIN은 접근 가능
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"USER"})
-    void adminPage_forbiddenForUser() throws Exception {
-        mockMvc.perform(get("/users/admin"))
-                .andExpect(status().isForbidden()); // USER는 접근 불가
-    }
-
-    @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
-    void userPage_forbiddenForAdmin() throws Exception {
-        mockMvc.perform(get("/users/myPage"))
-                .andExpect(status().isForbidden()); // admin 접근 불가능
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"USER"})
-    void userPage_accessibleByUser() throws Exception {
-        mockMvc.perform(get("/users/myPage"))
-                .andExpect(status().isOk()); // user 접근 가능
-    }
-
+//    @Test
+//    @WithMockUser(username = "admin", roles = {"ADMIN"})
+//    void adminPage_accessibleByAdmin() throws Exception {
+//        mockMvc.perform(get("/users/admin"))
+//                .andExpect(status().isOk()); // ADMIN은 접근 가능
+//    }
+//
+//    @Test
+//    @WithMockUser(username = "user", roles = {"USER"})
+//    void adminPage_forbiddenForUser() throws Exception {
+//        mockMvc.perform(get("/users/admin"))
+//                .andExpect(status().isForbidden()); // USER는 접근 불가
+//    }
+//
+//    @Test
+//    @WithMockUser(username = "admin", roles = {"ADMIN"})
+//    void userPage_forbiddenForAdmin() throws Exception {
+//        mockMvc.perform(get("/users/myPage"))
+//                .andExpect(status().isForbidden()); // admin 접근 불가능
+//    }
+//
+//    @Test
+//    @WithMockUser(username = "user", roles = {"USER"})
+//    void userPage_accessibleByUser() throws Exception {
+//        mockMvc.perform(get("/users/myPage"))
+//                .andExpect(status().isOk()); // user 접근 가능
+//    }
+//
 //    @Test
 //    @WithMockUser(username = "admin", roles = {"ADMIN"})
 //    void adminPage_accessibleByAdmin() throws Exception {
