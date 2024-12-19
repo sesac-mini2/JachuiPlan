@@ -64,9 +64,9 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 }
 
-// tasks.named('test') {
-// 	useJUnitPlatform()
-// }
+ tasks.named('test') {
+ 	useJUnitPlatform()
+ }
 tasks.withType(JavaCompile) {
 	options.compilerArgs << '-parameters'
 }
