@@ -42,9 +42,9 @@ public class ReplyController {
     }
 
     // 댓글 등록
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{bno}")
-    public ResponseEntity<?> create(@PathVariable("bno") Long bno, @Valid @RequestBody ReplyRequest replyRequest, BindingResult bindingResult){//, Principal principal){
+    public ResponseEntity<?> create(@PathVariable("bno") Long bno, @Valid @RequestBody ReplyRequest replyRequest, BindingResult bindingResult, Principal principal){
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             bindingResult.getAllErrors().forEach(error -> {
@@ -52,9 +52,7 @@ public class ReplyController {
             });
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        //Users users = this.userService.getUser(principal.getName());
-        // 테스트 하드 코딩
-        Users users = this.userService.getUser("user00");
+        Users users = this.userService.findByUsername(principal.getName()).get();
 
         ReplyResponse replyResponse = new ReplyResponse(replyService.create(replyRequest, bno, users));
         return ResponseEntity
@@ -64,7 +62,7 @@ public class ReplyController {
 
     // 댓글 수정
     @PutMapping("/{rno}")
-    public ResponseEntity<?> modify(@PathVariable("rno") Long rno, @Valid @RequestBody ReplyRequest replyRequest, BindingResult bindingResult){//, Principal principal){
+    public ResponseEntity<?> modify(@PathVariable("rno") Long rno, @Valid @RequestBody ReplyRequest replyRequest, BindingResult bindingResult, Principal principal){
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             bindingResult.getAllErrors().forEach(error -> {
@@ -80,9 +78,7 @@ public class ReplyController {
 //            return ResponseEntity.badRequest().body(errorMessages);
 //        }
 
-        //Users users = this.userService.getUser(principal.getName());
-        // 테스트 하드 코딩
-        Users users = this.userService.getUser("user00");
+        Users users = this.userService.findByUsername(principal.getName()).get();
 
         ReplyResponse replyResponse = new ReplyResponse(replyService.modify(reply, replyRequest, users));
 
