@@ -11,15 +11,10 @@ public class RegioncdService {
     private final RegioncdRepository regioncdRepository;
 
     public List<Regioncd> getSidocdList() {
-        List<Regioncd> regioncds = regioncdRepository.findAll();
-        regioncds.removeIf(r -> !r.getSggCd().equals("000"));
-        return regioncds;
+        return regioncdRepository.findSido();
     }
 
     public List<Regioncd> getSggList(String sidocd) {
-        List<Regioncd> sidocds = regioncdRepository.findBySidoCd(sidocd);
-        sidocds.removeIf(r -> r.getSggCd().equals("000"));
-        sidocds.removeIf(r -> !r.getUmdCd().equals("000"));
-        return sidocds;
+        return regioncdRepository.findSgg(sidocd);
     }
 }
