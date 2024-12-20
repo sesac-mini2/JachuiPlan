@@ -32,7 +32,7 @@ class UserSecurityServiceTest {
     @Test
     void loadUserByUsername_user() {
         // Given
-        String userUsername = "user";
+        String userUsername = "user00";
 
         // When
         UserDetails userDetails = userSecurityService.loadUserByUsername(userUsername);
