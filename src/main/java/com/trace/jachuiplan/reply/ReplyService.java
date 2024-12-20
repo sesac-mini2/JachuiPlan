@@ -26,6 +26,8 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
 
+    private final int pageSize = 10;
+
     // 게시글 댓글 목록
     public List<Reply> getList(Long bno) {
         // Board Entity 가져오기
@@ -41,8 +43,24 @@ public class ReplyService {
     public Page<Reply> getList(Long bno, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.asc("replydate")); // replydate로 오름차순
-        Pageable pageable = PageRequest.of(page, 50, Sort.by(sorts)); // 페이징과 정렬 설정
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts)); // 페이징과 정렬 설정
         return this.replyRepository.findByBoardBno(bno, pageable); // JPA를 통해 페이징된 결과 반환
+    }
+
+    // 특정 댓글 목록
+    @Transactional
+    public Page<Reply> getTargetList(Long bno, Long rno){
+        Optional<Reply> reply = replyRepository.findById(rno);
+        if(reply.isEmpty()) {
+            throw new DataNotFoundException("댓글이 존재하지 않습니다.");
+        }
+        Long position = replyRepository.countByReplydateBeforeAndBoardBno(reply.get().getReplydate(), bno);
+        int page = (int) (position / pageSize);
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.asc("replydate")); // replydate로 오름차순
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts)); // 페이징과 정렬 설정
+        return this.replyRepository.findByBoardBno(bno, pageable);
     }
 
     // 댓글 가져오기

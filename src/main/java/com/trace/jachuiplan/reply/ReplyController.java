@@ -41,6 +41,16 @@ public class ReplyController {
                 .body(replyList);
     }
 
+    // 특정 댓글 목록
+    @GetMapping("/list/{bno}/{rno}")
+    public ResponseEntity<Page<ReplyResponse>> targetList(@PathVariable("bno") Long bno, @PathVariable("rno") Long rno){
+        Page<ReplyResponse> replyList = this.replyService.getTargetList(bno, rno)
+                .map(ReplyResponse::new);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(replyList);
+    }
+
     // 댓글 등록
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{bno}")
@@ -89,14 +99,14 @@ public class ReplyController {
 
     // 댓글 삭제
     @DeleteMapping("/{rno}")
-    public ResponseEntity<Void> delete(@PathVariable("rno") Long rno){//, Principal principal){
+    public ResponseEntity<?> delete(@PathVariable("rno") Long rno, Principal principal){
         // Reply Entity 가져오기
         Reply reply = replyService.getReply(rno);
-//        if (!reply.getUsers().getUsername().equals(principal.getName())) {
-//            List<String> errorMessages = new ArrayList<>();
-//            errorMessages.add("수정권한이 없습니다.");
-//            return ResponseEntity.badRequest().body(errorMessages);
-//        }
+        if (!reply.getUsers().getUsername().equals(principal.getName())) {
+            List<String> errorMessages = new ArrayList<>();
+            errorMessages.add("수정권한이 없습니다.");
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
 
         replyService.delete(reply);
         return ResponseEntity
