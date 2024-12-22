@@ -1,5 +1,6 @@
 package com.trace.jachuiplan.regioncd;
 
+import com.trace.jachuiplan.CustomAnnotation.ExactSize;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class RegioncdApiController {
     }
 
     @GetMapping("/api/regioncd/{sidocd}")
-    public ResponseEntity<List<Regioncd>> getSggList(@PathVariable("sidocd") String sidocd) {
+    public ResponseEntity<List<Regioncd>> getSggList(@PathVariable("sidocd") @ExactSize(2) String sidocd) {
         List<Regioncd> regioncds = regioncdService.getSggList(sidocd);
         return ResponseEntity.ok()
                 .body(regioncds);
