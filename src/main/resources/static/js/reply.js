@@ -160,7 +160,6 @@ function renderReplyList(replyList, targetRno){
         clickRegReplyBtn(this);
     })
 
-
     // 댓글 수정 이벤트
     $(".reply-modify").click(function(){
         clickModifyReplyBtn(this);
@@ -180,7 +179,12 @@ function renderReplyList(replyList, targetRno){
 }
 
 function validateReply(reply){
+    // 빈 댓글일 때
     if(!reply){
+        return false;
+    }
+    // 300자 넘어갈 때
+    if(reply.length > 300){
         return false;
     }
     return true;
