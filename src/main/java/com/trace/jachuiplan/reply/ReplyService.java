@@ -5,10 +5,8 @@ import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.board.BoardRepository;
 import com.trace.jachuiplan.user.Users;
 import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,27 +38,30 @@ public class ReplyService {
     }
 
     // 게시글 댓글 목록 페이징
+    @Transactional
     public Page<Reply> getList(Long bno, int page) {
+        // 마지막 페이지를 초과한 요청을 했을 때
+        Long totalCount = replyRepository.countByBoardBno(bno);
+        int lastPage = (int) ((totalCount - 1) / pageSize);
+
+        int currentPage = (page > lastPage) ? lastPage : page;
+
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.asc("replydate")); // replydate로 오름차순
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts)); // 페이징과 정렬 설정
+        Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by(sorts)); // 페이징과 정렬 설정
         return this.replyRepository.findByBoardBno(bno, pageable); // JPA를 통해 페이징된 결과 반환
     }
 
-    // 특정 댓글 목록
+    // 특정 댓글 페이지 번호
     @Transactional
-    public Page<Reply> getTargetList(Long bno, Long rno){
+    public int getReplyPage(Long bno, Long rno){
         Optional<Reply> reply = replyRepository.findById(rno);
         if(reply.isEmpty()) {
             throw new DataNotFoundException("댓글이 존재하지 않습니다.");
         }
         Long position = replyRepository.countByReplydateBeforeAndBoardBno(reply.get().getReplydate(), bno);
-        int page = (int) (position / pageSize);
 
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.asc("replydate")); // replydate로 오름차순
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts)); // 페이징과 정렬 설정
-        return this.replyRepository.findByBoardBno(bno, pageable);
+        return (int) (position / pageSize);
     }
 
     // 댓글 가져오기

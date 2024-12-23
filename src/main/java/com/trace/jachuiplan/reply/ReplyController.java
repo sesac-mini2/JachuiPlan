@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,7 +23,7 @@ import java.util.Optional;
 
 @RequestMapping("/api/reply")
 @RequiredArgsConstructor
-@RestController
+@Controller
 public class ReplyController {
 
     private final ReplyService replyService;
@@ -29,31 +31,18 @@ public class ReplyController {
 
     // 게시글 댓글 목록
     @GetMapping("/list/{bno}")
-    public ResponseEntity<Page<ReplyResponse>> list(@PathVariable("bno") Long bno, @RequestParam(value="page", defaultValue="0") int page){
-//        List<ReplyResponse> replyList = this.replyService.getList(bno)
-//                .stream()
-//                .map(ReplyResponse::new)
-//                .toList();
+    public String list(Model model, @PathVariable("bno") Long bno, @RequestParam(value="page", defaultValue="0") int page){
+
         Page<ReplyResponse> replyList = this.replyService.getList(bno, page)
                 .map(ReplyResponse::new);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(replyList);
-    }
-
-    // 특정 댓글 목록
-    @GetMapping("/list/{bno}/{rno}")
-    public ResponseEntity<Page<ReplyResponse>> targetList(@PathVariable("bno") Long bno, @PathVariable("rno") Long rno){
-        Page<ReplyResponse> replyList = this.replyService.getTargetList(bno, rno)
-                .map(ReplyResponse::new);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(replyList);
+        model.addAttribute("paging", replyList);
+        return "reply/reply_list :: replyFragment";
     }
 
     // 댓글 등록
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{bno}")
+    @ResponseBody
     public ResponseEntity<?> create(@PathVariable("bno") Long bno, @Valid @RequestBody ReplyRequest replyRequest, BindingResult bindingResult, Principal principal){
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
@@ -64,7 +53,12 @@ public class ReplyController {
         }
         Users users = this.userService.findByUsername(principal.getName()).get();
 
+        // 댓글 등록 결과
         ReplyResponse replyResponse = new ReplyResponse(replyService.create(replyRequest, bno, users));
+
+        // 페이지 번호 가져오기
+        replyResponse.setPage(replyService.getReplyPage(bno, replyResponse.getRno()));
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(replyResponse);
@@ -82,11 +76,11 @@ public class ReplyController {
         }
         // Reply Entity 가져오기
         Reply reply = replyService.getReply(rno);
-//        if (!reply.getUsers().getUsername().equals(principal.getName())) {
-//            List<String> errorMessages = new ArrayList<>();
-//            errorMessages.add("수정권한이 없습니다.");
-//            return ResponseEntity.badRequest().body(errorMessages);
-//        }
+        if (!reply.getUsers().getUsername().equals(principal.getName())) {
+            List<String> errorMessages = new ArrayList<>();
+            errorMessages.add("수정권한이 없습니다.");
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
 
         Users users = this.userService.findByUsername(principal.getName()).get();
 
