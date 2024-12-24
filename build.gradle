@@ -80,7 +80,7 @@ sourceSets {
 	}
 }
 
-processResources { dependsOn "copyReactBuildFiles" }
+processResources { dependsOn "copyReactBuildResourceFiles", "copyReactBuildHtmlFiles" }
 
 task installAndBuildReact(type: Exec) {
 	workingDir "$reactDir"
@@ -96,8 +96,18 @@ task installAndBuildReact(type: Exec) {
 	}
 }
 
-task copyReactBuildFiles(type: Copy) {
+
+task copyReactBuildResourceFiles(type: Copy) {
 	dependsOn "installAndBuildReact"
-	from "$reactDir/build"
-	into "$projectDir/src/main/resources/static"
+	from "$reactDir/build/"
+	exclude '**/*.html' // *.html 파일 제외
+	into "$projectDir/src/main/resources/static/map/"
+}
+
+task copyReactBuildHtmlFiles(type: Copy) {
+	dependsOn "installAndBuildReact"
+	from("$reactDir/build/") {
+		include '*.html' // *.html 파일만 포함
+	}
+	into "$projectDir/src/main/resources/templates/map/"
 }

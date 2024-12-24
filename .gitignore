@@ -43,6 +43,9 @@ out/
 
 # production
 /src/main/map/build
+# react build
+/src/main/resources/static/map
+/src/main/resources/templates/map
 
 # misc
 .DS_Store
