@@ -70,3 +70,34 @@ dependencies {
 tasks.withType(JavaCompile) {
 	options.compilerArgs << '-parameters'
 }
+
+def reactDir = "$projectDir/src/main/map"
+
+sourceSets {
+	main {
+		resources { srcDirs = ["$projectDir/src/main/resources"]
+		}
+	}
+}
+
+processResources { dependsOn "copyReactBuildFiles" }
+
+task installAndBuildReact(type: Exec) {
+	workingDir "$reactDir"
+	inputs.dir "$reactDir"
+	group = BasePlugin.BUILD_GROUP
+
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine 'npm.cmd', 'install'
+		commandLine 'npm.cmd', 'run', 'build'
+	} else {
+		commandLine 'npm', 'install'
+		commandLine 'npm', 'run', 'build'
+	}
+}
+
+task copyReactBuildFiles(type: Copy) {
+	dependsOn "installAndBuildReact"
+	from "$reactDir/build"
+	into "$projectDir/src/main/resources/static"
+}
