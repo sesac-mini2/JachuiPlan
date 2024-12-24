@@ -6,6 +6,7 @@ import com.trace.jachuiplan.user.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,9 +34,11 @@ public class Board {
     private String content;
 
     @Column(name = "REGDATE", nullable = false)
+    @ColumnDefault("SYSDATE")
     private LocalDateTime regdate;
 
     @Column(name = "UPDATEDATE", nullable = true)
+    @ColumnDefault("SYSDATE")
     private LocalDateTime updatedate;
 
     @Column(name = "VIEWS", nullable = false, columnDefinition = "NUMBER DEFAULT 0")

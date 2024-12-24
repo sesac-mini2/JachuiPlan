@@ -5,6 +5,7 @@ import com.trace.jachuiplan.user.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,9 +33,11 @@ public class Question {
     private String qContent; // Q_CONTENT (질문 내용)
 
     @Column(name="Q_REGDATE", nullable = false)
+    @ColumnDefault("SYSDATE")
     private LocalDateTime qRegDate; // Q_REGDATE (등록일)
 
     @Column(name="Q_UPDATEDATE")
+    @ColumnDefault("SYSDATE")
     private LocalDateTime qUpdateDate; // Q_UPDATEDATE (수정일)
 
     @Column(name="STATUS", nullable = false, columnDefinition = "CHAR DEFAULT '0'")

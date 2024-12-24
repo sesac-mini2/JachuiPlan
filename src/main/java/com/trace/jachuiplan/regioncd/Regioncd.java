@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -13,7 +15,7 @@ public class Regioncd {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "SIDO_CD", length = 2, nullable = true)
+    @Column(name = "SIDO_CD", length = 2, nullable = false)
     private String sidoCd;
 
     @Column(name = "SGG_CD", length = 3, nullable = true)
@@ -24,4 +26,10 @@ public class Regioncd {
 
     @Column(name = "UMD_CD", length = 3, nullable = true)
     private String umdCd;
+
+    @Column(name = "LATITUDE", nullable = false, precision = 11, scale = 8)
+    private BigDecimal latitude;
+
+    @Column(name = "LONGITUDE", nullable = false, precision = 11, scale = 8)
+    private BigDecimal longitude;
 }

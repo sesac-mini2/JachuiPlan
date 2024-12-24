@@ -43,6 +43,9 @@ public class Building {
     @Column(name = "DEALDATE")
 	private LocalDateTime dealdate;
 
+    @Column(name = "JIBUN", length = 20, nullable = true)
+    private String jibun;
+
     @Column(name = "BUILDING_NAME", length = 300, nullable = true)
 	private String buildingName;
 
