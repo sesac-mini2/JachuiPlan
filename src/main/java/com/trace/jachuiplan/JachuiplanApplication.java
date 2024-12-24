@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class JachuiplanApplication {
+public class  JachuiplanApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(JachuiplanApplication.class, args);
