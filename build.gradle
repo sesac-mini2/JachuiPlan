@@ -82,10 +82,14 @@ sourceSets {
 
 processResources { dependsOn "copyReactBuildResourceFiles", "copyReactBuildHtmlFiles" }
 
-task installAndBuildReact(type: Exec) {
+task installReact(type: Exec) {
 	workingDir "$reactDir"
 	inputs.dir "$reactDir"
 	group = BasePlugin.BUILD_GROUP
+
+    // PATH 정보를 명시적으로 전달
+	// Github Action Runner에서 npm 명령어 실행할 때 PATH를 전달해줘야 작동함.
+    environment "PATH", System.getenv("PATH")
 
 	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
 		commandLine 'npm.cmd', 'install'
@@ -99,6 +103,9 @@ task buildReact(type: Exec) {
 	workingDir "$reactDir"
 	inputs.dir "$reactDir"
 	group = BasePlugin.BUILD_GROUP
+
+    // PATH 정보를 명시적으로 전달
+    environment "PATH", System.getenv("PATH")
 
 	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
 		commandLine 'npm.cmd', 'run', 'build'
