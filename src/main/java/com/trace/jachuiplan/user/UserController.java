@@ -2,6 +2,12 @@ package com.trace.jachuiplan.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +69,12 @@ public class UserController {
     @GetMapping("/myPage")
     public String myPage() {
         return "users/myPage_form"; // 타임리프 뷰 이름
+    }
+
+    // 임시 admin test
+    @GetMapping("/admin")
+    public String admin(){
+        return "users/admin_form";
     }
 
 }

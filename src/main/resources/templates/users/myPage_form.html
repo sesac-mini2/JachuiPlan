@@ -1,10 +1,80 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>마이페이지</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #myPageContent {
+            display: none; /* 초기 상태에서 숨김 */
+        }
+
+        .success-message {
+            color: green;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-로그인 성공 !
+<h1>마이페이지</h1>
+
+<!-- 비밀번호 확인 섹션 -->
+<div id="passwordVerifySection">
+    <label for="password">비밀번호:</label>
+    <input type="password" id="password" placeholder="비밀번호 입력">
+    <button id="verifyPasswordBtn">확인</button>
+    <p id="verifyMessage" class="error-message"></p>
+</div>
+
+<!-- 마이페이지 콘텐츠 -->
+<div id="myPageContent">
+    <h2>환영합니다, 사용자님!</h2>
+    <ul>
+        <li>정보 수정</li>
+        <li>스크랩한 지역</li>
+        <li>작성한 글</li>
+        <li>좋아요 글</li>
+    </ul>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // 비밀번호 확인 버튼 클릭 이벤트
+        $('#verifyPasswordBtn').click(function () {
+            const password = $('#password').val();
+            const message = $('#verifyMessage');
+
+            if (!password) {
+                message.text("비밀번호를 입력해주세요.")
+                    .removeClass("success-message")
+                    .addClass("error-message");
+                return;
+            }
+
+            $.ajax({
+                url: "/users/myPage/verify-password", // 서버 API
+                type: "POST",
+                data: { password: password },
+                success: function () {
+                    // 비밀번호가 일치하면
+                    message.text("비밀번호가 일치합니다.")
+                        .removeClass("error-message")
+                        .addClass("success-message");
+                    $('#passwordVerifySection').hide(); // 비밀번호 입력 폼 숨기기
+                    $('#myPageContent').fadeIn(); // 마이페이지 콘텐츠 표시
+                },
+                error: function () {
+                    // 비밀번호가 일치하지 않으면
+                    message.text("비밀번호가 일치하지 않습니다.")
+                        .removeClass("success-message")
+                        .addClass("error-message");
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

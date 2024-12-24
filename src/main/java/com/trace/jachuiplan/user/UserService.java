@@ -59,6 +59,14 @@ public class UserService {
         return userRepository.findByNickname(nickname).isEmpty();
     }
 
+    // myPage 사용자 비밀번호 검증
+    public boolean verifyPassword(String username, String inputPassword){
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        return passwordEncoder.matches(inputPassword, user.getPassword());
+    }
+
     /*
     // 비밀번호 변경
     public void changePassword(Long userId, String newPassword) {
