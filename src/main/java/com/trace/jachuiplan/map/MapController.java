@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/map")
 public class MapController {
     @GetMapping("/")
-    public String getInfoBoards() {
+    public String mapIndex() {
         log.info("MAP CONTROLLER");
         return "map/index";
     }
