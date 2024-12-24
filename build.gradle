@@ -89,23 +89,33 @@ task installAndBuildReact(type: Exec) {
 
 	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
 		commandLine 'npm.cmd', 'install'
-		commandLine 'npm.cmd', 'run', 'build'
 	} else {
 		commandLine 'npm', 'install'
+	}
+}
+
+task buildReact(type: Exec) {
+	dependsOn "installReact"
+	workingDir "$reactDir"
+	inputs.dir "$reactDir"
+	group = BasePlugin.BUILD_GROUP
+
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine 'npm.cmd', 'run', 'build'
+	} else {
 		commandLine 'npm', 'run', 'build'
 	}
 }
 
-
 task copyReactBuildResourceFiles(type: Copy) {
-	dependsOn "installAndBuildReact"
+	dependsOn "buildReact"
 	from "$reactDir/build/"
 	exclude '**/*.html' // *.html 파일 제외
 	into "$projectDir/src/main/resources/static/map/"
 }
 
 task copyReactBuildHtmlFiles(type: Copy) {
-	dependsOn "installAndBuildReact"
+	dependsOn "buildReact"
 	from("$reactDir/build/") {
 		include '*.html' // *.html 파일만 포함
 	}
