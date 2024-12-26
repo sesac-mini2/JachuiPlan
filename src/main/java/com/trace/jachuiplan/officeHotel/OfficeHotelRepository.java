@@ -23,4 +23,26 @@ public interface OfficeHotelRepository extends JpaRepository<OfficeHotel, Long> 
     List<OfficeHotel> getOfficeHotelDealsWithSggList(@Param("startyearmonth") String startyearmonth,
                                                      @Param("endyearmonth") String endyearmonth,
                                                      @Param("sggcds") List<String> sggcds);
+
+    // 동적인 조건을 사용하여 OfficeHotel을 필터링하는 JPQL 쿼리
+    @Query("SELECT o FROM OfficeHotel o WHERE "
+            + "( :rentType IS NULL OR "
+            + "( :rentType = '전세' AND o.monthlyRent = 0 ) OR "
+            + "( :rentType = '반전세' AND o.monthlyRent IS NOT NULL AND o.deposit = o.monthlyRent * 240 ) OR "
+            + "( :rentType = '월세' AND o.monthlyRent IS NOT NULL AND o.deposit <> o.monthlyRent * 240 ) ) "
+            + "AND ( :minArea IS NULL OR o.exclu_use_ar >= :minArea ) "
+            + "AND ( :maxArea IS NULL OR o.exclu_use_ar <= :maxArea ) "
+            + "AND ( :minBuildYear IS NULL OR o.buildYear >= :minBuildYear ) "
+            + "AND ( :maxBuildYear IS NULL OR o.buildYear <= :maxBuildYear ) "
+            + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "
+            + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor )")
+    List<OfficeHotel> findByCriteria(
+            @Param("rentType") String rentType,
+            @Param("minArea") Double minArea,
+            @Param("maxArea") Double maxArea,
+            @Param("minBuildYear") Integer minBuildYear,
+            @Param("maxBuildYear") Integer maxBuildYear,
+            @Param("minFloor") Integer minFloor,
+            @Param("maxFloor") Integer maxFloor);
+
 }
