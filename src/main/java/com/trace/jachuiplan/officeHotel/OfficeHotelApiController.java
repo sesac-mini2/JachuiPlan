@@ -32,7 +32,7 @@ public class OfficeHotelApiController {
     public ResponseEntity<List<OfficeHotel>> getDealsWithSggList(@PathVariable("startyearmonth") @ExactSize(6) String startyearmonth,
                                                                 @PathVariable("endyearmonth") @ExactSize(6) String endyearmonth,
                                                                 // 일단은 sggcd부터 리스트로 받는 기능 만들기
-                                                                @RequestParam(value = "sggcds") List<@Size(max = 5, min = 5) String> sggcds) {
+                                                                @RequestParam(value = "sggcds") List<@ExactSize(5) String> sggcds) {
         List<OfficeHotel> officeHotelDeals = officeHotelService.getOfficeHotelDeals(startyearmonth, endyearmonth, sggcds);
         return ResponseEntity.ok()
                 .body(officeHotelDeals);

@@ -59,21 +59,32 @@ public class UserService {
         return userRepository.findByNickname(nickname).isEmpty();
     }
 
-    /*
-    // 비밀번호 변경
-    public void changePassword(Long userId, String newPassword) {
-        Users user = userRepository.findById(userId)
+    // myPage 사용자 비밀번호 검증
+    public boolean verifyPassword(String username, String inputPassword){
+        Users user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        user.changePassword(passwordEncoder.encode(newPassword));
+
+        return passwordEncoder.matches(inputPassword, user.getPassword());
+    }
+
+    // 비밀번호 변경
+    public void changePassword(String username, String newPassword) {
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        user.setPassword(passwordEncoder.encode(newPassword)); // 새 비밀번호 암호화 후 저장
         userRepository.save(user);
     }
 
     // 닉네임 변경
-    public void changeNickname(Long userId, String newNickname) {
-        Users user = userRepository.findById(userId)
+    public void changeNickname(String username, String nickname) {
+        // 닉네임 중복 확인
+        if (userRepository.findByNickname(nickname).isPresent()) {
+            throw new IllegalArgumentException("사용 중인 닉네임입니다.");
+        }
+        Users user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        user.changeNickname(newNickname);
+        user.setNickname(nickname); // 새 닉네임 설정
         userRepository.save(user);
     }
-     */
+
 }

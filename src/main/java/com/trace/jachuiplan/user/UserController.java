@@ -2,6 +2,8 @@ package com.trace.jachuiplan.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -55,20 +57,54 @@ public class UserController {
 
     // 로그인
     @GetMapping("/login")
-    public String login(){
-        return "users/login_form";
+    public String login() {return "users/login_form";}
+
+    // myPage user 검증
+    @PostMapping("/myPage/verify-password")
+    public ResponseEntity<String> verifyPassword(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("password") String password) {
+
+        boolean isPasswordValid = userService.verifyPassword(userDetails.getUsername(), password);
+
+        if (isPasswordValid) {
+            return ResponseEntity.ok("비밀번호가 일치합니다.");
+        } else {
+            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+        }
     }
 
     // 임시 myPage
     @GetMapping("/myPage")
-    public String myPage() {
-        return "users/myPage_form"; // 타임리프 뷰 이름
+    public String myPage(@AuthenticationPrincipal UserDetails userDetails) {
+        return "users/myPage_form";
     }
 
-    // 임시 admin test
-    @GetMapping("/admin")
-    public String admin(){
-        return "users/admin_form";
+    // 비밀번호 변경
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword){
+
+        if(!newPassword.equals(confirmPassword)){
+            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+        }
+
+        userService.changePassword(userDetails.getUsername(), newPassword);
+        return ResponseEntity.ok("비밀번호가 변경되었습니다.");
+    }
+
+    // 닉네임 변경
+    @PutMapping("/change-nickname")
+    public ResponseEntity<String> changeNickname(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("nickname") String nickname){
+
+        userService.changeNickname(userDetails.getUsername(), nickname);
+        return ResponseEntity.ok("닉네임이 변경되었습니다.");
     }
 
 }
+
+

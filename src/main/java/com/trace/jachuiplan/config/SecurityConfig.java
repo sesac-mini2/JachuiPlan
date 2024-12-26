@@ -19,6 +19,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/board/like"))
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/users/myPage/verify-password"))
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-nickname"))
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-password"))
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
@@ -33,13 +36,16 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/users/login")
                         .loginProcessingUrl("/users/login") // 로그인 post
-                        .defaultSuccessUrl("/users/myPage") // 임의로 마이페이지 연결
+                        .defaultSuccessUrl("/users/myPage",true) // 임의로 마이페이지 연결
+                        .failureUrl("/users/login?error=true") // 실패 시 로그인 페이지로 리다이렉트
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
+                        .clearAuthentication(true) // 인증 정보 제거
+                        .permitAll()
                 );
 
         return http.build();

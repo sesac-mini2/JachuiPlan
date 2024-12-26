@@ -5,7 +5,7 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
@@ -19,4 +19,12 @@ public @interface ExactSize {
     Class<? extends Payload>[] payload() default {};
 
     int value(); // 문자열 길이를 지정
+
+    @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @interface List {
+
+        ExactSize[] value();
+    }
 }

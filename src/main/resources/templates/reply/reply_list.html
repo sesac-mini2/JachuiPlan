@@ -1,0 +1,57 @@
+<div th:fragment="replyFragment">
+    <div>댓글</div><span th:text="${paging.totalElements}"></span>
+    <div id="replyRegContainer" class="mb-3" sec:authorize="isAuthenticated()">
+        <div class="mt-4">
+            <div class="mb-3">
+                <textarea id="replyContent" class="form-control" rows="3" placeholder="댓글 작성하기" name="content"></textarea>
+                <div id="replyErrorContainer"></div>
+            </div>
+            <div class="text-end">
+                <button type="button" class="btn btn-primary reply-reg">댓글 등록</button>
+            </div>
+        </div>
+    </div>
+    <div id="replyListContainer">
+        <div class="card mb-3" th:each="reply : ${paging}" th:data-reply-id="${reply.rno}">
+            <div class="card-body">
+                <p th:text="${reply.nickname}"></p>
+                <p class="reply-content" th:text="${reply.reply}"></p>
+                <textarea class="reply-textarea d-none form-control"></textarea>
+                <p class="text-muted small" th:text="${#temporals.format(reply.replydate, 'yyyy-MM-dd HH:mm')}"></p>
+                <div class="reply-err"></div>
+                <div class="text-end">
+                    <button class="btn btn-primary btn-sm reply-modify"
+                            sec:authorize="isAuthenticated()"
+                            th:if="${reply.username != null and #authentication.getPrincipal().getUsername() == reply.username}"
+                            th:text="수정"></button>
+                    <button class="btn btn-secondary btn-sm reply-delete"
+                            sec:authorize="isAuthenticated()"
+                            th:if="${reply.username != null and #authentication.getPrincipal().getUsername() == reply.username}"
+                            th:text="삭제"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="paginationContainer" th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item"
+                th:classappend="${!paging.hasPrevious} ? 'disabled'"
+                th:data-page="${paging.number-1}">
+                <a class="page-link">이전</a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'"
+                th:data-page="${page}"
+                class="page-item">
+                <a th:text="${page+1}" class="page-link"></a>
+            </li>
+            <li class="page-item"
+                th:classappend="${!paging.hasNext} ? 'disabled'"
+                th:data-page="${paging.number+1}">
+                <a class="page-link">다음</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
