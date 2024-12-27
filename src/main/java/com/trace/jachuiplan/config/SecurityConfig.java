@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
-                                "/board/infolist", "/board/generallist", "/board/qnalist", "/board/menu") // 게시판 목록 누구나 접근 가능
+                                "/board/infolist", "/board/generallist", "/board/qnalist", "/board/menu", "/map/**", "/api/**") // 게시판 목록 누구나 접근 가능
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
                         .anyRequest().authenticated()
