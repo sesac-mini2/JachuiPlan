@@ -62,4 +62,32 @@ public class OfficeHotelApiController {
         return ResponseEntity.ok(officeHotels);
     }
 
+    @GetMapping("/api/officeHotel/average")
+    public ResponseEntity<List<OfficeHotelFilterDTO>> averageOfficeHotels(
+            @RequestParam(name = "sggcds") List<@ExactSize(5) String> sggcds,
+            @RequestParam(name = "startYearMonth") @ExactSize(6) String startYearMonth,
+            @RequestParam(name = "endYearMonth") @ExactSize(6) String endYearMonth,
+            @RequestParam(name = "rentType", required = false) String rentType,
+            @RequestParam(name = "minArea", required = false) Double minArea,
+            @RequestParam(name = "maxArea", required = false) Double maxArea,
+            @RequestParam(name = "minBuildYear", required = false) Integer minBuildYear,
+            @RequestParam(name = "maxBuildYear", required = false) Integer maxBuildYear,
+            @RequestParam(name = "minFloor", required = false) Integer minFloor,
+            @RequestParam(name = "maxFloor", required = false) Integer maxFloor) {
+
+        List<OfficeHotelFilterDTO> officeHotels = officeHotelService.averageOfficeHotelsByCriteria(
+                startYearMonth,
+                endYearMonth,
+                sggcds,
+                rentType,
+                minArea,
+                maxArea,
+                minBuildYear,
+                maxBuildYear,
+                minFloor,
+                maxFloor);
+
+        return ResponseEntity.ok(officeHotels);
+    }
+
 }

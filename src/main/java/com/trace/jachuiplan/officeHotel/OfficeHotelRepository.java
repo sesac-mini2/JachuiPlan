@@ -51,4 +51,32 @@ public interface OfficeHotelRepository extends JpaRepository<OfficeHotel, Long> 
             @Param("minFloor") Integer minFloor,
             @Param("maxFloor") Integer maxFloor);
 
+    // 각 동별 평균과 거래량을 알려줌
+    @Query("SELECT new com.trace.jachuiplan.officeHotel.OfficeHotelFilterDTO(o.umdnm, ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM OfficeHotel o WHERE "
+            + "o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM') "
+            + "AND o.dealdate < ADD_MONTHS(TO_DATE(:endYearMonth, 'YYYYMM'), 1) "
+            + "AND o.sggcd IN :sggcds "
+            + "AND ( :rentType IS NULL OR "
+            + "( :rentType = '전세' AND o.monthlyRent = 0 ) OR "
+            + "( :rentType = '반전세' AND o.monthlyRent IS NOT NULL AND o.deposit > o.monthlyRent * 12 ) OR "
+            + "( :rentType = '월세' AND o.monthlyRent IS NOT NULL AND o.deposit <= o.monthlyRent * 12 ) ) "
+            + "AND ( :minArea IS NULL OR o.exclu_use_ar >= :minArea ) "
+            + "AND ( :maxArea IS NULL OR o.exclu_use_ar <= :maxArea ) "
+            + "AND ( :minBuildYear IS NULL OR o.buildYear >= :minBuildYear ) "
+            + "AND ( :maxBuildYear IS NULL OR o.buildYear <= :maxBuildYear ) "
+            + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "
+            + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor )"
+            + "GROUP BY o.umdnm")
+    List<OfficeHotelFilterDTO> averageByCriteria(
+            @Param("startYearMonth") String startYearMonth,
+            @Param("endYearMonth") String endYearMonth,
+            @Param("sggcds") List<String> sggcds,
+            @Param("rentType") String rentType,
+            @Param("minArea") Double minArea,
+            @Param("maxArea") Double maxArea,
+            @Param("minBuildYear") Integer minBuildYear,
+            @Param("maxBuildYear") Integer maxBuildYear,
+            @Param("minFloor") Integer minFloor,
+            @Param("maxFloor") Integer maxFloor);
+
 }

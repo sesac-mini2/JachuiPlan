@@ -26,4 +26,10 @@ public class OfficeHotelService {
         return officeHotelRepository.findByCriteria(startYearMonth, endYearMonth, sggcds, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);
     }
 
+    public List<OfficeHotelFilterDTO> averageOfficeHotelsByCriteria(String startYearMonth, String endYearMonth, List<String> sggcds,
+                                                                    String rentType, Double minArea, Double maxArea, Integer minBuildYear,
+                                                                    Integer maxBuildYear, Integer minFloor, Integer maxFloor) {
+        return officeHotelRepository.averageByCriteria(startYearMonth, endYearMonth, sggcds, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);
+    }
+
 }
