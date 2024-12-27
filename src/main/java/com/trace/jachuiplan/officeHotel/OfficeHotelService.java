@@ -8,13 +8,22 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class OfficeHotelService {
+
     private final OfficeHotelRepository officeHotelRepository;
 
-    public List<OfficeHotel> getOfficeHotelDeals(String startyearmonth, String endyearmonth, String sggcd) {
-        return officeHotelRepository.getOfficeHotelDeals(startyearmonth, endyearmonth, sggcd);
+    public List<OfficeHotel> getOfficeHotelDeals(String startYearMonth, String endYearMonth, String sggcd) {
+        return officeHotelRepository.getOfficeHotelDeals(startYearMonth, endYearMonth, sggcd);
     }
 
-    public List<OfficeHotel> getOfficeHotelDeals(String startyearmonth, String endyearmonth, List<String> sggcds) {
-        return officeHotelRepository.getOfficeHotelDealsWithSggList(startyearmonth, endyearmonth, sggcds);
+    public List<OfficeHotel> getOfficeHotelDeals(String startYearMonth, String endYearMonth, List<String> sggcds) {
+        return officeHotelRepository.getOfficeHotelDealsWithSggList(startYearMonth, endYearMonth, sggcds);
     }
+
+    // 레포지토리에서 제공하는 findByCriteria 메서드를 호출
+    public List<OfficeHotel> findOfficeHotelsByCriteria(String startYearMonth, String endYearMonth, List<String> sggcds,
+                                                        String rentType, Double minArea, Double maxArea, Integer minBuildYear,
+                                                        Integer maxBuildYear, Integer minFloor, Integer maxFloor) {
+        return officeHotelRepository.findByCriteria(startYearMonth, endYearMonth, sggcds, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);
+    }
+
 }

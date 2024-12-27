@@ -70,3 +70,61 @@ dependencies {
 tasks.withType(JavaCompile) {
 	options.compilerArgs << '-parameters'
 }
+
+def reactDir = "$projectDir/src/main/map"
+
+sourceSets {
+	main {
+		resources { srcDirs = ["$projectDir/src/main/resources"]
+		}
+	}
+}
+
+processResources { dependsOn "copyReactBuildResourceFiles", "copyReactBuildHtmlFiles" }
+
+task installReact(type: Exec) {
+	workingDir "$reactDir"
+	inputs.dir "$reactDir"
+	group = BasePlugin.BUILD_GROUP
+
+    // PATH 정보를 명시적으로 전달
+	// Github Action Runner에서 npm 명령어 실행할 때 PATH를 전달해줘야 작동함.
+    environment "PATH", System.getenv("PATH")
+
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine 'npm.cmd', 'install'
+	} else {
+		commandLine 'npm', 'install'
+	}
+}
+
+task buildReact(type: Exec) {
+	dependsOn "installReact"
+	workingDir "$reactDir"
+	inputs.dir "$reactDir"
+	group = BasePlugin.BUILD_GROUP
+
+    // PATH 정보를 명시적으로 전달
+    environment "PATH", System.getenv("PATH")
+
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine 'npm.cmd', 'run', 'build'
+	} else {
+		commandLine 'npm', 'run', 'build'
+	}
+}
+
+task copyReactBuildResourceFiles(type: Copy) {
+	dependsOn "buildReact"
+	from "$reactDir/build/"
+	exclude '**/*.html' // *.html 파일 제외
+	into "$projectDir/src/main/resources/static/map/"
+}
+
+task copyReactBuildHtmlFiles(type: Copy) {
+	dependsOn "buildReact"
+	from("$reactDir/build/") {
+		include '*.html' // *.html 파일만 포함
+	}
+	into "$projectDir/src/main/resources/templates/map/"
+}
