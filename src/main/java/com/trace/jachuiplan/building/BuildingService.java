@@ -19,4 +19,10 @@ public class BuildingService {
                                                Integer maxBuildYear, Integer minFloor, Integer maxFloor) {
         return buildingRepository.findByCriteria(startYearMonth, endYearMonth, sggcds, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);
     }
+
+    public List<BuildingFilterDTO> averageBuildingCriteria(String startYearMonth, String endYearMonth, List<String> sggcds,
+                                               String rentType, Double minArea, Double maxArea, Integer minBuildYear,
+                                               Integer maxBuildYear, Integer minFloor, Integer maxFloor) {
+        return buildingRepository.averageByCriteria(startYearMonth, endYearMonth, sggcds, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);
+    }
 }
