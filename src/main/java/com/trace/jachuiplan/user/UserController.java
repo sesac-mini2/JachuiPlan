@@ -1,5 +1,10 @@
 package com.trace.jachuiplan.user;
 
+import com.trace.jachuiplan.board.Board;
+import com.trace.jachuiplan.board.BoardService;
+import com.trace.jachuiplan.likes.LikesId;
+import com.trace.jachuiplan.likes.LikesService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,12 +13,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private final LikesService likesService;
 
     // 회원가입 페이지
     @GetMapping("/signup")
@@ -75,8 +85,9 @@ public class UserController {
     }
 
     // 임시 myPage
-    @GetMapping("/myPage")
+    @GetMapping("/mypage")
     public String myPage(@AuthenticationPrincipal UserDetails userDetails) {
+
         return "users/myPage_form";
     }
 
@@ -103,6 +114,37 @@ public class UserController {
 
         userService.changeNickname(userDetails.getUsername(), nickname);
         return ResponseEntity.ok("닉네임이 변경되었습니다.");
+    }
+
+
+    // 수정
+    // 작성한 글
+    @GetMapping("/mypage/my-posts")
+    @ResponseBody
+    public ResponseEntity<List<Board>> getPosts(Model model,
+                                               @AuthenticationPrincipal UserDetails userDetails,
+                                               @RequestParam(value="page", defaultValue="0") int page){
+        List<Board> getPosts = userService.getPosts(userDetails.getUsername());
+        return ResponseEntity.ok(getPosts);
+    }
+
+    // 좋아요한 글
+    @GetMapping("/mypage/mylikes")
+    public String myLikes(Model model,
+                          @AuthenticationPrincipal UserDetails userDetails,
+                          @RequestParam(value="page", defaultValue="0") int page) {
+        List<Board> likedBoards = userService.likedBoards(userDetails.getUsername());
+
+        // 좋아요 수 계산
+        Map<Long, Long> likesCountMap = new HashMap<>();
+        for (Board board : likedBoards) {
+            long likesCount = likesService.getLikesCount(board);
+            likesCountMap.put(board.getBno(), likesCount);
+        }
+
+        model.addAttribute("likedBoards", likedBoards);
+        model.addAttribute("likesCountMap", likesCountMap);
+        return "users/mylikes_form";
     }
 
 }

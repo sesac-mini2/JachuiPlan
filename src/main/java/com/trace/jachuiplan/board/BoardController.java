@@ -158,16 +158,7 @@ public class BoardController {
         // 게시물 정보 가져오기
         Board board = boardService.getBoardById(boardId);
 
-        // LikesId 객체 생성
-        LikesId likesId = new LikesId(board, currentUser);
-
         // 좋아요 상태 확인 및 토글
-        if (likesService.isLiked(board, currentUser)) {
-            likesService.removeLike(likesId);
-            return "unliked";
-        } else {
-            likesService.addLike(likesId);
-            return "liked";
-        }
+        return likesService.toggleLike(board, currentUser);
     }
 }

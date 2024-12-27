@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>좋아요한 글 목록</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .post-list {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .post-list th, .post-list td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .post-list th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .like-button {
+        cursor: pointer;
+    }
+
+    .like-button:hover {
+        opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+<h1>좋아요한 글 목록</h1>
+
+<table class="post-list">
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>제목</th>
+    <th>게시판</th>
+    <th>작성자</th>
+    <th>작성일</th>
+    <th>좋아요 수</th>
+    <th>좋아요</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="board, stat : ${likedBoards}">
+    <td th:text="${stat.index + 1}"></td> <!-- 번호 -->
+    <td>
+      <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"></a>
+    </td>
+    <td th:text="${board.type.toString() == '0' ? '정보' : (board.type.toString() == '1' ? '일반' : (board.type.toString() == '2' ? 'Q&A' : '기타'))}"></td>
+    <td th:text="${board.users.username}"></td>
+    <td th:text="${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}"></td>
+    <td th:text="${likesCountMap[board.bno]}"></td>
+    <td>
+      <img id="likeButton-${board.bno}"
+           th:src="${'/img/like.png'}"
+           class="like-button"
+           th:onclick="|toggleLike(${board.bno})|" />
+    </td>
+  </tr>
+  <tr th:if="${likedBoards == null || likedBoards.size() == 0}">
+    <td colspan="7">좋아요한 글이 없습니다.</td>
+  </tr>
+  </tbody>
+</table>
+
+<script>
+  function toggleLike(boardId) {
+      const likeButton = document.getElementById(`likeButton-${boardId}`);
+      if (!likeButton) {
+          console.error(`Like button for board ID ${boardId} not found.`);
+          return;
+      }
+
+      const currentSrc = likeButton.src;
+      const isLiked = currentSrc.includes('like.png');
+
+      fetch("/board/like?boardId=" + boardId, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": csrfToken
+          }
+      })
+      .then(response => response.text())
+      .then(data => {
+          if (data === "unliked") {
+              likeButton.src = '/img/unlike.png'; // 좋아요 취소 상태로 변경
+          } else if (data === "liked") {
+              likeButton.src = '/img/like.png'; // 좋아요 상태로 변경
+          }
+      })
+      .catch(error => {
+          console.error("Error:", error);
+          alert("좋아요 처리 중 오류가 발생했습니다.");
+      });
+  }
+</script>
+</body>
+</html>
