@@ -25,7 +25,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
-                                "/api/regioncd/**", "/api/officeHotel/**","/api/building/**") // API는 누구나 접근 가능
+                                "/api/regioncd/**", "/api/officeHotel/**","/api/building/**", "/map/**","/api/**") // API는 누구나 접근 가능
                         .permitAll()
                         //.requestMatchers("/public/**", "/user/signup", "/user/check-username", "/user/check-nickname").permitAll()
                         //.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
