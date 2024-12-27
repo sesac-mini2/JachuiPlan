@@ -1,5 +1,6 @@
 package com.trace.jachuiplan.board;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,4 +38,9 @@ public class BoardService {
                 .orElse(null); // 게시글이 없으면 null 반환
     }
 
+    // 조회수 증가
+    @Transactional
+    public void addViewCount(Board board) {
+        board.setViews(board.getViews() + 1);
+    }
 }
