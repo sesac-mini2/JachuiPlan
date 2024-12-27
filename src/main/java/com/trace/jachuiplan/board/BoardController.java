@@ -4,6 +4,7 @@ import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.likes.LikesService;
 import com.trace.jachuiplan.user.UserService;
 import com.trace.jachuiplan.user.Users;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,11 @@ public class BoardController {
     @Autowired
     private UserService userService;
 
+    @ModelAttribute("menu")
+    public String menu(){
+        return "community";
+    }
+
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
@@ -43,6 +49,7 @@ public class BoardController {
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
+        model.addAttribute("type", BoardType.INFO.getType());
         return "board/info_list";
     }
 
@@ -56,6 +63,7 @@ public class BoardController {
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
+        model.addAttribute("type", BoardType.GENERAL.getType());
         return "board/general_list";
     }
 
@@ -69,6 +77,7 @@ public class BoardController {
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
+        model.addAttribute("type", BoardType.QNA.getType());
         return "board/qna_list";
     }
 
@@ -140,6 +149,7 @@ public class BoardController {
 
         model.addAttribute("isLiked", isLiked);
         model.addAttribute("board", board);
+        model.addAttribute("type", board.getType());
         return "board/board_detail";
     }
 
