@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 
 @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE })
 @Retention(RetentionPolicy.RUNTIME)
-@Inherited
+@Repeatable(ExactSize.List.class)
 @Documented
 @Constraint(validatedBy = ExactSizeValidator.class)
 public @interface ExactSize {
@@ -18,8 +18,16 @@ public @interface ExactSize {
 
     Class<? extends Payload>[] payload() default {};
 
-    int value(); // 문자열 길이를 지정
+    /**
+     * @return size the element must be equal to
+     */
+    int value();
 
+    /**
+     * Defines several {@link ExactSize} annotations on the same element.
+     *
+     * @see ExactSize
+     */
     @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE })
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
