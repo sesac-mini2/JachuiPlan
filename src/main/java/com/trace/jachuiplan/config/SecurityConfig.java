@@ -26,8 +26,7 @@ public class SecurityConfig {
                 .securityMatcher("/users/**", "/board/**", "/reply/**", "/admin/**" )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
-                                "/api/**", // API는 누구나 접근 가능
+                                "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
                                 "/board/infolist", "/board/generallist", "/board/qnalist", "/board/menu") // 게시판 목록 누구나 접근 가능
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
