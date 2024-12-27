@@ -23,20 +23,20 @@ public class SecurityConfig {
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-nickname"))
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-password"))
                 )
+                .securityMatcher("/users/**", "/board/**", "/reply/**", "/admin/**" )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
-                                "/api/regioncd/**", "/api/officeHotel/**") // API는 누구나 접근 가능
+                        .requestMatchers(
+                                "/", "/home", "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
+                                "/api/**", // API는 누구나 접근 가능
+                                "/board/infolist", "/board/generallist", "/board/qnalist", "/board/menu") // 게시판 목록 누구나 접근 가능
                         .permitAll()
-                        //.requestMatchers("/public/**", "/user/signup", "/user/check-username", "/user/check-nickname").permitAll()
-                        //.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
-                        //.requestMatchers("/user/**").hasRole("USER")   // 사용자만 접근 가능
-                        .requestMatchers("/board/like").authenticated() // 인증된 사용자만 접근 가능
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/users/login")
                         .loginProcessingUrl("/users/login") // 로그인 post
-                        .defaultSuccessUrl("/users/myPage",true) // 임의로 마이페이지 연결
+                        .defaultSuccessUrl("/users/mypage",true) // 임의로 마이페이지 연결
                         .failureUrl("/users/login?error=true") // 실패 시 로그인 페이지로 리다이렉트
                         .permitAll()
                 )
