@@ -147,6 +147,8 @@ public class BoardController {
 
         boolean isLiked = likesService.isLiked(board, currentUser);
 
+        boardService.addViewCount(board);
+
         model.addAttribute("isLiked", isLiked);
         model.addAttribute("board", board);
         model.addAttribute("type", board.getType());
