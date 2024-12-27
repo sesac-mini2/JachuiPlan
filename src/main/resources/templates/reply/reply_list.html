@@ -1,5 +1,5 @@
-<div th:fragment="replyFragment">
-    <div>댓글</div><span th:text="${paging.totalElements}"></span>
+<div th:fragment="replyFragment" class="mb-4">
+    <h4 class="d-inline me-3">댓글</h4><span class="h5 text-muted" th:text="${paging.totalElements}"></span>
     <div id="replyRegContainer" class="mb-3" sec:authorize="isAuthenticated()">
         <div class="mt-4">
             <div class="mb-3">
@@ -11,20 +11,23 @@
             </div>
         </div>
     </div>
+
+    <p style="height: 1px; background-color: #718EBF;" class="my-5"></p>
+
     <div id="replyListContainer">
-        <div class="card mb-3" th:each="reply : ${paging}" th:data-reply-id="${reply.rno}">
+        <div class="reply-card mb-4" th:each="reply : ${paging}" th:data-reply-id="${reply.rno}">
             <div class="card-body">
                 <p th:text="${reply.nickname}"></p>
-                <p class="reply-content" th:text="${reply.reply}"></p>
+                <p class="reply-content text-muted" th:text="${reply.reply}"></p>
                 <textarea class="reply-textarea d-none form-control"></textarea>
-                <p class="text-muted small" th:text="${#temporals.format(reply.replydate, 'yyyy-MM-dd HH:mm')}"></p>
+                <p class="text-muted small m-0" th:text="${#temporals.format(reply.replydate, 'yyyy-MM-dd HH:mm')}"></p>
                 <div class="reply-err"></div>
                 <div class="text-end">
                     <button class="btn btn-primary btn-sm reply-modify"
                             sec:authorize="isAuthenticated()"
                             th:if="${reply.username != null and #authentication.getPrincipal().getUsername() == reply.username}"
                             th:text="수정"></button>
-                    <button class="btn btn-secondary btn-sm reply-delete"
+                    <button class="btn btn-outline-primary btn-sm reply-delete"
                             sec:authorize="isAuthenticated()"
                             th:if="${reply.username != null and #authentication.getPrincipal().getUsername() == reply.username}"
                             th:text="삭제"></button>
@@ -35,7 +38,7 @@
     <div id="paginationContainer" th:if="${!paging.isEmpty()}">
         <ul class="pagination justify-content-center">
             <li class="page-item"
-                th:classappend="${!paging.hasPrevious} ? 'disabled'"
+                th:classappend="${!paging.hasPrevious} ? 'none'"
                 th:data-page="${paging.number-1}">
                 <a class="page-link">이전</a>
             </li>
@@ -47,11 +50,10 @@
                 <a th:text="${page+1}" class="page-link"></a>
             </li>
             <li class="page-item"
-                th:classappend="${!paging.hasNext} ? 'disabled'"
+                th:classappend="${!paging.hasNext} ? 'none'"
                 th:data-page="${paging.number+1}">
                 <a class="page-link">다음</a>
             </li>
         </ul>
     </div>
-
 </div>
