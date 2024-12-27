@@ -1,4 +1,4 @@
-package com.trace.jachuiplan.building;
+package com.trace.jachuiplan.house;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

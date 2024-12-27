@@ -1,4 +1,4 @@
-package com.trace.jachuiplan.building;
+package com.trace.jachuiplan.house;
 
 import com.trace.jachuiplan.CustomAnnotation.ExactSize;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 public class BuildingApiController {
 
-    private final BuildingService buildingService;
+    private final com.trace.jachuiplan.house.BuildingService buildingService;
 
     @GetMapping("/api/building/search")
     public ResponseEntity<List<Building>> searchBuildings(

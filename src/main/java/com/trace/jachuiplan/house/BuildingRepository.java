@@ -1,4 +1,4 @@
-package com.trace.jachuiplan.building;
+package com.trace.jachuiplan.house;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

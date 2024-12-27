@@ -1,4 +1,4 @@
-package com.trace.jachuiplan.building;
+package com.trace.jachuiplan.house;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
