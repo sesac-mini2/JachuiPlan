@@ -75,3 +75,7 @@ a.active {
     height: 140px;
     padding: 1rem;
 }
+
+textarea {
+    resize: none;
+}
