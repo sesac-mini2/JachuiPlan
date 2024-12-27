@@ -1,4 +1,4 @@
-<div th:fragment="replyFragment" class="mb-4">
+<div th:fragment="replyFragment" class="pt-3">
     <h4 class="d-inline me-3">댓글</h4><span class="h5 text-muted" th:text="${paging.totalElements}"></span>
     <div id="replyRegContainer" class="mb-3" sec:authorize="isAuthenticated()">
         <div class="mt-4">
@@ -20,7 +20,6 @@
             <div class="card-body">
                 <p th:text="${reply.nickname}"></p>
                 <p class="reply-content text-muted" th:text="${reply.reply}"></p>
-                <textarea class="reply-textarea d-none form-control"></textarea>
                 <p class="text-muted small m-0" th:text="${#temporals.format(reply.replydate, 'yyyy-MM-dd HH:mm')}"></p>
                 <div class="reply-err"></div>
                 <div class="text-end">

@@ -88,7 +88,7 @@ function clickRegReplyBtn(e){
     const replyContent = $('#replyContent').val().trim();
     if(!validateReply(replyContent)){
         $("#replyErrorContainer").empty();
-        $("#replyErrorContainer").append(`<p>댓글을 입력해주세요.</p>`)
+        $("#replyErrorContainer").append(`<p class="p-2 text-danger">! 댓글을 입력해주세요.</p>`)
         return;
     }
     createReply(replyContent);
@@ -100,7 +100,6 @@ function clickModifyReplyBtn(e) {
     const card = $(e).closest('.reply-card');
     const replyId = card.data("reply-id");
     const replyContent = card.find('.reply-content');
-    const replyTextarea = card.find('.reply-textarea');
     const replyErr = card.find('.reply-err');
     const cancelBtn = $(e).next();
 
@@ -109,11 +108,11 @@ function clickModifyReplyBtn(e) {
     if ($(e).text() === '수정') {
         // p 태그 내용을 textarea로 복사
         const currentContent = replyContent.text();
-        replyTextarea.val(currentContent);
+        card.find('.reply-textarea').val(currentContent);
 
-        // p 태그 숨기고 textarea 표시
+        // replyContent 숨기고 textarea 표시
         replyContent.addClass('d-none');
-        replyTextarea.removeClass('d-none');
+        replyContent.after(`<textarea class="reply-textarea form-control mb-3 p-3" placeholder="댓글을 입력하세요">${currentContent}</textarea>`);
 
         // 버튼 텍스트를 '저장'으로 변경
         $(e).text('저장');
@@ -123,16 +122,16 @@ function clickModifyReplyBtn(e) {
     }
     else {
         // 변경 내용 가져오기
-        const updatedContent = replyTextarea.val().trim();
+        const updatedContent = card.find('.reply-textarea').val().trim();
         if(!validateReply(updatedContent)){
-            replyErr.append(`<p>댓글을 입력해주세요.</p>`)
+            replyErr.append(`<p class="p-2 text-danger">! 댓글을 입력해주세요.</p>`)
             return;
         }
 
         modifyReply(replyId, updatedContent);
 
-        // textarea 숨기고 p 태그 표시
-        replyTextarea.addClass('d-none');
+        // textarea 삭제하고 replyContent 태그 표시
+        replyContent.next().remove();
         replyContent.text(updatedContent);
         replyContent.removeClass('d-none');
 
@@ -157,7 +156,7 @@ function clickDeleteReplyBtn(e){
         $(e).text('삭제');
 
         // 저장 버튼을 '수정'으로 변경
-        $(e).pre().text('수정');
+        $(e).prev().text('수정');
 
         const card = $(e).closest('.reply-card');
         const replyContent = card.find('.reply-content');
@@ -166,7 +165,7 @@ function clickDeleteReplyBtn(e){
 
         // 댓글 내용, 수정란 변경
         replyContent.removeClass('d-none');
-        replyTextarea.addClass('d-none');
+        replyTextarea.remove();
         replyErr.empty();
     }
 }
