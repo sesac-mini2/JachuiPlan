@@ -22,15 +22,15 @@
                     <li class="nav-item me-4">
                         <img th:if="${menu == 'mypage'}" th:src="@{/img/mypage_active.png}" alt="마이페이지 아이콘" class="d-inline nav-icon align-middle">
                         <img th:unless="${menu == 'mypage'}" th:src="@{/img/mypage.png}" alt="마이페이지 아이콘" class="d-inline nav-icon align-middle">
-                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'mypage' ? 'active' : ''}" href="/mypage" th:field="${type}">마이페이지</a>
+                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'mypage' ? 'active' : ''}" href="/users/mypage" th:field="${type}">마이페이지</a>
                     </li>
                 </ul>
             </div>
 
             <div class="col-md-3 text-end">
                 <span class="me-3 text-muted align-middle" sec:authentication="principal.nickname"></span>
-                <a class="btn btn-outline-secondary btn-sm align-middle" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
-                <a class="btn btn-outline-secondary btn-sm align-middle" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+                <a class="btn btn-outline-secondary btn-sm align-middle" sec:authorize="isAnonymous()" th:href="@{/users/login}">로그인</a>
+                <a class="btn btn-outline-secondary btn-sm align-middle" sec:authorize="isAuthenticated()" th:href="@{/users/logout}">로그아웃</a>
             </div>
         </div>
     </nav>

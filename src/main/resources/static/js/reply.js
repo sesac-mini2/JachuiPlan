@@ -64,7 +64,7 @@ async function modifyReply(replyId, replyContent){
 // 댓글 삭제
 async function deleteReply(replyId){
     if(confirm("댓글을 삭제하시겠습니까?")){
-        const page = $(".page-item.active").find(".page-link").data("page");
+        const page = $(".page-item.active").data('page');
         await axios.delete("/reply/" + replyId, {
                 headers: {
                     "X-CSRF-TOKEN": csrfToken

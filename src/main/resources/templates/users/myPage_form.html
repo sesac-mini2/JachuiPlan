@@ -1,213 +1,173 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>마이페이지</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        #myPageContent {
-            display: none;
-        }
+<html layout:decorate="~{layout}">
+<th:block layout:fragment="sidebar">
+    <nav th:replace="~{users/users_sidebar :: sidebarFragment}"></nav>
+</th:block>
+<th:block layout:fragment="content">
+    <h1>마이페이지</h1>
 
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .success-message {
-            color: green;
-        }
-
-        .error-message {
-            color: red;
-        }
-
-        .tabs {
-            margin-top: 20px;
-        }
-
-        .tabs button {
-            padding: 10px 20px;
-            margin-right: 5px;
-            cursor: pointer;
-            border: none;
-            background-color: #f1f1f1;
-        }
-
-        .tabs button.active {
-            background-color: #007bff;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-<h1>마이페이지</h1>
-
-<!-- 비밀번호 확인 -->
-<div id="passwordVerifySection">
-    <label for="password">비밀번호:</label>
-    <input type="password" id="password" placeholder="비밀번호 입력">
-    <button id="verifyPasswordBtn">확인</button>
-    <p id="verifyMessage" class="error-message"></p>
-</div>
-
-<!-- 마이페이지 -->
-<div id="myPageContent">
-    <div class="tabs">
-        <button class="tab-link active" data-tab="infoTab">정보 수정</button>
-        <button class="tab-link" data-tab="scrapTab">스크랩한 지역</button>
-        <button class="tab-link" data-tab="writtenTab">작성한 글</button>
-        <button class="tab-link" data-tab="likesTab">좋아요 글</button>
+    <!-- 비밀번호 확인 -->
+    <div id="passwordVerifySection">
+        <label for="password">비밀번호:</label>
+        <input type="password" id="password" placeholder="비밀번호 입력">
+        <button id="verifyPasswordBtn">확인</button>
+        <p id="verifyMessage" class="error-message"></p>
     </div>
 
-    <div class="tab-content active" id="infoTab">
-        <h2>정보 수정</h2>
-        <form id="infoForm" method="PUT">
-            <label for="nickname">닉네임 변경:</label>
-            <input type="text" id="nickname" name="nickname" placeholder="닉네임 입력">
-            <button type="button" id="checkNicknameBtn">중복 확인</button>
-            <p id="nicknameMessage"></p>
+    <!-- 마이페이지 -->
+    <div id="myPageContent">
+        <div class="tabs">
+            <button class="tab-link active" data-tab="infoTab">정보 수정</button>
+            <button class="tab-link" data-tab="scrapTab">스크랩한 지역</button>
+            <button class="tab-link" data-tab="writtenTab">작성한 글</button>
+            <button class="tab-link" data-tab="likesTab">좋아요 글</button>
+        </div>
 
-            <label for="newPassword">새 비밀번호:</label>
-            <input type="password" id="newPassword" name="newPassword" placeholder="새 비밀번호 입력">
-            <label for="confirmPassword">비밀번호 확인:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 확인">
-            <p id="passwordMessage"></p>
+        <div class="tab-content active" id="infoTab">
+            <h2>정보 수정</h2>
+            <form id="infoForm" method="PUT">
+                <label for="nickname">닉네임 변경:</label>
+                <input type="text" id="nickname" name="nickname" placeholder="닉네임 입력">
+                <button type="button" id="checkNicknameBtn">중복 확인</button>
+                <p id="nicknameMessage"></p>
 
-            <button type="button" id="updateInfoBtn">수정 완료</button>
-        </form>
+                <label for="newPassword">새 비밀번호:</label>
+                <input type="password" id="newPassword" name="newPassword" placeholder="새 비밀번호 입력">
+                <label for="confirmPassword">비밀번호 확인:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 확인">
+                <p id="passwordMessage"></p>
+
+                <button type="button" id="updateInfoBtn">수정 완료</button>
+            </form>
+        </div>
+
+        <div class="tab-content" id="scrapTab">
+            <h2>스크랩한 지역</h2>
+            <p>스크랩한 지역 리스트를 표시합니다.</p>
+        </div>
+
+        <div class="tab-content" id="writtenTab">
+            <h2>작성한 글</h2>
+            <p>작성한 글 리스트를 표시합니다.</p>
+        </div>
+
+        <div class="tab-content" id="likesTab">
+            <h2>좋아요 글</h2>
+            <p>좋아요한 글 리스트를 표시합니다.</p>
+        </div>
     </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function () {
+            // 비밀번호 확인 버튼 클릭 이벤트
+            $('#verifyPasswordBtn').click(function () {
+                const password = $('#password').val();
+                const message = $('#verifyMessage');
 
-    <div class="tab-content" id="scrapTab">
-        <h2>스크랩한 지역</h2>
-        <p>스크랩한 지역 리스트를 표시합니다.</p>
-    </div>
-
-    <div class="tab-content" id="writtenTab">
-        <h2>작성한 글</h2>
-        <p>작성한 글 리스트를 표시합니다.</p>
-    </div>
-
-    <div class="tab-content" id="likesTab">
-        <h2>좋아요 글</h2>
-        <p>좋아요한 글 리스트를 표시합니다.</p>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function () {
-        // 비밀번호 확인 버튼 클릭 이벤트
-        $('#verifyPasswordBtn').click(function () {
-            const password = $('#password').val();
-            const message = $('#verifyMessage');
-
-            if (!password) {
-                message.text("비밀번호를 입력해주세요.")
-                    .removeClass("success-message")
-                    .addClass("error-message");
-                return;
-            }
-
-            $.ajax({
-                url: "/users/myPage/verify-password", // 서버 API
-                type: "POST",
-                data: { password: password },
-                success: function () {
-                    message.text("비밀번호가 일치합니다.")
-                        .removeClass("error-message")
-                        .addClass("success-message");
-                    $('#passwordVerifySection').hide();
-                    $('#myPageContent').fadeIn();
-                },
-                error: function () {
-                    message.text("비밀번호가 일치하지 않습니다.")
+                if (!password) {
+                    message.text("비밀번호를 입력해주세요.")
                         .removeClass("success-message")
                         .addClass("error-message");
+                    return;
                 }
+
+                $.ajax({
+                    url: "/users/myPage/verify-password", // 서버 API
+                    type: "POST",
+                    data: { password: password },
+                    success: function () {
+                        message.text("비밀번호가 일치합니다.")
+                            .removeClass("error-message")
+                            .addClass("success-message");
+                        $('#passwordVerifySection').hide();
+                        $('#myPageContent').fadeIn();
+                    },
+                    error: function () {
+                        message.text("비밀번호가 일치하지 않습니다.")
+                            .removeClass("success-message")
+                            .addClass("error-message");
+                    }
+                });
+            });
+
+            // 탭 클릭 이벤트
+            $('.tab-link').click(function () {
+                const targetTab = $(this).data('tab');
+
+                $('.tab-content').removeClass('active');
+                $('.tab-link').removeClass('active');
+
+                $(`#${targetTab}`).addClass('active');
+                $(this).addClass('active');
+            });
+
+            // 닉네임 중복 확인
+            $('#checkNicknameBtn').click(function () {
+                const nickname = $('#nickname').val();
+                const message = $('#nicknameMessage');
+
+                if (!nickname) {
+                    message.text("닉네임을 입력해주세요.").addClass("error-message");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/users/check-nickname",
+                    type: "GET",
+                    data: { nickname: nickname },
+                    success: function () {
+                        message.text("사용 가능한 닉네임입니다.").removeClass("error-message").addClass("success-message");
+                    },
+                    error: function () {
+                        message.text("이미 사용 중인 닉네임입니다.").removeClass("success-message").addClass("error-message");
+                    }
+                });
+            });
+
+            // 수정 완료 버튼 클릭 이벤트
+            $('#updateInfoBtn').click(function () {
+                const nickname = $('#nickname').val();
+                const newPassword = $('#newPassword').val();
+                const confirmPassword = $('#confirmPassword').val();
+                const passwordMessage = $('#passwordMessage');
+
+                if (!newPassword || !confirmPassword) {
+                    passwordMessage.text("모든 비밀번호 입력 필드를 채워주세요.").addClass("error-message");
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    passwordMessage.text("비밀번호가 일치하지 않습니다.").addClass("error-message");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/users/change-nickname",
+                    type: "PUT",
+                    data: { nickname: nickname },
+                    success: function () {
+                        $('#nicknameMessage').text("닉네임이 변경되었습니다.").addClass("success-message");
+
+                        $.ajax({
+                            url: "/users/change-password",
+                            type: "PUT",
+                            data: { newPassword: newPassword, confirmPassword: confirmPassword },
+                            success: function () {
+                                passwordMessage.text("비밀번호가 변경되었습니다.").removeClass("error-message").addClass("success-message");
+                            },
+                            error: function () {
+                                passwordMessage.text("비밀번호 변경에 실패했습니다.").addClass("error-message");
+                            }
+                        });
+
+
+                    },
+                    error: function () {
+                        $('#nicknameMessage').text("닉네임 변경에 실패했습니다.").addClass("error-message");
+                    }
+                });
             });
         });
-
-        // 탭 클릭 이벤트
-        $('.tab-link').click(function () {
-            const targetTab = $(this).data('tab');
-
-            $('.tab-content').removeClass('active');
-            $('.tab-link').removeClass('active');
-
-            $(`#${targetTab}`).addClass('active');
-            $(this).addClass('active');
-        });
-
-        // 닉네임 중복 확인
-        $('#checkNicknameBtn').click(function () {
-            const nickname = $('#nickname').val();
-            const message = $('#nicknameMessage');
-
-            if (!nickname) {
-                message.text("닉네임을 입력해주세요.").addClass("error-message");
-                return;
-            }
-
-            $.ajax({
-                url: "/users/check-nickname",
-                type: "GET",
-                data: { nickname: nickname },
-                success: function () {
-                    message.text("사용 가능한 닉네임입니다.").removeClass("error-message").addClass("success-message");
-                },
-                error: function () {
-                    message.text("이미 사용 중인 닉네임입니다.").removeClass("success-message").addClass("error-message");
-                }
-            });
-        });
-
-        // 수정 완료 버튼 클릭 이벤트
-        $('#updateInfoBtn').click(function () {
-            const nickname = $('#nickname').val();
-            const newPassword = $('#newPassword').val();
-            const confirmPassword = $('#confirmPassword').val();
-            const passwordMessage = $('#passwordMessage');
-
-            if (!newPassword || !confirmPassword) {
-                passwordMessage.text("모든 비밀번호 입력 필드를 채워주세요.").addClass("error-message");
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                passwordMessage.text("비밀번호가 일치하지 않습니다.").addClass("error-message");
-                return;
-            }
-
-            $.ajax({
-                url: "/users/change-nickname",
-                type: "PUT",
-                data: { nickname: nickname },
-                success: function () {
-                    $('#nicknameMessage').text("닉네임이 변경되었습니다.").addClass("success-message");
-
-                    $.ajax({
-                        url: "/users/change-password",
-                        type: "PUT",
-                        data: { newPassword: newPassword, confirmPassword: confirmPassword },
-                        success: function () {
-                            passwordMessage.text("비밀번호가 변경되었습니다.").removeClass("error-message").addClass("success-message");
-                        },
-                        error: function () {
-                            passwordMessage.text("비밀번호 변경에 실패했습니다.").addClass("error-message");
-                        }
-                    });
-
-
-                },
-                error: function () {
-                    $('#nicknameMessage').text("닉네임 변경에 실패했습니다.").addClass("error-message");
-                }
-            });
-        });
-    });
-</script>
-</body>
+    </script>
+</th:block>
 </html>

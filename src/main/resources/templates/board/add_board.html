@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>글쓰기</title>
-</head>
-<body>
+<html layout:decorate="~{layout}">
+<th:block layout:fragment="sidebar">
+    <nav th:replace="~{board/board_sidebar :: sidebarFragment}"></nav>
+</th:block>
+<th:block layout:fragment="content">
 <h1>글쓰기</h1>
 
 <form th:action="@{/board/add_board}" method="post">
@@ -21,6 +19,7 @@
     <input type="hidden" name="size" th:value="${size}">
     <button type="submit">작성 완료</button>
 </form>
-
-</body>
+</th:block>
+<th:block layout:fragment="script">
+</th:block>
 </html>
