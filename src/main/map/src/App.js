@@ -4,7 +4,6 @@ import DistrictSelector from './DistrictSelector'; // DistrictSelector 컴포넌
 import './App.css';
 
 function App() {
-  const [msg, setMsg] = useState(""); // 초기 상태를 문자열로 설정
   const [selectedSidoCd, setSelectedSidoCd] = useState('11'); // 서울특별시 기본값 (서울특별시 코드)
   const [selectedSggCd, setSelectedSggCd] = useState(''); // 시군구 선택
   const [center, setCenter] = useState({ latitude: 37.5665, longitude: 126.978 }); // 서울시 기본 좌표
