@@ -117,15 +117,23 @@ public class UserController {
     }
 
 
-    // 수정
-    // 작성한 글
     @GetMapping("/mypage/my-posts")
-    @ResponseBody
-    public ResponseEntity<List<Board>> getPosts(Model model,
-                                               @AuthenticationPrincipal UserDetails userDetails,
-                                               @RequestParam(value="page", defaultValue="0") int page){
-        List<Board> getPosts = userService.getPosts(userDetails.getUsername());
-        return ResponseEntity.ok(getPosts);
+    public String myPosts(Model model,
+                            @AuthenticationPrincipal UserDetails userDetails){
+        List<Board> postBoards = userService.getPosts(userDetails.getUsername());
+        List<Board> likedBoards = userService.likedBoards(userDetails.getUsername());
+
+        // 좋아요 수 계산
+        Map<Long, Long> likesCountMap = new HashMap<>();
+        for (Board board : likedBoards) {
+            long likesCount = likesService.getLikesCount(board);
+            likesCountMap.put(board.getBno(), likesCount);
+        }
+
+        model.addAttribute("postBoards", postBoards);
+        model.addAttribute("likesCountMap", likesCountMap);
+
+        return "users/myposts_form";
     }
 
     // 좋아요한 글

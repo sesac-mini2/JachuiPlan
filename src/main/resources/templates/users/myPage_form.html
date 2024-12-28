@@ -71,8 +71,8 @@
     <div class="tabs">
         <button class="tab-link active" data-tab="infoTab">정보 수정</button>
         <button class="tab-link" data-tab="scrapTab">스크랩한 지역</button>
-        <button class="tab-link" data-tab="writtenTab">작성한 글</button>
-        <button class="tab-link" data-tab="likesTab">좋아요 글</button>
+        <button class="tab-link" onclick="location.href='/users/mypage/my-posts'">작성한 글</button>
+        <button class="tab-link" onclick="location.href='/users/mypage/mylikes'">좋아요 글</button>
     </div>
 
     <div class="tab-content active" id="infoTab">
@@ -96,26 +96,6 @@
     <div class="tab-content" id="scrapTab">
         <h2>스크랩한 지역</h2>
         <p>스크랩한 지역 리스트를 표시합니다.</p>
-    </div>
-
-    <div class="tab-content" id="writtenTab">
-        <h2>작성한 글</h2>
-
-        <div id="postList" style="margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between; font-weight: bold; border-bottom: 2px solid #000; padding: 10px;">
-                <span>번호</span>
-                <span>제목</span>
-                <span>게시판</span>
-                <span>작성일</span>
-                <span>조회수</span>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="tab-content" id="likesTab">
-        <h2>좋아요 글</h2>
-        <p>좋아요한 글 리스트를 표시합니다.</p>
     </div>
 </div>
 
@@ -161,46 +141,7 @@
 
             $(`#${targetTab}`).addClass('active');
             $(this).addClass('active');
-
-            // 작성한 글 탭 클릭 시 작성한 글 리스트 불러오기
-            if (targetTab === 'writtenTab') {
-                fetchMyPosts();
-            }
         });
-
-        // 작성한 글 불러오기
-        function fetchMyPosts() {
-            const postList = $('#postList');
-            postList.html('<p>작성한 글을 불러오는 중...</p>'); // 로딩 메시지 표시
-
-            $.ajax({
-                url: "/users/mypage/my-posts",
-                type: "GET",
-                success: function (posts) {
-                    const postList = $('#postList');
-                    postList.empty(); // 기존 내용 삭제
-
-                    if (posts.length === 0) {
-                        postList.append('<p>작성한 글이 없습니다.</p>');
-                    } else {
-                        posts.forEach((post, index) => {
-                            const postItem = `
-                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px;">
-                                    <span>${index + 1}</span>
-                                    <span>${post.title}</span>
-                                    <span>${new Date(post.regdate).toLocaleDateString()}</span>
-                                    <span>${post.views}</span>
-                                </div>
-                            `;
-                            postList.append(postItem);
-                        });
-                    }
-                },
-                error: function () {
-                    $('#postList').html('<p>작성한 글을 불러오는데 실패했습니다.</p>');
-                }
-            });
-        }
     });
 </script>
 

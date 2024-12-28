@@ -48,18 +48,19 @@
   </thead>
   <tbody>
   <tr th:each="board, stat : ${likedBoards}">
-    <td th:text="${stat.index + 1}"></td> <!-- 번호 -->
+    <td th:text="${stat.index + 1}"></td>
     <td>
       <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"></a>
     </td>
     <td th:text="${board.type.toString() == '0' ? '정보' : (board.type.toString() == '1' ? '일반' : (board.type.toString() == '2' ? 'Q&A' : '기타'))}"></td>
     <td th:text="${board.users.username}"></td>
-    <td th:text="${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}"></td>
+    <td th:text="${#temporals.format(board.regdate, 'yyyy-MM-dd')}"></td>
     <td th:text="${likesCountMap[board.bno]}"></td>
     <td>
-      <img id="likeButton-${board.bno}"
-           th:src="${'/img/like.png'}"
-           class="like-button"
+      <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
+      <img id="likeButton"
+         class="like-button"
+           th:src="@{/img/like.png}"
            th:onclick="|toggleLike(${board.bno})|" />
     </td>
   </tr>
@@ -70,15 +71,19 @@
 </table>
 
 <script>
+
+  const likeButton = document.getElementById(`likeButton`);
+  const csrfToken = document.getElementById(`csrfToken`).value;
+
   function toggleLike(boardId) {
-      const likeButton = document.getElementById(`likeButton-${boardId}`);
+
       if (!likeButton) {
           console.error(`Like button for board ID ${boardId} not found.`);
           return;
       }
 
-      const currentSrc = likeButton.src;
-      const isLiked = currentSrc.includes('like.png');
+<!--      const currentSrc = likeButton.src;-->
+<!--      const isLiked = currentSrc.includes('like.png');-->
 
       fetch("/board/like?boardId=" + boardId, {
           method: "POST",
