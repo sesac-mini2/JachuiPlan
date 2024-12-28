@@ -15,12 +15,12 @@
 
     <!-- 마이페이지 -->
     <div id="myPageContent">
-        <div class="tabs">
-            <button class="tab-link active" data-tab="infoTab">정보 수정</button>
-            <button class="tab-link" data-tab="scrapTab">스크랩한 지역</button>
-            <button class="tab-link" data-tab="writtenTab">작성한 글</button>
-            <button class="tab-link" data-tab="likesTab">좋아요 글</button>
-        </div>
+      <div class="tabs">
+        <button class="tab-link active" data-tab="infoTab">정보 수정</button>
+        <button class="tab-link" data-tab="scrapTab">스크랩한 지역</button>
+        <button class="tab-link" onclick="location.href='/users/mypage/my-posts'">작성한 글</button>
+        <button class="tab-link" onclick="location.href='/users/mypage/mylikes'">좋아요 글</button>
+    </div>
 
         <div class="tab-content active" id="infoTab">
             <h2>정보 수정</h2>
@@ -55,6 +55,7 @@
             <p>좋아요한 글 리스트를 표시합니다.</p>
         </div>
     </div>
+
 </th:block>
 <th:block layout:fragment="script">
     <script>
@@ -96,7 +97,6 @@
 
                 $('.tab-content').removeClass('active');
                 $('.tab-link').removeClass('active');
-
                 $(`#${targetTab}`).addClass('active');
                 $(this).addClass('active');
             });

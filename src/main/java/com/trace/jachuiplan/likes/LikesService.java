@@ -31,9 +31,27 @@ public class LikesService {
         }
     }
 
+    // 좋아요 상태 확인 및 토글
+    public String toggleLike(Board board, Users user){
+        LikesId likesId = new LikesId(board, user);
+        if(isLiked(board, user)){
+            removeLike(likesId);
+            return "unliked";
+        } else{
+          addLike(likesId);
+          return "liked";
+        }
+    }
+
     // 특정 게시글에 대해 사용자가 좋아요를 눌렀는지 확인
     public boolean isLiked(Board board, Users users) {
         Likes like = likesRepository.findByBoardAndUsers(board, users);
         return like != null;  // 좋아요가 존재하면 true 반환
     }
+
+    // 좋아요 수 가져오기
+    public long getLikesCount(Board board){
+        return likesRepository.countByBoard(board);
+    }
+
 }
