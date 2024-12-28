@@ -1,0 +1,17 @@
+<!-- 사이드바 -->
+<nav th:fragment="sidebarFragment" class="col-md-2 sidebar bg-white shadow-sm pt-4">
+    <ul class="nav flex-column text-center">
+        <li class="nav-item mb-3">
+            <a class="nav-link" th:classappend="${type.toString() == '0' ? 'active' : ''}" th:href="@{/board/infolist}">정보 게시판</a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link" th:classappend="${type.toString() == '1' ? 'active' : ''}" th:href="@{/board/generallist}">일반 게시판</a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link" th:classappend="${type.toString() == '2' ? 'active' : ''}" th:href="@{/board/qnalist}">Q&A 게시판</a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link">1:1 문의</a>
+        </li>
+    </ul>
+</nav>
