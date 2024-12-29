@@ -28,7 +28,14 @@
             </div>
 
             <div class="col-md-3 text-end">
-                <span class="me-3 text-muted align-middle" sec:authentication="principal.nickname"></span>
+                <!-- 로그인 상태 -->
+                <span class="me-3 text-muted align-middle"
+                      sec:authorize="isAuthenticated()"
+                      th:text="${#authentication.principal.nickname}"></span>
+
+                <!-- 비로그인 상태 -->
+                <span class="me-3 text-muted align-middle"
+                      sec:authorize="isAnonymous()">Guest</span>
                 <a class="btn btn-outline-secondary btn-sm align-middle" sec:authorize="isAnonymous()" th:href="@{/users/login}">로그인</a>
                 <a class="btn btn-outline-secondary btn-sm align-middle" sec:authorize="isAuthenticated()" th:href="@{/users/logout}">로그아웃</a>
             </div>

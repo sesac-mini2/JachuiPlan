@@ -45,6 +45,11 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .clearAuthentication(true) // 인증 정보 제거
                         .permitAll()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(
+                                (request, response, authException) -> response.sendRedirect("/users/login")
+                        )
                 );
 
         return http.build();
