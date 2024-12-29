@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import MapContainer from "./MapContainer";
 import DistrictSelector from './DistrictSelector'; // DistrictSelector 컴포넌트 가져오기
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import './App.css';
+import Header from "./components/Header";
+import Sidebar from './components/Sidebar';
 
 function App() {
   const [selectedSidoCd, setSelectedSidoCd] = useState('11'); // 서울특별시 기본값 (서울특별시 코드)
@@ -31,6 +34,7 @@ function App() {
 
   return (
     <div>
+      <Header menu='community' isAuthenticated='true' nickname='user99' />
       <h4>지역 선택</h4>
       <div className="select-container">
         <select
