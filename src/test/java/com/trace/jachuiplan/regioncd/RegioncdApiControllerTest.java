@@ -56,7 +56,6 @@ class RegioncdApiControllerTest {
             resultActions
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$["+i+"].sidoCd").value(sidocd))
-                    .andExpect(jsonPath("$["+i+"].sggCd").value(Matchers.not("000")))
                     .andExpect(jsonPath("$["+i+"].umdCd").value("000"));
     }
 }

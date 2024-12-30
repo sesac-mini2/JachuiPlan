@@ -4,6 +4,7 @@ import com.trace.jachuiplan.CustomAnnotation.ExactSize;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,11 +12,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/building")
 public class BuildingApiController {
 
     private final BuildingService buildingService;
 
-    @GetMapping("/api/building/search")
+    @GetMapping("/search")
     public ResponseEntity<List<Building>> searchBuildings(
             @RequestParam(name = "sggcds") List<@ExactSize(5) String> sggcds,
             @RequestParam(name = "startYearMonth") @ExactSize(6) String startYearMonth,
@@ -41,7 +43,7 @@ public class BuildingApiController {
         return ResponseEntity.ok(buildings);
     }
 
-    @GetMapping("/api/building/average")
+    @GetMapping("/average")
     public ResponseEntity<List<BuildingFilterDTO>> averageBuildings(
             @RequestParam(name = "sggcds") List<@ExactSize(5) String> sggcds,
             @RequestParam(name = "startYearMonth") @ExactSize(6) String startYearMonth,
