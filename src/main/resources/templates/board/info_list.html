@@ -4,29 +4,31 @@
 </th:block>
 
 <th:block layout:fragment="content">
-    <div class="board-container">
-        <div th:each="board : ${boardPage}" class="board-item">
-            <div class="board-title">
-                <p class="user-name" th:text="${board.users.nickname}"></p>
-                <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
-            </div>
-            <div class="board-details">
-                <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|" class="date"></p>
-                <span class="board-font">
-                        <img class="view-img" th:src="@{/img/view_count.png}" />
-                        <span th:text="${board.views}"></span>
-                    </span>
-                <span class="board-font">
-                        <img class="like-img" th:src="@{/img/like_count.png}" />
-                        <span th:text="${board.likeCount}"></span> <!-- Changed from board.views to board.likes -->
-                    </span>
-                <span class="board-font">
-                        <img class="reply-img" th:src="@{/img/reply_count.png}" />
-                        <span th:text="${board.replyCount}"></span> <!-- Changed from board.views to board.replies -->
-                    </span>
+    <main class="col-md-10 p-4">
+        <div class="board-container">
+            <div th:each="board : ${boardPage}" class="board-item">
+                <div class="board-title">
+                    <p class="user-name" th:text="${board.users.nickname}"></p>
+                    <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
+                </div>
+                <div class="board-details">
+                    <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|" class="date"></p>
+                    <span class="board-font">
+                            <img class="view-img" th:src="@{/img/view_count.png}" />
+                            <span th:text="${board.views}"></span>
+                        </span>
+                    <span class="board-font">
+                            <img class="like-img" th:src="@{/img/like_count.png}" />
+                            <span th:text="${board.likeCount}"></span> <!-- Changed from board.views to board.likes -->
+                        </span>
+                    <span class="board-font">
+                            <img class="reply-img" th:src="@{/img/reply_count.png}" />
+                            <span th:text="${board.replyCount}"></span> <!-- Changed from board.views to board.replies -->
+                        </span>
+                </div>
             </div>
         </div>
-    </div>
+
 
     <div class="paging">
         <div>
@@ -68,6 +70,7 @@
                 </span>
         </div>
     </div>
+    </main>
 </th:block>
 <th:block layout:fragment="script">
 </th:block>
