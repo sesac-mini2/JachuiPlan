@@ -11,6 +11,15 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [nickname, setNickname] = useState('Guest');
 
+  const handleClick = () => {
+    console.log("오잉?")
+    if(!isAuthenticated){
+      if(window.confirm("로그인 하시겠습니까?")){
+        window.location.href = `http://localhost/users/login`;
+      }
+    };
+  };
+
   useEffect(() => {
     // 로그인 여부 확인
     fetch("/api/auth", {
@@ -69,6 +78,7 @@ function App() {
                 selectedSggCd={selectedSggCd}
                 setSelectedSggCd={setSelectedSggCd}
               />
+              <button onClick={handleClick}>로그인 확인</button>
             </div>
             <MapContainer center={center} />
           </main>
