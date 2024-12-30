@@ -40,7 +40,7 @@ const MapContainer = ({ center }) => {
     const west = bounds.getSouthWest().getLng(); // 서쪽 경계
 
     // 서버에서 현재 지도 영역 내 동들을 가져옴
-    fetch(`http://localhost/api/regionsInBounds?north=${north}&east=${east}&south=${south}&west=${west}`)
+    fetch(`http://localhost/api/regioncd/regionsInBounds?north=${north}&east=${east}&south=${south}&west=${west}`)
       .then(response => response.json()) // JSON 응답 처리
       .then(data => {
         // 각 동에 대해 마커 생성

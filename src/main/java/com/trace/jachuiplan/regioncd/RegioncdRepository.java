@@ -18,9 +18,10 @@ public interface RegioncdRepository extends JpaRepository<Regioncd, Long> {
     List<Regioncd> findSgg(@Param("sidocd") String sidocd);
 
     //구 선택시 해당 동 리스트 찾기
-    List<Regioncd> findBySggCd(String sggCd);
+    @Query("SELECT r FROM Regioncd r WHERE r.sidoCd = :sidocd AND r.sggCd = :sggcd AND r.umdCd != '000'")
+    List<Regioncd> findUmd(@Param("sidocd") String sidocd, @Param("sggcd") String sggcd);
 
-    // 지정된 경계 내에 포함되는 동들을 조회하는 쿼리
+    // 지정된 경계 내에 포함되는 지역들을 조회하는 쿼리
     List<Regioncd> findByLatitudeBetweenAndLongitudeBetween(
-            Double latMin, Double latMax, Double lngMin, Double lngMax);
+        Double latMin, Double latMax, Double lngMin, Double lngMax);
 }
