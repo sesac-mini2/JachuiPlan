@@ -1,25 +1,25 @@
 <!-- 상단바 -->
 <header th:fragment="headerFragment">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm text-center">
+    <nav class="navbar navbar-expand-sm navbar-light bg-white shadow-sm text-center">
         <div class="row container-fluid">
-            <a class="d-inline col-md-2 navbar-brand fw-bold my-2" href="/home">
+            <a class="d-inline col-md-2 navbar-brand fw-bold my-2" href="/map">
                 <img th:src="@{/img/logo.png}" alt="전월세 평균가 아이콘" class="d-inline align-middle logo">
                 <span class="align-middle">자취플랜</span>
             </a>
 
-            <div class="col-md-7 collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-3">
-                    <li class="nav-item me-4">
+            <div class="col-sm-7 collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item me-3">
                         <img th:if="${menu == 'home'}" th:src="@{/img/home_active.png}" alt="전월세 평균가 아이콘" class="d-inline nav-icon align-middle">
                         <img th:unless="${menu == 'home'}" th:src="@{/img/home.png}" alt="전월세 평균가 아이콘" class="d-inline nav-icon align-middle">
-                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'home' ? 'active' : ''}" href="/home">전월세 평균가</a>
+                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'home' ? 'active' : ''}" href="/map">전월세 평균가</a>
                     </li>
-                    <li class="nav-item me-4">
+                    <li class="nav-item me-3">
                         <img th:if="${menu == 'community'}" th:src="@{/img/community_active.png}" alt="커뮤니티 아이콘" class="d-inline nav-icon align-middle">
                         <img th:unless="${menu == 'community'}" th:src="@{/img/community.png}" alt="커뮤니티 아이콘" class="d-inline nav-icon align-middle">
-                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'community' ? 'active' : ''}" href="/board">커뮤니티</a>
+                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'community' ? 'active' : ''}" href="/board/infolist">커뮤니티</a>
                     </li>
-                    <li class="nav-item me-4">
+                    <li class="nav-item me-3">
                         <img th:if="${menu == 'mypage'}" th:src="@{/img/mypage_active.png}" alt="마이페이지 아이콘" class="d-inline nav-icon align-middle">
                         <img th:unless="${menu == 'mypage'}" th:src="@{/img/mypage.png}" alt="마이페이지 아이콘" class="d-inline nav-icon align-middle">
                         <a class="d-inline nav-link align-middle" th:classappend="${menu == 'mypage' ? 'active' : ''}" href="/users/mypage" th:field="${type}">마이페이지</a>
@@ -27,7 +27,7 @@
                 </ul>
             </div>
 
-            <div class="col-md-3 text-end">
+            <div class="col-sm-3 text-end">
                 <!-- 로그인 상태 -->
                 <span class="me-3 text-muted align-middle"
                       sec:authorize="isAuthenticated()"
