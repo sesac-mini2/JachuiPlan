@@ -14,11 +14,11 @@ public class RegioncdService {
         return regioncdRepository.findSido();
     }
 
-    public List<Regioncd> getSggList(String sidocd) {
-        return regioncdRepository.findSgg(sidocd);
+    public List<Regioncd> getSidoAndSggList(String sidocd) {
+        return regioncdRepository.findSidoAndSgg(sidocd);
     }
 
-    public List<Regioncd> getUmdList(String sidocd, String sggcd) { return regioncdRepository.findUmd(sidocd, sggcd);}
+    public List<Regioncd> getSggAndUmdList(String sidocd, String sggcd) { return regioncdRepository.findBySidoCdAndSggCd(sidocd, sggcd);}
 
     // 경계 내의 지역들을 조회하는 서비스 메서드
     public List<Regioncd> getRegionsInBounds(Double north, Double east, Double south, Double west) {

@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     // 구를 선택할 때마다 해당 구의 좌표를 가져오는 API 호출
     if (selectedSggCd) {
-      fetch(`/api/regioncd/${selectedSggCd.slice(2)}/${selectedSggCd.slice(-3)}`) //RegioncdApiController에 요청
+      fetch(`/api/regioncd/${selectedSidoCd}/${selectedSggCd}`) //RegioncdApiController에 요청
         .then((response) => response.json())
         .then((data) => {
           if (data.length > 0) {
@@ -27,7 +27,7 @@ function App() {
           console.error("구 정보 가져오기 실패:", error);
         });
     }
-  }, [selectedSggCd]);
+  }, [selectedSidoCd, selectedSggCd]);
 
   return (
     <div>

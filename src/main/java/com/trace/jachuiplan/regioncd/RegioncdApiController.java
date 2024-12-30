@@ -21,16 +21,16 @@ public class RegioncdApiController {
     }
 
     @GetMapping("/{sidocd}")
-    public ResponseEntity<List<Regioncd>> getSggList(@PathVariable("sidocd") @ExactSize(2) String sidocd) {
-        List<Regioncd> regioncds = regioncdService.getSggList(sidocd);
+    public ResponseEntity<List<Regioncd>> getSidoAndSggList(@PathVariable("sidocd") @ExactSize(2) String sidocd) {
+        List<Regioncd> regioncds = regioncdService.getSidoAndSggList(sidocd);
         return ResponseEntity.ok()
                 .body(regioncds);
     }
 
     @GetMapping("/{sidocd}/{sggcd}")
-    public ResponseEntity<List<Regioncd>> getUmdList(@PathVariable("sidocd") @ExactSize(2) String sidocd,
+    public ResponseEntity<List<Regioncd>> getSggAndUmdList(@PathVariable("sidocd") @ExactSize(2) String sidocd,
                                                      @PathVariable("sggcd") @ExactSize(3) String sggcd) {
-        List<Regioncd> regioncds = regioncdService.getUmdList(sidocd, sggcd);
+        List<Regioncd> regioncds = regioncdService.getSggAndUmdList(sidocd, sggcd);
         return ResponseEntity.ok()
                 .body(regioncds);
     }
