@@ -34,7 +34,7 @@ public class HomeController {
         Map<String, Object> response = new HashMap<>();
         boolean authenticated = userDetails != null && !userDetails.getAuthorities().isEmpty();
         response.put("authenticated", authenticated);
-        response.put("nickname", authenticated ? userDetails.getNickname() : "Guest");
+        response.put("nickname", authenticated ? userDetails.getNickname() : "");
         return ResponseEntity.ok(response);
     }
 }
