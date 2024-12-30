@@ -15,6 +15,9 @@ const DistrictSelector = ({ selectedSidoCd, selectedSggCd, setSelectedSggCd }) =
     fetch(`http://localhost/api/regioncd/${selectedSidoCd}`)
       .then(response => response.json()) // 응답을 JSON으로 파싱
       .then(data => {
+        // TODO: 시도데이터도 받아오는데, 해당 시도 데이터를 이용해서 지도의 중심을 이동시켜야 함.
+        //       현재는 서울특별시만 있어서 데이터를 받아와서 움직이지 않고 고정값을 입력해뒀음.
+        data = data.filter(region => region.sggCd !== '000'); // 시군구가 '000'인 데이터는 제외
         setDistricts(data); // 가져온 구 데이터를 districts 상태에 저장
         setLoading(false); // 로딩 종료
       })
