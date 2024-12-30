@@ -245,10 +245,26 @@ img.reply-img{
     font-weight: bold;
 }
 
+/* 마이페이지 폼 */
+.mypage-container {
+    max-width: 1110px;
+    height: 600px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+}
+
+#passwordVerifySection {
+    display: flex;
+    flex-direction: column; /* 요소를 세로로 배치 */
+    align-items: center; /* 가로 중앙 정렬 */
+}
+
+
 /* signup 추가 */
 .register-container {
      max-width: 630px;
-     height: 630px;
+     height: 600px;
      margin: 50px auto;
      background: #fff;
      border-radius: 15px;
@@ -271,6 +287,7 @@ img.reply-img{
 .form-label {
      font-weight: bold;
      margin-bottom: 5px;
+     border-radius: 10px;
      display: block;
 }
 
@@ -321,4 +338,16 @@ img.reply-img{
     font-size: 14px;
     font-weight: border;
     margin-top: 5px;
+}
+
+.form-pw-label {
+     font-size: 18px;
+     font-weight: bold;
+     margin-bottom: 5px;
+     border-radius: 10px;
+     display: block;
+}
+
+.custom-pw-input{
+    width: 350px;
 }

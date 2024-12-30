@@ -87,8 +87,9 @@ public class UserController {
     // 임시 myPage
     @GetMapping("/mypage")
     public String myPage(Model model,
-                         @AuthenticationPrincipal UserDetails userDetails) {
+                         @AuthenticationPrincipal CustomUserDetails userDetails) {
 
+        model.addAttribute("user", userDetails);
         model.addAttribute("type", MypageTab.INFO.getType());
         return "users/myPage_form";
     }
