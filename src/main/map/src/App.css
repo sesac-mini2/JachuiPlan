@@ -4,3 +4,7 @@
   gap: 10px;
   /* 사이 간격을 조절할 수 있습니다. */
 }
+
+.select-container {
+  height: 50px;
+}

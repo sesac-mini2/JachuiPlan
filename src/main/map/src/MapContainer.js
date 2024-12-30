@@ -58,7 +58,11 @@ const MapContainer = ({ center }) => {
       });
   };
 
-  return <div ref={mapContainerRef} style={{ width: '80%', height: '500px' }} />; // 지도 표시할 div
+  return (
+    
+      <div ref={mapContainerRef} style={{ width: '100%', height: 'calc(100vh - 174px)' }} />
+    
+  )
 };
 
 export default MapContainer;

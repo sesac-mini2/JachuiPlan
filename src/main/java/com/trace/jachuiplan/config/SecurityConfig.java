@@ -9,6 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -23,7 +26,7 @@ public class SecurityConfig {
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-nickname"))
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-password"))
                 )
-                .securityMatcher("/users/**", "/board/**", "/reply/**", "/admin/**" )
+                .securityMatcher("/users/**", "/board/**", "/reply/**", "/admin/**", "/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login",  // 로그인 및 회원가입 페이지는 누구나 접근 가능
