@@ -13,7 +13,7 @@ import java.util.List;
 public class RegioncdApiController {
     private final RegioncdService regioncdService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Regioncd>> getSidoList() {
         List<Regioncd> regioncds = regioncdService.getSidoList();
         return ResponseEntity.ok()
