@@ -6,10 +6,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BuildingRepository extends JpaRepository<Building, Long> {
+public interface HouseRepository extends JpaRepository<House, Long> {
 
-    // 동적인 조건을 사용하여 Building 필터링하는 JPQL 쿼리
-    @Query("SELECT o FROM Building o WHERE "
+    // 동적인 조건을 사용하여 House 필터링하는 JPQL 쿼리
+    @Query("SELECT o FROM House o WHERE "
             + "o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM') "
             + "AND o.dealdate < ADD_MONTHS(TO_DATE(:endYearMonth, 'YYYYMM'), 1) "
             + "AND o.sggcd IN :sggcds "
@@ -23,7 +23,7 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
             + "AND ( :maxBuildYear IS NULL OR o.buildYear <= :maxBuildYear ) "
             + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "
             + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor )")
-    List<Building> findByCriteria(
+    List<House> findByCriteria(
             @Param("startYearMonth") String startYearMonth,
             @Param("endYearMonth") String endYearMonth,
             @Param("sggcds") List<String> sggcds,
@@ -36,7 +36,7 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
             @Param("maxFloor") Integer maxFloor);
 
     // 각 동별 평균과 거래량을 알려줌
-    @Query("SELECT new com.trace.jachuiplan.building.BuildingFilterDTO(o.umdnm, ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM Building o WHERE "
+    @Query("SELECT new com.trace.jachuiplan.house.HouseFilterDTO(o.umdnm, ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM House o WHERE "
             + "o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM') "
             + "AND o.dealdate < ADD_MONTHS(TO_DATE(:endYearMonth, 'YYYYMM'), 1) "
             + "AND o.sggcd IN :sggcds "
@@ -51,7 +51,7 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
             + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "
             + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor )"
             + "GROUP BY o.umdnm")
-    List<BuildingFilterDTO> averageByCriteria(
+    List<HouseFilterDTO> averageByCriteria(
             @Param("startYearMonth") String startYearMonth,
             @Param("endYearMonth") String endYearMonth,
             @Param("sggcds") List<String> sggcds,

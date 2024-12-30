@@ -11,12 +11,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class BuildingApiController {
+public class HouseApiController {
 
-    private final com.trace.jachuiplan.house.BuildingService buildingService;
+    private final HouseService houseService;
 
-    @GetMapping("/api/building/search")
-    public ResponseEntity<List<Building>> searchBuildings(
+    @GetMapping("/api/house/search")
+    public ResponseEntity<List<House>> searchHouses(
             @RequestParam(name = "sggcds") List<@ExactSize(5) String> sggcds,
             @RequestParam(name = "startYearMonth") @ExactSize(6) String startYearMonth,
             @RequestParam(name = "endYearMonth") @ExactSize(6) String endYearMonth,
@@ -27,7 +27,7 @@ public class BuildingApiController {
             @RequestParam(name = "maxBuildYear", required = false) Integer maxBuildYear,
             @RequestParam(name = "minFloor", required = false) Integer minFloor,
             @RequestParam(name = "maxFloor", required = false) Integer maxFloor) {
-        List<Building> buildings = buildingService.findBuildingCriteria(
+        List<House> houses = houseService.findHouseCriteria(
                 startYearMonth,
                 endYearMonth,
                 sggcds,
@@ -38,11 +38,11 @@ public class BuildingApiController {
                 maxBuildYear,
                 minFloor,
                 maxFloor);
-        return ResponseEntity.ok(buildings);
+        return ResponseEntity.ok(houses);
     }
 
-    @GetMapping("/api/building/average")
-    public ResponseEntity<List<BuildingFilterDTO>> averageBuildings(
+    @GetMapping("/api/house/average")
+    public ResponseEntity<List<HouseFilterDTO>> averageHouses(
             @RequestParam(name = "sggcds") List<@ExactSize(5) String> sggcds,
             @RequestParam(name = "startYearMonth") @ExactSize(6) String startYearMonth,
             @RequestParam(name = "endYearMonth") @ExactSize(6) String endYearMonth,
@@ -53,7 +53,7 @@ public class BuildingApiController {
             @RequestParam(name = "maxBuildYear", required = false) Integer maxBuildYear,
             @RequestParam(name = "minFloor", required = false) Integer minFloor,
             @RequestParam(name = "maxFloor", required = false) Integer maxFloor) {
-        List<BuildingFilterDTO> buildings = buildingService.averageBuildingCriteria(
+        List<HouseFilterDTO> houses = houseService.averageHouseCriteria(
                 startYearMonth,
                 endYearMonth,
                 sggcds,
@@ -64,6 +64,6 @@ public class BuildingApiController {
                 maxBuildYear,
                 minFloor,
                 maxFloor);
-        return ResponseEntity.ok(buildings);
+        return ResponseEntity.ok(houses);
     }
 }
