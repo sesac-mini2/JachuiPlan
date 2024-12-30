@@ -16,4 +16,11 @@ public interface RegioncdRepository extends JpaRepository<Regioncd, Long> {
     // 읍면동 단위 항목 (예: 서울특별시 동작구 흑석동)도 제거하기 위해 umdCd가 000인 경우로 한정한다.
     @Query("SELECT r FROM Regioncd r WHERE r.sidoCd = :sidocd AND r.sggCd != '000' AND r.umdCd = '000'")
     List<Regioncd> findSgg(@Param("sidocd") String sidocd);
+
+    //구 선택시 해당 동 리스트 찾기
+    List<Regioncd> findBySggCd(String sggCd);
+
+    // 지정된 경계 내에 포함되는 동들을 조회하는 쿼리
+    List<Regioncd> findByLatitudeBetweenAndLongitudeBetween(
+            Double latMin, Double latMax, Double lngMin, Double lngMax);
 }

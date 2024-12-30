@@ -1,9 +1,15 @@
 package com.trace.jachuiplan.user;
 
+import com.trace.jachuiplan.board.Board;
+import com.trace.jachuiplan.likes.Likes;
+import com.trace.jachuiplan.likes.LikesRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -12,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // PasswordEncoder 추가
+    private final LikesRepository likesRepository;
 
     // 사용자 이름으로 사용자 찾기
     public Optional<Users> findByUsername(String username) {
@@ -87,4 +94,25 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // 작성한 글
+    public List<Board> getPosts(String username){
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        return user.getDboardList();
+    }
+
+    // 좋아요한 글
+    @Transactional
+    public List<Board> likedBoards(String username){
+        Users user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        List<Likes> likesList = likesRepository.findByUsers(user); // Likes 데이터 가져오기
+        List<Board> likedBoards = new ArrayList<>();
+
+        for (Likes like : likesList) {
+            likedBoards.add(like.getBoard());
+        }
+        return likedBoards;
+    }
 }
