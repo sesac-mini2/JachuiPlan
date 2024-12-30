@@ -86,8 +86,10 @@ public class UserController {
 
     // 임시 myPage
     @GetMapping("/mypage")
-    public String myPage(@AuthenticationPrincipal UserDetails userDetails) {
+    public String myPage(Model model,
+                         @AuthenticationPrincipal UserDetails userDetails) {
 
+        model.addAttribute("type", MypageTab.INFO.getType());
         return "users/myPage_form";
     }
 
@@ -117,7 +119,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/mypage/my-posts")
+    @GetMapping("/mypage/myposts")
     public String myPosts(Model model,
                             @AuthenticationPrincipal UserDetails userDetails){
         List<Board> postBoards = userService.getPosts(userDetails.getUsername());
@@ -132,6 +134,7 @@ public class UserController {
 
         model.addAttribute("postBoards", postBoards);
         model.addAttribute("likesCountMap", likesCountMap);
+        model.addAttribute("type", MypageTab.POSTS.getType());
 
         return "users/myposts_form";
     }
@@ -152,7 +155,15 @@ public class UserController {
 
         model.addAttribute("likedBoards", likedBoards);
         model.addAttribute("likesCountMap", likesCountMap);
+        model.addAttribute("type", MypageTab.LIKES.getType());
         return "users/mylikes_form";
+    }
+
+    // 스크랩한 지역
+    @GetMapping("/mypage/region")
+    public String myRegion(Model model){
+        model.addAttribute("type", MypageTab.REGION.getType());
+        return "users/myRegion_form";
     }
 
 }

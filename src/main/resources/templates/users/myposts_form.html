@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>작성한 글</title>
-</head>
+<html layout:decorate="~{layout}">
+<th:block layout:fragment="sidebar">
+    <nav th:replace="~{users/users_sidebar :: sidebarFragment}"></nav>
+</th:block>
+<th:block layout:fragment="content">
+    <main class="col-md-10 p-4">
 <body>
 <h1>작성한 글</h1>
 <table>
@@ -28,3 +28,5 @@
     </tr>
     </tbody>
 </table>
+</th:block>
+<th:block layout:fragment="script">

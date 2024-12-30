@@ -2,40 +2,42 @@
 <th:block layout:fragment="sidebar">
     <nav th:replace="~{board/board_sidebar :: sidebarFragment}"></nav>
 </th:block>
-<th:block layout:fragment="content">
+<th:block layout:fragment="content" th:with="hasSidebar=true">
     <!-- 게시글 -->
-    <div class="card">
-        <div class="mb-5">
-            <h4 class="card-title mb-2" th:text="${board.title}"></h4>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span>
-                    <small class="text-muted" th:text="${board.users.nickname}"></small>
-                    <small class="text-muted ms-2" th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|"></small>
-                </span>
-                <small class="text-muted" th:text="|조회수 ${board.views}|"></small>
-            </div>
-            <!-- 본문 -->
-            <p class="board-content" th:text="${board.content}"></p>
+    <main class="col-md-10 p-4">
+        <div class="card">
+            <div class="mb-5">
+                <h4 class="card-title mb-2" th:text="${board.title}"></h4>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>
+                        <small class="text-muted" th:text="${board.users.nickname}"></small>
+                        <small class="text-muted ms-2" th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|"></small>
+                    </span>
+                    <small class="text-muted" th:text="|조회수 ${board.views}|"></small>
+                </div>
+                <!-- 본문 -->
+                <p class="board-content" th:text="${board.content}"></p>
 
-            <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
+                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
 
-            <!-- 좋아요 & 수정/삭제 버튼 -->
-            <div class="d-flex">
-                <button class="btn btn-outline-primary btn-sm me-auto">
-                    <!-- 좋아요 버튼 (AJAX로 좋아요 추가/제거) -->
-                    <img id="likeButton" class="align-middle"
-                         th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"
-                         th:onclick="|toggleLike(${board.bno})|" />
-                    <span class="align-middle">좋아요</span>
-                </button>
-                <div>
-                    <button class="btn btn-primary me-2">수정</button>
-                    <button class="btn btn-outline-primary">삭제</button>
+                <!-- 좋아요 & 수정/삭제 버튼 -->
+                <div class="d-flex">
+                    <button class="btn btn-outline-primary btn-sm me-auto">
+                        <!-- 좋아요 버튼 (AJAX로 좋아요 추가/제거) -->
+                        <img id="likeButton" class="align-middle"
+                             th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"
+                             th:onclick="|toggleLike(${board.bno})|" />
+                        <span class="align-middle">좋아요</span>
+                    </button>
+                    <div>
+                        <button class="btn btn-primary me-2">수정</button>
+                        <button class="btn btn-outline-primary">삭제</button>
+                    </div>
                 </div>
             </div>
+            <div id="replyFragment"></div>
         </div>
-        <div id="replyFragment"></div>
-    </div>
+    </main>
 </th:block>
 <th:block layout:fragment="script">
     <script th:src="@{/js/reply.js}"></script>
