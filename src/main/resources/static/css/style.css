@@ -120,8 +120,89 @@ textarea {
 .error-message {
     color: red;
     font-size: 12px;
+    margin-top: 5px;
 }
+
 .success-message {
     color: green;
     font-size: 12px;
+    margin-top: 5px;
+}
+
+/* signup 추가 */
+.register-container {
+     max-width: 630px;
+     height: 630px;
+     margin: 50px auto;
+     background: #fff;
+     border-radius: 15px;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+     padding: 30px;
+}
+
+.register-title {
+     text-align: center;
+     font-size: 24px;
+     font-weight: bold;
+     color: black;
+     margin-bottom: 20px;
+}
+
+.form-group {
+     margin-bottom: 15px;
+}
+
+.form-label {
+     font-weight: bold;
+     margin-bottom: 5px;
+     display: block;
+}
+
+.form-control {
+     height: 45px;
+     border-radius: 10px !important;
+}
+
+.input-group {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 10px; /* 입력란과 버튼 사이 여백 */
+}
+
+.custom-input {
+     flex: 1;
+     height: 45px;
+}
+
+.custom-btn {
+     height: 45px;
+     width: 140px;
+     font-size: 15px;
+     line-height: 1.5;
+     border-radius: 10px !important;
+}
+
+.signup-btn {
+     width: 200px;
+     height: 50px;
+     border-radius: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.login-error {
+    color: red;
+    font-size: 14px;
+    font-weight: border;
+    margin-top: 5px;
+}
+
+.login-success{
+    color: green;
+    font-size: 14px;
+    font-weight: border;
+    margin-top: 5px;
 }

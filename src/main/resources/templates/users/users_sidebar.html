@@ -2,6 +2,16 @@
 <nav th:fragment="sidebarFragment" class="col-md-2 sidebar bg-white shadow-sm pt-4">
     <ul class="nav flex-column text-center">
         <li class="nav-item mb-3">
+            <a class="nav-link" th:classappend="${type == 0 ? 'active' : ''}" th:href="@{/users/mypage}">정보 수정</a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link" th:classappend="${type == 1 ? 'active' : ''}" th:href="@{/users/mypage/region}">스크랩한 지역</a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link" th:classappend="${type == 2 ? 'active' : ''}" th:href="@{/users/mypage/myposts}">작성한 글</a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link" th:classappend="${type == 3 ? 'active' : ''}" th:href="@{/users/mypage/mylikes}">좋아요 글</a>
         </li>
     </ul>
 </nav>

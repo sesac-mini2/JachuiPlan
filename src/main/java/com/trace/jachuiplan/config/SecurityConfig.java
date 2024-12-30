@@ -41,9 +41,9 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/map")
                         .invalidateHttpSession(true)
-                        .clearAuthentication(true) // 인증 정보 제거
+                        .clearAuthentication(true)
                         .permitAll()
                 )
                 .exceptionHandling(ex -> ex
