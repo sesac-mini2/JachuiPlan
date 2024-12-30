@@ -6,7 +6,7 @@ const Header = (props) => {
       <nav className="navbar navbar-expand-sm navbar-light bg-white shadow-sm text-center">
         <div className="row container-fluid">
           <a className="d-inline col-sm-2 navbar-brand fw-bold my-2" href="http://localhost/map">
-            <img src="/img/logo.png" alt="전월세 평균가 아이콘" className="d-inline align-middle me-3 logo" />
+            <img src="/img/logo.png" alt="전월세 평균가 아이콘" className="d-inline align-middle me-2 logo" />
             <span className="align-middle">자취플랜</span>
           </a>
 
@@ -63,9 +63,14 @@ const Header = (props) => {
                 </a>
               </>
             ) : (
-              <a className="btn btn-outline-secondary btn-sm align-middle" href="http://localhost/users/login">
-                로그인
-              </a>
+              <>
+                <a className="btn btn-outline-secondary btn-sm align-middle me-2" href="http://localhost/users/login">
+                  로그인
+                </a>
+                <a className="btn btn-outline-secondary btn-sm align-middle" href="http://localhost/users/signup">
+                  회원가입
+                </a>
+              </>
             )}
           </div>
         </div>

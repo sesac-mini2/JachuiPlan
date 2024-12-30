@@ -136,6 +136,114 @@ textarea {
     font-size: 12px;
     margin-top: 5px;
 }
+.board-container{
+    background-color: white;
+    border-radius: 25px;
+}
+
+.board-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid lightgray;
+    width: 98%;
+    margin-left: 1%;
+    padding: 13px;
+}
+
+.board-title > a {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 17px;
+    margin-left: 20px
+}
+
+.user-name{
+    font-size: 13px;
+    margin-left: 20px
+}
+
+img.view-img {
+    width: 20px;
+}
+img.like-img{
+    width: 18px;
+}
+img.reply-img{
+    width: 18px;
+}
+.board-font{
+    font-size: 13px;
+    margin-right: 1px;
+}
+.date {
+
+}
+.paging{
+    display: flex;
+    justify-content: space-between;
+    margin-top:10px;
+}
+
+.table-container{
+    background-color: white;
+    border-radius: 25px;
+    width: 100%;
+}
+
+.paging-btn {
+    display: inline-block;
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+
+
+.paging-btn:hover{
+    display: inline-block;
+    border-radius: 3px;
+    background-color: #718EBF;
+    color:white;
+    text-decoration: none;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+
+.add_form{
+    background-color: white;
+    border-radius: 25px;
+    padding: 3% 3% 5% 3%;
+}
+
+.add_title{
+    width: 100%;
+    height: 40px;
+    border: 1px solid #DFEAF2;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.add_content{
+    width: 100%;
+    height: 500px;
+    border: 1px solid #DFEAF2;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+#add_board_btn{
+    float: right;
+}
+
+.add_form > p{
+    font-size: 18px;
+    font-weight: bold;
+}
 
 /* 마이페이지 폼 */
 .mypage-container {

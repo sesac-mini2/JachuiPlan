@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,7 @@ public class BoardController {
                                 @AuthenticationPrincipal UserDetails userDetails) {
 
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Board> boardPage = boardService.getInfoBoards(pageRequest);
+        Page<Board> boardPage = boardService.getInfoBoards(Pageable.ofSize(size).withPage(page));
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -59,7 +60,7 @@ public class BoardController {
                                    @RequestParam(name = "size", defaultValue = "10") int size,
                                    @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Board> boardPage = boardService.getGeneralBoards(pageRequest);
+        Page<Board> boardPage = boardService.getGeneralBoards(Pageable.ofSize(size).withPage(page));
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -73,17 +74,12 @@ public class BoardController {
                                @RequestParam(name = "size", defaultValue = "10") int size,
                                @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Board> boardPage = boardService.getQnABoards(pageRequest);
+        Page<Board> boardPage = boardService.getQnABoards(Pageable.ofSize(size).withPage(page));
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("type", BoardType.QNA.getType());
         return "board/qna_list";
-    }
-
-    @GetMapping("/menu")
-    public String menu(@AuthenticationPrincipal UserDetails userDetails) {
-        return "board/menu";
     }
 
     @GetMapping("/add_board")

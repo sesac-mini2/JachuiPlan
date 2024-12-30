@@ -56,4 +56,10 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Likes> likesList;
+
+    @Transient
+    private Long replyCount; // 댓글 수 필드 추가
+
+    @Transient
+    private Long likeCount; // 좋아요 수 필드 추가
 }

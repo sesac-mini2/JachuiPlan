@@ -9,7 +9,16 @@ function App() {
   const [selectedSggCd, setSelectedSggCd] = useState(''); // 시군구 선택
   const [center, setCenter] = useState({ latitude: 37.5665, longitude: 126.978 }); // 서울시 기본 좌표
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [nickname, setNickname] = useState('Guest');
+  const [nickname, setNickname] = useState('');
+
+  const handleClick = () => {
+    console.log("오잉?")
+    if(!isAuthenticated){
+      if(window.confirm("로그인 하시겠습니까?")){
+        window.location.href = `http://localhost/users/login`;
+      }
+    };
+  };
 
   useEffect(() => {
     // 로그인 여부 확인
@@ -69,6 +78,7 @@ function App() {
                 selectedSggCd={selectedSggCd}
                 setSelectedSggCd={setSelectedSggCd}
               />
+              <button onClick={handleClick}>로그인 확인</button>
             </div>
             <MapContainer center={center} />
           </main>
