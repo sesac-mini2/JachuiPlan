@@ -4,70 +4,72 @@
 </th:block>
 
 <th:block layout:fragment="content">
-    <div class="board-container">
-        <div th:each="board : ${boardPage}" class="board-item">
-            <div class="board-title">
-                <p class="user-name" th:text="${board.users.nickname}"></p>
-                <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
-            </div>
-            <div class="board-details">
-                <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|" class="date"></p>
-                <span class="board-font">
-                        <img class="view-img" th:src="@{/img/view_count.png}" />
-                        <span th:text="${board.views}"></span>
-                    </span>
-                <span class="board-font">
-                        <img class="like-img" th:src="@{/img/like_count.png}" />
-                        <span th:text="${board.likeCount}"></span> <!-- Changed from board.views to board.likes -->
-                    </span>
-                <span class="board-font">
-                        <img class="reply-img" th:src="@{/img/reply_count.png}" />
-                        <span th:text="${board.replyCount}"></span> <!-- Changed from board.views to board.replies -->
-                    </span>
+    <main class="col-md-10 p-4">
+        <div class="board-container">
+            <div th:each="board : ${boardPage}" class="board-item">
+                <div class="board-title">
+                    <p class="user-name" th:text="${board.users.nickname}"></p>
+                    <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
+                </div>
+                <div class="board-details">
+                    <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|" class="date"></p>
+                    <span class="board-font">
+                            <img class="view-img" th:src="@{/img/view_count.png}" />
+                            <span th:text="${board.views}"></span>
+                        </span>
+                    <span class="board-font">
+                            <img class="like-img" th:src="@{/img/like_count.png}" />
+                            <span th:text="${board.likeCount}"></span> <!-- Changed from board.views to board.likes -->
+                        </span>
+                    <span class="board-font">
+                            <img class="reply-img" th:src="@{/img/reply_count.png}" />
+                            <span th:text="${board.replyCount}"></span> <!-- Changed from board.views to board.replies -->
+                        </span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="paging">
-        <div>
-            <form th:action="@{/board/add_board}" method="get">
-                <input type="hidden" name="type" value="0"/>
-                <input type="hidden" name="page" th:value="${page}">
-                <input type="hidden" name="size" th:value="${size}">
-                <button type="submit" class="btn btn-primary me-2">글쓰기</button>
-            </form>
-        </div>
+        <div class="paging">
+            <div>
+                <form th:action="@{/board/add_board}" method="get">
+                    <input type="hidden" name="type" value="0"/>
+                    <input type="hidden" name="page" th:value="${page}">
+                    <input type="hidden" name="size" th:value="${size}">
+                    <button type="submit" class="btn btn-primary me-2">글쓰기</button>
+                </form>
+            </div>
 
-        <div class="pagination">
-            <span th:if="${boardPage.number > 0}">
-                <a th:href="@{/board/generallist(page=0, size=${boardPage.size})}">
-                    <img th:src="@{/img/start.png}"/>
-                </a>
-            </span>
-
-            <span th:if="${boardPage.number >= 5}">
-                <a th:href="@{/board/generallist(page=${boardPage.number - 5}, size=${boardPage.size})}">
-                    <img th:src="@{/img/previous.png}"/>
-                </a>
-            </span>
-
-            <span th:each="i : ${#numbers.sequence(0, boardPage.totalPages - 1)}" th:if="${i >= (boardPage.number / 5) * 5 && i < (boardPage.number / 5) * 5 + 5}">
-                    <a th:href="@{/board/generallist(page=${i}, size=${boardPage.size})}" th:text="${i + 1}" class="paging-btn"></a>
-                </span>
-
-            <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
-                    <a th:href="@{/board/generallist(page=${boardPage.number + 5}, size=${boardPage.size})}">
-                        <img th:src="@{/img/next.png}"/>
+            <div class="pagination">
+                <span th:if="${boardPage.number > 0}">
+                    <a th:href="@{/board/generallist(page=0, size=${boardPage.size})}">
+                        <img th:src="@{/img/start.png}"/>
                     </a>
                 </span>
 
-            <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
-                    <a th:href="@{/board/generallist(page=${boardPage.totalPages - 1}, size=${boardPage.size})}">
-                        <img th:src="@{/img/end.png}"/>
+                <span th:if="${boardPage.number >= 5}">
+                    <a th:href="@{/board/generallist(page=${boardPage.number - 5}, size=${boardPage.size})}">
+                        <img th:src="@{/img/previous.png}"/>
                     </a>
                 </span>
+
+                <span th:each="i : ${#numbers.sequence(0, boardPage.totalPages - 1)}" th:if="${i >= (boardPage.number / 5) * 5 && i < (boardPage.number / 5) * 5 + 5}">
+                        <a th:href="@{/board/generallist(page=${i}, size=${boardPage.size})}" th:text="${i + 1}" class="paging-btn"></a>
+                    </span>
+
+                <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
+                        <a th:href="@{/board/generallist(page=${boardPage.number + 5}, size=${boardPage.size})}">
+                            <img th:src="@{/img/next.png}"/>
+                        </a>
+                    </span>
+
+                <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
+                        <a th:href="@{/board/generallist(page=${boardPage.totalPages - 1}, size=${boardPage.size})}">
+                            <img th:src="@{/img/end.png}"/>
+                        </a>
+                    </span>
+            </div>
         </div>
-    </div>
+    </main>
 </th:block>
 <th:block layout:fragment="script">
 </th:block>

@@ -3,18 +3,20 @@
     <nav th:replace="~{board/board_sidebar :: sidebarFragment}"></nav>
 </th:block>
 <th:block layout:fragment="content">
-<form th:action="@{/board/add_board}" method="post" class="add_form">
-    <p>제목</p>
-    <input type="text" id="title" name="title" class="add_title" required/>
-    <br>
-    <p>내용</p>
-    <textarea id="content" name="content" class="add_content" required></textarea>
-    <br>
-    <input type="hidden" name="type" th:value="${type}"/>  <!-- 전달된 type 값을 hidden으로 보냄 -->
-    <input type="hidden" name="page" th:value="${page}">
-    <input type="hidden" name="size" th:value="${size}">
-    <button type="submit" class="btn btn-primary me-2" id="add_board_btn">작성 완료</button>
-</form>
+    <main class="col-md-10 p-4">
+        <form th:action="@{/board/add_board}" method="post" class="add_form">
+            <p>제목</p>
+            <input type="text" id="title" name="title" class="add_title" required/>
+            <br>
+            <p>내용</p>
+            <textarea id="content" name="content" class="add_content" required></textarea>
+            <br>
+            <input type="hidden" name="type" th:value="${type}"/>  <!-- 전달된 type 값을 hidden으로 보냄 -->
+            <input type="hidden" name="page" th:value="${page}">
+            <input type="hidden" name="size" th:value="${size}">
+            <button type="submit" class="btn btn-primary me-2" id="add_board_btn">작성 완료</button>
+        </form>
+    </main>
 </th:block>
 <th:block layout:fragment="script">
 </th:block>
