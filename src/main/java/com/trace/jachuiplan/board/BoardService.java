@@ -1,5 +1,7 @@
 package com.trace.jachuiplan.board;
 
+import com.trace.jachuiplan.likes.LikesRepository;
+import com.trace.jachuiplan.reply.ReplyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,42 @@ public class BoardService {
     @Autowired
     private final BoardRepository boardRepository;
 
+    @Autowired
+    private ReplyRepository replyRepository;
+
+    @Autowired
+    private LikesRepository likesRepository;
+
     public Page<Board> getInfoBoards(Pageable pageable) {
-        return boardRepository.findByType('0', pageable);
+        Page<Board> boardPage = boardRepository.findByType('0', pageable);
+        // 각 게시글에 댓글 수와 좋아요 수를 추가
+        boardPage.forEach(board -> {
+            board.setReplyCount(replyRepository.countByBoard(board)); // 댓글 수 계산
+            board.setLikeCount(likesRepository.countByBoard(board));   // 좋아요 수 계산
+        });
+        return boardPage;
     }
 
     public Page<Board> getGeneralBoards(Pageable pageable) {
-        return boardRepository.findByType('1', pageable);
+        Page<Board> boardPage = boardRepository.findByType('1', pageable);
+        // 각 게시글에 댓글 수와 좋아요 수를 추가
+        boardPage.forEach(board -> {
+            board.setReplyCount(replyRepository.countByBoard(board)); // 댓글 수 계산
+            board.setLikeCount(likesRepository.countByBoard(board));   // 좋아요 수 계산
+        });
+
+        return boardPage;
     }
 
     public Page<Board> getQnABoards(Pageable pageable) {
-        return boardRepository.findByType('2', pageable);
+        Page<Board> boardPage = boardRepository.findByType('2', pageable);
+        // 각 게시글에 댓글 수와 좋아요 수를 추가
+        boardPage.forEach(board -> {
+            board.setReplyCount(replyRepository.countByBoard(board)); // 댓글 수 계산
+            board.setLikeCount(likesRepository.countByBoard(board));   // 좋아요 수 계산
+        });
+
+        return boardPage;
     }
 
     public void saveBoard(Board board) {
@@ -37,10 +65,11 @@ public class BoardService {
         return boardRepository.findById(id)
                 .orElse(null); // 게시글이 없으면 null 반환
     }
-
     // 조회수 증가
     @Transactional
     public void addViewCount(Board board) {
         board.setViews(board.getViews() + 1);
     }
+
+
 }
