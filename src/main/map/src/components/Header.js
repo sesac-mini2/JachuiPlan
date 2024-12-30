@@ -63,9 +63,14 @@ const Header = (props) => {
                 </a>
               </>
             ) : (
-              <a className="btn btn-outline-secondary btn-sm align-middle" href="http://localhost/users/login">
-                로그인
-              </a>
+              <>
+                <a className="btn btn-outline-secondary btn-sm align-middle me-2" href="http://localhost/users/login">
+                  로그인
+                </a>
+                <a className="btn btn-outline-secondary btn-sm align-middle" href="http://localhost/users/signup">
+                  회원가입
+                </a>
+              </>
             )}
           </div>
         </div>

@@ -9,7 +9,7 @@ function App() {
   const [selectedSggCd, setSelectedSggCd] = useState(''); // 시군구 선택
   const [center, setCenter] = useState({ latitude: 37.5665, longitude: 126.978 }); // 서울시 기본 좌표
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [nickname, setNickname] = useState('Guest');
+  const [nickname, setNickname] = useState('');
 
   const handleClick = () => {
     console.log("오잉?")
