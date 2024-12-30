@@ -23,6 +23,14 @@ a.active {
     border-radius: 0.5rem;
 }
 
+main {
+    min-height: calc(100vh - 76px);
+}
+
+.navbar {
+    height: 76px;
+}
+
 .navbar-brand {
     color: #343C6A;
 }

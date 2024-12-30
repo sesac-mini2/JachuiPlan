@@ -3,62 +3,64 @@
     <nav th:replace="~{board/board_sidebar :: sidebarFragment}"></nav>
 </th:block>
 <th:block layout:fragment="content">
-    <h1>Boards List</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Reg Date</th>
-            <th>Views</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="board : ${boardPage}">
-            <td th:text="${board.bno}"/>
-            <td><a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"></a></td>
-            <td th:text="${board.content}"/>
-            <td th:text="${board.regdate}"/>
-            <td th:text="${board.views}"/>
-        </tr>
-        </tbody>
-    </table>
+    <main class="col-md-10 p-4">
+        <h1>Boards List</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Reg Date</th>
+                <th>Views</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board : ${boardPage}">
+                <td th:text="${board.bno}"/>
+                <td><a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"></a></td>
+                <td th:text="${board.content}"/>
+                <td th:text="${board.regdate}"/>
+                <td th:text="${board.views}"/>
+            </tr>
+            </tbody>
+        </table>
 
-    <form th:action="@{/board/add_board}" method="get">
-        <!-- hidden input to send type=0 (information board) -->
-        <input type="hidden" name="type" value="0"/>
-        <input type="hidden" name="page" th:value="${page}">
-        <input type="hidden" name="size" th:value="${size}">
-        <button type="submit">글쓰기</button>
-    </form>
-    <!-- 페이징 네비게이션 -->
-    <div>
-        <!-- 맨 처음 페이지로 이동 -->
-        <span th:if="${boardPage.number > 0}">
-            <a th:href="@{/board/infolist(page=0, size=${boardPage.size})}"><img th:src="@{/img/start.png}"/></a>
-        </span>
+        <form th:action="@{/board/add_board}" method="get">
+            <!-- hidden input to send type=0 (information board) -->
+            <input type="hidden" name="type" value="0"/>
+            <input type="hidden" name="page" th:value="${page}">
+            <input type="hidden" name="size" th:value="${size}">
+            <button type="submit">글쓰기</button>
+        </form>
+        <!-- 페이징 네비게이션 -->
+        <div>
+            <!-- 맨 처음 페이지로 이동 -->
+            <span th:if="${boardPage.number > 0}">
+                <a th:href="@{/board/infolist(page=0, size=${boardPage.size})}"><img th:src="@{/img/start.png}"/></a>
+            </span>
 
-        <!-- 이전 페이지 범위로 이동 -->
-        <span th:if="${boardPage.number >= 5}">
-            <a th:href="@{/board/infolist(page=${boardPage.number - 5}, size=${boardPage.size})}"><img th:src="@{/img/previous.png}"/></a>
-        </span>
+            <!-- 이전 페이지 범위로 이동 -->
+            <span th:if="${boardPage.number >= 5}">
+                <a th:href="@{/board/infolist(page=${boardPage.number - 5}, size=${boardPage.size})}"><img th:src="@{/img/previous.png}"/></a>
+            </span>
 
-        <!-- 5개씩 페이지 번호 표시 -->
-        <span th:each="i : ${#numbers.sequence(0, boardPage.totalPages - 1)}" th:if="${i >= (boardPage.number / 5) * 5 && i < (boardPage.number / 5) * 5 + 5}">
-            <a th:href="@{/board/infolist(page=${i}, size=${boardPage.size})}" th:text="${i + 1}">1</a>
-        </span>
+            <!-- 5개씩 페이지 번호 표시 -->
+            <span th:each="i : ${#numbers.sequence(0, boardPage.totalPages - 1)}" th:if="${i >= (boardPage.number / 5) * 5 && i < (boardPage.number / 5) * 5 + 5}">
+                <a th:href="@{/board/infolist(page=${i}, size=${boardPage.size})}" th:text="${i + 1}">1</a>
+            </span>
 
-        <!-- 다음 페이지 범위로 이동 -->
-        <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
-            <a th:href="@{/board/infolist(page=${boardPage.number + 5}, size=${boardPage.size})}"><img th:src="@{/img/next.png}"/></a>
-        </span>
+            <!-- 다음 페이지 범위로 이동 -->
+            <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
+                <a th:href="@{/board/infolist(page=${boardPage.number + 5}, size=${boardPage.size})}"><img th:src="@{/img/next.png}"/></a>
+            </span>
 
-        <!-- 맨 끝 페이지로 이동 -->
-        <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
-            <a th:href="@{/board/infolist(page=${boardPage.totalPages - 1}, size=${boardPage.size})}"><img th:src="@{/img/end.png}"/></a>
-        </span>
-    </div>
+            <!-- 맨 끝 페이지로 이동 -->
+            <span th:if="${boardPage.number + 5 < boardPage.totalPages}">
+                <a th:href="@{/board/infolist(page=${boardPage.totalPages - 1}, size=${boardPage.size})}"><img th:src="@{/img/end.png}"/></a>
+            </span>
+        </div>
+    </main>
 </th:block>
 <th:block layout:fragment="script">
 </th:block>
