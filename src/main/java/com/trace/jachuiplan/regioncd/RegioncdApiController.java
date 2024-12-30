@@ -35,7 +35,7 @@ public class RegioncdApiController {
                 .body(regioncds);
     }
 
-    // 지도 영역 내 동들을 조회하는 API
+    // 지도 영역 내 지역들을 조회하는 API
     @GetMapping("/regionsInBounds")
     public ResponseEntity<List<Regioncd>> getRegionsInBounds(
             @RequestParam("north") Double north,
@@ -43,7 +43,7 @@ public class RegioncdApiController {
             @RequestParam("south") Double south,
             @RequestParam("west") Double west) {
 
-        // 경계 내의 동들을 조회
+        // 경계 내의 지역들을 조회
         List<Regioncd> regioncds = regioncdService.getRegionsInBounds(north, east, south, west);
         return ResponseEntity.ok(regioncds);
     }
