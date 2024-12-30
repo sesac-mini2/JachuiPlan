@@ -12,7 +12,6 @@ function App() {
   const [nickname, setNickname] = useState('');
 
   const handleClick = () => {
-    console.log("오잉?")
     if(!isAuthenticated){
       if(window.confirm("로그인 하시겠습니까?")){
         window.location.href = `http://localhost/users/login`;
@@ -22,7 +21,7 @@ function App() {
 
   useEffect(() => {
     // 로그인 여부 확인
-    fetch("/api/auth", {
+    fetch("/users/check-auth", {
       method: "GET",
       credentials: "include", // 세션 쿠키 포함
     })

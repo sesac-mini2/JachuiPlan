@@ -55,16 +55,17 @@ const Header = (props) => {
           </div>
 
           <div className="col-sm-3 text-end">
-            <span className="me-3 text-muted align-middle">{props.nickname}</span>
+            
             {props.isAuthenticated ? (
               <>
+                <span className="me-3 text-muted align-middle">{props.nickname}</span>
                 <a className="btn btn-outline-secondary btn-sm align-middle" href="http://localhost/users/logout">
                   로그아웃
                 </a>
               </>
             ) : (
               <>
-                <a className="btn btn-outline-secondary btn-sm align-middle me-2" href="http://localhost/users/login">
+                <a className="btn btn-outline-secondary btn-sm align-middle me-3" href="http://localhost/users/login">
                   로그인
                 </a>
                 <a className="btn btn-outline-secondary btn-sm align-middle" href="http://localhost/users/signup">
