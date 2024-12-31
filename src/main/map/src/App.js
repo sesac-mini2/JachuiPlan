@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MapContainer from "./MapContainer";
 import DistrictSelector from './DistrictSelector'; // DistrictSelector 컴포넌트 가져오기
+import Scrap from './components/Graph/Scrap';
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import './App.css';
 import Header from "./components/Header";
@@ -81,6 +82,7 @@ function App() {
               <button onClick={handleClick}>로그인 확인</button>
             </div>
             <MapContainer center={center} />
+            <Scrap />
           </main>
         </div>
       </div>
