@@ -4,108 +4,101 @@
 </th:block>
 <th:block layout:fragment="content">
   <main class="col-md-10 p-4">
-  <style>
-    .post-list {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-
-    .post-list th, .post-list td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-
-    .post-list th {
-        background-color: #f4f4f4;
-        font-weight: bold;
-    }
-
-    .like-button {
-        cursor: pointer;
-    }
-
-    .like-button:hover {
-        opacity: 0.7;
-    }
-  </style>
-</head>
-<body>
-<h1>좋아요한 글 목록</h1>
-
-<table class="post-list">
-  <thead>
-  <tr>
-    <th>번호</th>
-    <th>제목</th>
-    <th>게시판</th>
-    <th>작성자</th>
-    <th>작성일</th>
-    <th>좋아요 수</th>
-    <th>좋아요</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="board, stat : ${likedBoards}">
-    <td th:text="${stat.index + 1}"></td>
-    <td>
-      <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"></a>
-    </td>
-    <td th:text="${board.type.toString() == '0' ? '정보' : (board.type.toString() == '1' ? '일반' : (board.type.toString() == '2' ? 'Q&A' : '기타'))}"></td>
-    <td th:text="${board.users.username}"></td>
-    <td th:text="${#temporals.format(board.regdate, 'yyyy-MM-dd')}"></td>
-    <td th:text="${likesCountMap[board.bno]}"></td>
-    <td>
-      <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
-      <img id="likeButton"
-         class="like-button"
-           th:src="@{/img/like.png}"
-           th:onclick="|toggleLike(${board.bno})|" />
-    </td>
-  </tr>
-  <tr th:if="${likedBoards == null || likedBoards.size() == 0}">
-    <td colspan="7">좋아요한 글이 없습니다.</td>
-  </tr>
-  </tbody>
-</table>
+    <div class="board-container">
+      <div th:each="board : ${likedBoards}" class="likeborad-item">
+        <div class="like-btn">
+          <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
+          <img class="like-button"
+               th:src="@{/img/like.png}"
+               th:data-board-id="${board.bno}"
+               th:onclick="|toggleLike(${board.bno}, this)|" />
+        </div>
+        <div class="board-item">
+        <div class="likeboard-title">
+          <p class="board-type" th:text="${board.type.toString() == '0' ? '정보게시판' : (board.type.toString() == '1' ? '일반게시판' : (board.type.toString() == '2' ? 'Q&A' : '기타'))}"></p>
+          <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
+        </div>
+            <div class="board-details">
+              <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd')}|" class="date"></p>
+              <span class="board-font">
+                <img class="view-img" th:src="@{/img/view_count.png}" />
+                <span th:text="${board.views}"></span>
+              </span>
+              <span class="board-font">
+                <img class="like-img" th:src="@{/img/like_count.png}" />
+                <span th:text="${board.likesList.size()}"></span> <!-- Changed from board.views to board.likes -->
+              </span>
+              <span class="board-font">
+                <img class="reply-img" th:src="@{/img/reply_count.png}" />
+                <span th:text="${board.replyList.size()}"></span> <!-- Changed from board.views to board.replies -->
+              </span>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div th:if="${likedBoards == null || likedBoards.size() == 0}">
+        <p class="form-pw-label mb-3">좋아요한 글이 없습니다.</p>
+        <a href="/board/infolist">커뮤니티 이동</a>
+    </div>
 </th:block>
 <th:block layout:fragment="script">
 <script>
+  function toggleLike(boardId, button) {
+    const csrfToken = document.getElementById(`csrfToken`).value;
 
-  const likeButton = document.getElementById(`likeButton`);
-  const csrfToken = document.getElementById(`csrfToken`).value;
+    fetch("/board/like?boardId=" + boardId, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken
+        }
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data === "unliked") {
+            button.src = '/img/unlike.png'; // 좋아요 취소 상태로 변경
+        } else if (data === "liked") {
+            button.src = '/img/like.png'; // 좋아요 상태로 변경
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("좋아요 처리 중 오류가 발생했습니다.");
+    });
+}
 
-  function toggleLike(boardId) {
 
-      if (!likeButton) {
-          console.error(`Like button for board ID ${boardId} not found.`);
-          return;
-      }
 
-<!--      const currentSrc = likeButton.src;-->
-<!--      const isLiked = currentSrc.includes('like.png');-->
+<!--  function toggleLike(boardId) {-->
 
-      fetch("/board/like?boardId=" + boardId, {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-TOKEN": csrfToken
-          }
-      })
-      .then(response => response.text())
-      .then(data => {
-          if (data === "unliked") {
-              likeButton.src = '/img/unlike.png'; // 좋아요 취소 상태로 변경
-          } else if (data === "liked") {
-              likeButton.src = '/img/like.png'; // 좋아요 상태로 변경
-          }
-      })
-      .catch(error => {
-          console.error("Error:", error);
-          alert("좋아요 처리 중 오류가 발생했습니다.");
-      });
-  }
+<!--    const likeButton = document.getElementById(`likeButton`);-->
+<!--    const csrfToken = document.getElementById(`csrfToken`).value;-->
+
+<!--      if (!likeButton) {-->
+<!--          console.error(`Like button for board ID ${boardId} not found.`);-->
+<!--          return;-->
+<!--      }-->
+
+<!--      fetch("/board/like?boardId=" + boardId, {-->
+<!--          method: "POST",-->
+<!--          headers: {-->
+<!--              "Content-Type": "application/json",-->
+<!--              "X-CSRF-TOKEN": csrfToken-->
+<!--          }-->
+<!--      })-->
+<!--      .then(response => response.text())-->
+<!--      .then(data => {-->
+<!--          if (data === "unliked") {-->
+<!--              likeButton.src = '/img/unlike.png'; // 좋아요 취소 상태로 변경-->
+<!--          } else if (data === "liked") {-->
+<!--              likeButton.src = '/img/like.png'; // 좋아요 상태로 변경-->
+<!--          }-->
+<!--      })-->
+<!--      .catch(error => {-->
+<!--          console.error("Error:", error);-->
+<!--          alert("좋아요 처리 중 오류가 발생했습니다.");-->
+<!--      });-->
+<!--  }-->
 </script>
-</body>
+</th:block>
 </html>

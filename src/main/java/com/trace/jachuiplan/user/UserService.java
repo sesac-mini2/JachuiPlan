@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -98,6 +96,8 @@ public class UserService {
     public List<Board> getPosts(String username){
         Users user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        Collections.sort(user.getDboardList(), Comparator.comparing(Board::getRegdate).reversed());
         return user.getDboardList();
     }
 
@@ -113,6 +113,10 @@ public class UserService {
         for (Likes like : likesList) {
             likedBoards.add(like.getBoard());
         }
+
+        // 최신 날짜순 정렬
+        Collections.sort(likedBoards, Comparator.comparing(Board::getRegdate).reversed());
+
         return likedBoards;
     }
 }

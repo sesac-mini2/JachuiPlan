@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,8 +39,16 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/users/login")
-                        .loginProcessingUrl("/users/login") // 로그인 post
-                        .defaultSuccessUrl("/users/mypage",true) // 임의로 마이페이지 연결
+                        .loginProcessingUrl("/users/login")
+                        .successHandler((request, response, authentication) -> {
+                            var savedRequest = (SavedRequest) request.getSession()
+                                    .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+                            if (savedRequest != null) {
+                                response.sendRedirect(savedRequest.getRedirectUrl());
+                            } else {
+                                response.sendRedirect("/map");
+                            }
+                        })
                         .failureUrl("/users/login?error=true") // 실패 시 로그인 페이지로 리다이렉트
                         .permitAll()
                 )
