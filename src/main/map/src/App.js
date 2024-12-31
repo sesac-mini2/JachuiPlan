@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import MapContainer from "./MapContainer";
 import DistrictSelector from './DistrictSelector'; // DistrictSelector 컴포넌트 가져오기
 import Scrap from './components/Graph/Scrap';
+import Header from "./components/Header";
+import ScrapButton from "./components/ScrapButton"
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import './App.css';
-import Header from "./components/Header";
+
 function App() {
   const [selectedSidoCd, setSelectedSidoCd] = useState('11'); // 서울특별시 기본값 (서울특별시 코드)
   const [selectedSggCd, setSelectedSggCd] = useState(''); // 시군구 선택
@@ -13,7 +15,6 @@ function App() {
   const [nickname, setNickname] = useState('');
 
   const handleClick = () => {
-    console.log("오잉?")
     if(!isAuthenticated){
       if(window.confirm("로그인 하시겠습니까?")){
         window.location.href = `http://localhost/users/login`;
@@ -23,7 +24,7 @@ function App() {
 
   useEffect(() => {
     // 로그인 여부 확인
-    fetch("/api/auth", {
+    fetch("/users/check-auth", {
       method: "GET",
       credentials: "include", // 세션 쿠키 포함
     })
@@ -80,6 +81,7 @@ function App() {
                 setSelectedSggCd={setSelectedSggCd}
               />
               <button onClick={handleClick}>로그인 확인</button>
+              <ScrapButton regioncdId={3}></ScrapButton>
             </div>
             <MapContainer center={center} />
             <Scrap />
