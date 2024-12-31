@@ -24,6 +24,11 @@ public class UserController {
     private final LikesService likesService;
     private final UserDetailsService userDetailsService;
 
+    @ModelAttribute("menu")
+    public String menu(){
+        return "mypage";
+    }
+
     // 회원가입 페이지
     @GetMapping("/signup")
     public String signupPage() {
@@ -169,6 +174,16 @@ public class UserController {
         return "users/myRegion_form";
     }
 
+    // 권한 확인
+    @ResponseBody
+    @GetMapping("/check-auth")
+    public ResponseEntity<Map<String, Object>> checkAuthentication(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Map<String, Object> response = new HashMap<>();
+        boolean authenticated = userDetails != null && !userDetails.getAuthorities().isEmpty();
+        response.put("authenticated", authenticated);
+        response.put("nickname", authenticated ? userDetails.getNickname() : "");
+        return ResponseEntity.ok(response);
+    }
 }
 
 

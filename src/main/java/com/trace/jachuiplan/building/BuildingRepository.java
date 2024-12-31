@@ -50,7 +50,8 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
             + "AND ( :maxBuildYear IS NULL OR o.buildYear <= :maxBuildYear ) "
             + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "
             + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor )"
-            + "GROUP BY o.umdnm")
+            + "GROUP BY o.umdnm "
+            + "ORDER BY o.umdnm")
     List<BuildingFilterDTO> averageByCriteria(
             @Param("startYearMonth") String startYearMonth,
             @Param("endYearMonth") String endYearMonth,
