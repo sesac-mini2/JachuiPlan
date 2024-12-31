@@ -32,7 +32,7 @@
         <div class="paging">
             <div>
                 <form th:action="@{/board/add_board}" method="get">
-                    <input type="hidden" name="type" value="0"/>
+                    <input type="hidden" name="type" th:value="${type}"/>
                     <input type="hidden" name="page" th:value="${page}">
                     <input type="hidden" name="size" th:value="${size}">
                     <button type="submit" class="btn btn-primary me-2">글쓰기</button>
