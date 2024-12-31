@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MapContainer from "./MapContainer";
 import DistrictSelector from './DistrictSelector'; // DistrictSelector 컴포넌트 가져오기
 import Scrap from './components/Graph/Scrap';
+import UmdGraph from './components/Graph/UmdGraph';
 import Header from "./components/Header";
 import ScrapButton from "./components/ScrapButton"
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -85,6 +86,7 @@ function App() {
             </div>
             <MapContainer center={center} />
             <Scrap />
+            <UmdGraph />
           </main>
         </div>
       </div>

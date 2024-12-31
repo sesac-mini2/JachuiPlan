@@ -64,7 +64,7 @@ function Scarp() {
 
       // y축
       const yScale = scaleLinear()
-        .domain([min(data.map(r => r.avgMonthlyRent)) * 0.7, max(data.map(r => r.avgMonthlyRent))])
+        .domain([min(data.map(d => d.avgMonthlyRent)) * 0.7, max(data.map(d => d.avgMonthlyRent))])
         .range([height - margin.bottom, margin.top]);
       svg.selectAll(".y-axis")
         .join(
@@ -105,6 +105,7 @@ function Scarp() {
       updateGraph(data);
     }, [data]);
 
+    // 초기 데이터 로드
     useEffect(() => {
       getData(['11590', '11305'], '202307', '202312');
     }, []);
@@ -119,7 +120,7 @@ function Scarp() {
 
             시군구코드: <input type="text" value={sggcds} onChange={e => setSggcds(e.target.value)} /><br />
             시작년월: <input type="number" value={startYearMonth} onChange={e => setStartYearMonth(e.target.value)} /><br />
-            끝년월: <input type="number" value={endYearMonth}  onChange={e => setEndYearMonth(e.target.value)} />
+            끝년월: <input type="number" value={endYearMonth} onChange={e => setEndYearMonth(e.target.value)} />
 
             <button onClick={() => getData(sggcds, startYearMonth, endYearMonth)}>업데이트</button>
         </div>
