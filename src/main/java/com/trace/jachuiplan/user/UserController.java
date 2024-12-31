@@ -1,21 +1,19 @@
 package com.trace.jachuiplan.user;
 
 import com.trace.jachuiplan.board.Board;
-import com.trace.jachuiplan.board.BoardService;
-import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.likes.LikesService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -24,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final LikesService likesService;
+    private final UserDetailsService userDetailsService;
 
     // 회원가입 페이지
     @GetMapping("/signup")
@@ -84,7 +83,7 @@ public class UserController {
         }
     }
 
-    // 임시 myPage
+    // mypage
     @GetMapping("/mypage")
     public String myPage(Model model,
                          @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -109,32 +108,35 @@ public class UserController {
         return ResponseEntity.ok("비밀번호가 변경되었습니다.");
     }
 
-    // 닉네임 변경
     @PutMapping("/change-nickname")
     public ResponseEntity<String> changeNickname(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam("nickname") String nickname){
+            @RequestParam("nickname") String nickname) {
 
+        // DB에 닉네임 변경
         userService.changeNickname(userDetails.getUsername(), nickname);
+
+        // 변경된 정보로 UserDetails 다시 불러오기
+        UserDetails updatedUserDetails = userDetailsService.loadUserByUsername(userDetails.getUsername());
+
+        // 새로운 Authentication 토큰 생성
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(
+                updatedUserDetails,
+                updatedUserDetails.getPassword(),
+                updatedUserDetails.getAuthorities()
+        );
+
+        // 현재 SecurityContext에 새로운 Authentication 교체
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
         return ResponseEntity.ok("닉네임이 변경되었습니다.");
     }
-
 
     @GetMapping("/mypage/myposts")
     public String myPosts(Model model,
                             @AuthenticationPrincipal UserDetails userDetails){
         List<Board> postBoards = userService.getPosts(userDetails.getUsername());
-        List<Board> likedBoards = userService.likedBoards(userDetails.getUsername());
-
-        // 좋아요 수 계산
-        Map<Long, Long> likesCountMap = new HashMap<>();
-        for (Board board : likedBoards) {
-            long likesCount = likesService.getLikesCount(board);
-            likesCountMap.put(board.getBno(), likesCount);
-        }
 
         model.addAttribute("postBoards", postBoards);
-        model.addAttribute("likesCountMap", likesCountMap);
         model.addAttribute("type", MypageTab.POSTS.getType());
 
         return "users/myposts_form";
@@ -146,7 +148,7 @@ public class UserController {
                           @AuthenticationPrincipal UserDetails userDetails,
                           @RequestParam(value="page", defaultValue="0") int page) {
         List<Board> likedBoards = userService.likedBoards(userDetails.getUsername());
-
+        
         // 좋아요 수 계산
         Map<Long, Long> likesCountMap = new HashMap<>();
         for (Board board : likedBoards) {

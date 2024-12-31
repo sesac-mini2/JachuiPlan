@@ -3,30 +3,37 @@
     <nav th:replace="~{users/users_sidebar :: sidebarFragment}"></nav>
 </th:block>
 <th:block layout:fragment="content">
-    <main class="col-md-10 p-4">
-<body>
-<h1>작성한 글</h1>
-<table>
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>제목</th>
-        <th>게시판</th>
-        <th>작성일</th>
-        <th>조회수</th>
-        <th>좋아요 수</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="board, stat : ${postBoards}">
-        <td th:text="${stat.index + 1}"/>
-        <td><a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"></a></td>
-        <td th:text="${board.type.toString() == '0' ? '정보' : (board.type.toString() == '1' ? '일반' : (board.type.toString() == '2' ? 'Q&A' : '기타'))}"></td>
-        <td th:text="${#temporals.format(board.regdate, 'yyyy-MM-dd')}"></td>
-        <td th:text="${board.views}"/>
-        <td th:text="${likesCountMap[board.bno]}"></td>
-    </tr>
-    </tbody>
-</table>
+<main class="col-md-10 p-4">
+    <div class="board-container">
+        <div th:each="board : ${postBoards}" class="board-item">
+            <div class="board-title">
+                <p class="user-name" th:text="${board.type.toString() == '0' ? '정보게시판' : (board.type.toString() == '1' ? '일반게시판' : (board.type.toString() == '2' ? 'Q&A' : '기타'))}"></p>
+                <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
+            </div>
+            <div class="board-details">
+                <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd')}|" class="date"></p>
+                <span class="board-font">
+                    <img class="view-img" th:src="@{/img/view_count.png}" />
+                    <span th:text="${board.views}"></span>
+                </span>
+                <span class="board-font">
+                    <img class="like-img" th:src="@{/img/like_count.png}" />
+                    <span th:text="${board.likesList.size()}"></span> <!-- Changed from board.views to board.likes -->
+                </span>
+                <span class="board-font">
+                    <img class="reply-img" th:src="@{/img/reply_count.png}" />
+                    <span th:text="${board.replyList.size()}"></span> <!-- Changed from board.views to board.replies -->
+                </span>
+            </div>
+        </div>
+    </div>
+    <div th:if="${postBoards == null || postBoards.size() == 0}">
+        <p class="form-pw-label mb-3">작성한 글이 없습니다.</p>
+        <a href="/board/infolist">커뮤니티 이동</a>
+    </div>
+
+</main>
 </th:block>
 <th:block layout:fragment="script">
+</th:block>
+</html>
