@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MapContainer from "./MapContainer";
 import DistrictSelector from './DistrictSelector'; // DistrictSelector 컴포넌트 가져오기
+import Header from "./components/Header";
+import ScrapButton from "./components/ScrapButton"
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import './App.css';
-import Header from "./components/Header";
+
 function App() {
   const [selectedSidoCd, setSelectedSidoCd] = useState('11'); // 서울특별시 기본값 (서울특별시 코드)
   const [selectedSggCd, setSelectedSggCd] = useState(''); // 시군구 선택
@@ -78,6 +80,7 @@ function App() {
                 setSelectedSggCd={setSelectedSggCd}
               />
               <button onClick={handleClick}>로그인 확인</button>
+              <ScrapButton regioncdId={3}></ScrapButton>
             </div>
             <MapContainer center={center} />
           </main>
