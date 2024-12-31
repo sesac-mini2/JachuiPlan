@@ -15,7 +15,9 @@ function Scarp() {
     const containerHeight = 500;
 
     const transitionDuration = 500;
-    
+
+    const countColor = '#69b3a2';
+
     function getData(sggcds, startYearMonth, endYearMonth) {
       axios.get(`/api/building/average`, {
         params: {
@@ -88,17 +90,22 @@ function Scarp() {
             .attr("x", d => xScale(d.umdnm))
             .attr("y", d => yScale(d.avgMonthlyRent))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent)),
+            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent))
+            .attr("opacity", 0)
+            .transition()
+            .delay(transitionDuration)
+            .attr("opacity", 1),
         update => update
             .transition()
             .duration(transitionDuration)
             .attr("x", d => xScale(d.umdnm))
             .attr("y", d => yScale(d.avgMonthlyRent))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent)),
+            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent))
+            .attr("opacity", 1),
         exit => exit.remove()
       )
-      .attr("fill", "#69b3a2");
+      .attr("fill", countColor);
     }
 
     useEffect(() => {
