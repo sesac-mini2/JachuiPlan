@@ -98,7 +98,7 @@ public class ReplyController {
         Reply reply = replyService.getReply(rno);
         if (!reply.getUsers().getUsername().equals(principal.getName())) {
             List<String> errorMessages = new ArrayList<>();
-            errorMessages.add("수정권한이 없습니다.");
+            errorMessages.add("삭제권한이 없습니다.");
             return ResponseEntity.badRequest().body(errorMessages);
         }
 

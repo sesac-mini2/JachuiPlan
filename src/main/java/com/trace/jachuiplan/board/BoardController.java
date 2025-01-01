@@ -4,6 +4,7 @@ import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.likes.LikesService;
 import com.trace.jachuiplan.user.UserService;
 import com.trace.jachuiplan.user.Users;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 
@@ -168,5 +170,28 @@ public class BoardController {
 
         // 좋아요 상태 확인 및 토글
         return likesService.toggleLike(board, currentUser);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/{bno}")
+    public String getBoardDelete(@PathVariable("bno") Long bno,
+                                 @AuthenticationPrincipal UserDetails userDetails,
+                                 RedirectAttributes redirectAttributes,
+                                 HttpServletRequest request) {
+        try {
+            Board board = boardService.deleteBoard(bno, userDetails);
+            if (board.getType() == BoardType.INFO.getType()) {
+                return "redirect:/board/infolist";
+            } else if (board.getType() == BoardType.GENERAL.getType()) {
+                return "redirect:/board/generallist";
+            } else if (board.getType() == BoardType.QNA.getType()) {
+                return "redirect:/board/qnalist";
+            } else {
+                return "redirect:/board/menu";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:" + request.getHeader("referer"); // 실패 시 현재 페이지로 리다이렉트
+        }
     }
 }
