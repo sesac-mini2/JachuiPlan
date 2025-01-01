@@ -194,4 +194,34 @@ public class BoardController {
             return "redirect:" + request.getHeader("referer"); // 실패 시 현재 페이지로 리다이렉트
         }
     }
+
+    // 게시물 수정
+    @GetMapping("/modify/{id}")
+    public String boardModify(@PathVariable("id") Long id,
+                              @AuthenticationPrincipal UserDetails userDetails,
+                              Model model) {
+        Board board = boardService.getBoardById(id);
+
+        model.addAttribute("board", board);
+        model.addAttribute("user", userDetails);
+
+        return "board/modify_board";
+    }
+
+    @PutMapping("/modify_board/{bno}")
+    public String modifyBoard(
+            @PathVariable("bno") Long bno,
+            @ModelAttribute Board board, // 수정된 게시글 데이터
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        Board existingBoard = boardService.getBoardById(bno);
+        existingBoard.setTitle(board.getTitle());
+        existingBoard.setContent(board.getContent());
+        boardService.modifyBoard(existingBoard);
+
+        return "redirect:/board/detail/" + bno;
+    }
+
+
+
 }
