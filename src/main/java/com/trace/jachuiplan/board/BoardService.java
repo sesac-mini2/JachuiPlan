@@ -96,4 +96,16 @@ public class BoardService {
         return board.get();
     }
 
+    // 게시글 수정
+    public void modifyBoard(Board board) {
+        Board existingBoard = boardRepository.findById(board.getBno())
+                .orElseThrow(() -> new RuntimeException("Board not found with id: " + board.getBno()));
+
+        existingBoard.setTitle(board.getTitle());
+        existingBoard.setContent(board.getContent());
+        existingBoard.setUpdatedate(java.time.LocalDateTime.now());
+
+        boardRepository.save(existingBoard);
+    }
+
 }
