@@ -7,7 +7,7 @@
     <main class="col-md-10 p-4">
         <div class="card">
             <div class="mb-5">
-                <h4 class="card-title mb-2" th:text="${board.title}"></h4>
+                <h4 class="card-title mb-2" th:utext="${@commonUtil.markdown(board.title)}"></h4>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <span>
                         <small class="text-muted" th:text="${board.users.nickname}"></small>
@@ -16,7 +16,9 @@
                     <small class="text-muted" th:text="|조회수 ${board.views}|"></small>
                 </div>
                 <!-- 본문 -->
-                <p class="board-content" th:text="${board.content}"></p>
+                <div class ="board-content mb-3 px-4">
+                    <p class ="b-content" th:utext="${@commonUtil.markdown(board.content)}"></p>
+                </div>
 
                 <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
 

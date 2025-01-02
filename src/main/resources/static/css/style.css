@@ -395,3 +395,13 @@ img.reply-img{
 .board-no-item > p{
     text-align: center;
 }
+
+.b-content,
+.reply-content{
+    white-space: pre-wrap;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.6rem;
+}
