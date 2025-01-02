@@ -62,4 +62,7 @@ public class Board {
 
     @Transient
     private Long likeCount; // 좋아요 수 필드 추가
+
+    @Transient
+    private String formattedRegdate; // 포맷된 등록 날짜
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -18,12 +19,13 @@ public class RegioncdService {
         return regioncdRepository.findSidoAndSgg(sidocd);
     }
 
-    public List<Regioncd> getSggAndUmdList(String sidocd, String sggcd) { return regioncdRepository.findBySidoCdAndSggCd(sidocd, sggcd);}
+    public List<Regioncd> getSggAndUmdList(String sidocd, String sggcd) {
+        return regioncdRepository.findBySidoCdAndSggCd(sidocd, sggcd);
+    }
 
     // 경계 내의 지역들을 조회하는 서비스 메서드
-    public List<Regioncd> getRegionsInBounds(Double north, Double east, Double south, Double west) {
-        return regioncdRepository.findByLatitudeBetweenAndLongitudeBetween(
-                south, north, west, east
-        );
+    public List<Regioncd> getRegionsInBounds(Double north, Double east, Double south, Double west, Integer level) {
+        return regioncdRepository.findRegionsInBoundsWithLevel(north, east, south, west);
+
     }
 }
