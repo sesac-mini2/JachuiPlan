@@ -64,6 +64,11 @@
                                 </div>
                                 <p id="passwordMessage"></p>
                             </div>
+                            <div>
+                                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+                                <button type="button" id="deleteAccountBtn" class="btn btn-danger custom-btn">회원 탈퇴</button>
+                            </div>
+
                         </div>
                     </div>
 
@@ -77,6 +82,10 @@
 <th:block layout:fragment="script">
     <script>
         $(document).ready(function () {
+
+            const csrfToken = $('#csrfToken').val();
+
+
             // 비밀번호 확인 버튼 클릭 이벤트
             $('#verifyPasswordBtn').click(function () {
                 const password = $('#password').val();
@@ -185,6 +194,24 @@
                         location.reload();
                     }
                 });
+            });
+            $('#deleteAccountBtn').click(function() {
+                if(confirm("정말로 회원 탈퇴를 진행하시겠습니까?")) {
+                    $.ajax({
+                        url: "/users/delete",
+                        type: "DELETE",
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // 기본 헤더 이름 사용
+                        },
+                        success: function(){
+                            alert("회원 탈퇴가 완료되었습니다.");
+                            window.location.href = "/map/";
+                        },
+                        error: function () {
+                            alert("회원 탈퇴 중 문제가 발생했습니다. 다시 시도해 주세요.");
+                        }
+                    });
+                }
             });
         });
     </script>

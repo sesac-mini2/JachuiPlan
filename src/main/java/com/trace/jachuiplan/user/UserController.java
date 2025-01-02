@@ -2,9 +2,11 @@ package com.trace.jachuiplan.user;
 
 import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.likes.LikesService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,6 +47,18 @@ public class UserController {
             model.addAttribute("errorMessage", e.getMessage());
             return "users/signup_form";
         }
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteAccount(@AuthenticationPrincipal UserDetails userDetails,
+                                           HttpSession session){
+        String username = userDetails.getUsername();
+        userService.deleteUser(username);
+        SecurityContextHolder.clearContext();
+        session.invalidate();
+
+        return ResponseEntity.ok().build();
     }
 
     // 아이디 중복 확인

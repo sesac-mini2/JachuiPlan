@@ -59,6 +59,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // 회원 탈퇴
+    @Transactional
+    public void deleteUser(String username){
+        userRepository.deleteByUsername(username);
+    }
+
     // 아이디 중복 확인
     public boolean isUsernameAvailable(String username) {
         return userRepository.findByUsername(username).isEmpty();
