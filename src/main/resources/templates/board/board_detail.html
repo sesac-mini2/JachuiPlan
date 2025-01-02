@@ -30,12 +30,12 @@
                         <span class="align-middle">좋아요</span>
                     </button>
                     <div>
-                        <form th:action="|/board/modify/${board.bno}|" th:method="get">
+                        <form th:action="|/board/modify/${board.bno}|" th:method="get" class="d-inline">
                             <button class="btn btn-primary me-2" th:if="${#authentication.principal.username == board.users.username}">수정</button>
                         </form>
-                        <form th:action="|/board/${board.bno}|" th:method="delete" class="d-inline">
-                            <button class="btn btn-outline-primary"
-                                    th:if="${#authentication.principal.username != board.users.username}">삭제</button>
+                        <form th:action="|/board/${board.bno}|" th:method="delete"
+                              th:if="${#authentication.principal.username == board.users.username}" class="d-inline">
+                            <button class="btn btn-outline-primary">삭제</button>
                         </form>
                     </div>
                 </div>
