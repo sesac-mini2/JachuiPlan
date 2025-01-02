@@ -8,7 +8,7 @@
             <a class="nav-link" th:classappend="${type == 1 ? 'active' : ''}" th:href="@{/users/mypage/region}">스크랩한 지역</a>
         </li>
         <li class="nav-item mb-3">
-            <a class="nav-link" th:classappend="${type == 2 ? 'active' : ''}" th:href="@{/users/mypage/myposts}">작성한 글</a>
+            <a class="nav-link" th:classappend="${type == 2 or currentUri.startsWith('/board/modify') ? 'active' : ''}" th:href="@{/users/mypage/myposts}">작성한 글</a>
         </li>
         <li class="nav-item mb-3">
             <a class="nav-link" th:classappend="${type == 3 ? 'active' : ''}" th:href="@{/users/mypage/mylikes}">좋아요 글</a>

@@ -277,12 +277,13 @@ public class BoardController {
     @GetMapping("/modify/{id}")
     public String boardModify(@PathVariable("id") Long id,
                               @AuthenticationPrincipal UserDetails userDetails,
+                              HttpServletRequest request,
                               Model model) {
         Board board = boardService.getBoardById(id);
 
         model.addAttribute("board", board);
         model.addAttribute("user", userDetails);
-
+        model.addAttribute("currentUri", request.getRequestURI()); // sidebar 설정
         return "board/modify_board";
     }
 
