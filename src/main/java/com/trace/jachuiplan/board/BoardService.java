@@ -6,7 +6,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,10 @@ public class BoardService {
     private LikesRepository likesRepository;
 
     public Page<Board> getInfoBoards(Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findByType('0', pageable);
+        // 최근에 작성된 글부터 정렬 (regdate 필드를 기준으로 내림차순 정렬)
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Order.desc("regdate")));
+        Page<Board> boardPage = boardRepository.findByType('0', sortedPageable);
         // 각 게시글에 댓글 수와 좋아요 수를 추가
         boardPage.forEach(board -> {
             board.setReplyCount(replyRepository.countByBoard(board)); // 댓글 수 계산
@@ -34,7 +39,10 @@ public class BoardService {
     }
 
     public Page<Board> getGeneralBoards(Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findByType('1', pageable);
+        // 최근에 작성된 글부터 정렬 (regdate 필드를 기준으로 내림차순 정렬)
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Order.desc("regdate")));
+        Page<Board> boardPage = boardRepository.findByType('1', sortedPageable);
         // 각 게시글에 댓글 수와 좋아요 수를 추가
         boardPage.forEach(board -> {
             board.setReplyCount(replyRepository.countByBoard(board)); // 댓글 수 계산
@@ -45,7 +53,10 @@ public class BoardService {
     }
 
     public Page<Board> getQnABoards(Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findByType('2', pageable);
+        // 최근에 작성된 글부터 정렬 (regdate 필드를 기준으로 내림차순 정렬)
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Order.desc("regdate")));
+        Page<Board> boardPage = boardRepository.findByType('2', sortedPageable);
         // 각 게시글에 댓글 수와 좋아요 수를 추가
         boardPage.forEach(board -> {
             board.setReplyCount(replyRepository.countByBoard(board)); // 댓글 수 계산

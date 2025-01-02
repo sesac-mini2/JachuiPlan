@@ -6,13 +6,17 @@
 <th:block layout:fragment="content">
     <main class="col-md-10 p-4">
         <div class="board-container">
+            <!-- boardPage가 비어있는지 체크 -->
+            <div th:if="${#lists.isEmpty(boardPage.content)}" class="board-no-item">
+                <p>등록된 글이 없습니다.</p>
+            </div>
             <div th:each="board : ${boardPage}" class="board-item">
                 <div class="board-title">
                     <p class="user-name" th:text="${board.users.nickname}"></p>
                     <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
                 </div>
                 <div class="board-details">
-                    <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|" class="date"></p>
+                    <p th:text="${board.formattedRegdate}" class="date"></p>
                     <span class="board-font">
                             <img class="view-img" th:src="@{/img/view_count.png}" />
                             <span th:text="${board.views}"></span>
