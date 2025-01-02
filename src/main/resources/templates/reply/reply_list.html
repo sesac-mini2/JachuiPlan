@@ -19,7 +19,7 @@
         <div class="reply-card mb-4" th:each="reply : ${paging}" th:data-reply-id="${reply.rno}">
             <div class="card-body">
                 <p th:text="${reply.nickname}"></p>
-                <p class="reply-content text-muted" th:text="${reply.reply}"></p>
+                <p class="reply-content text-muted" th:utext="${@commonUtil.markdown(reply.reply)}"></p>
                 <p class="text-muted small m-0" th:text="${#temporals.format(reply.replydate, 'yyyy-MM-dd HH:mm')}"></p>
                 <div class="reply-err"></div>
                 <div class="text-end">
