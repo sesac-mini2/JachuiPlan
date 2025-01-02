@@ -1,10 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const MapContainer = ({ center }) => {
+const MapContainer = ({ center, onClickOverlay }) => {
   const mapContainerRef = useRef(null); // 지도 컨테이너를 참조하기 위한 ref
   const [map, setMap] = useState(null); // 지도 객체 상태
   const guOverlaysRef = useRef([]); // 구 마커 오버레이 상태를 담을 ref
   const dongOverlaysRef = useRef([]); // 동 마커 오버레이 상태를 담을 ref
+
+  const isMouseDownRef = useRef(false);  // 마우스 버튼 눌림 여부
+  const isDraggingRef = useRef(false);  // 드래깅 상태 여부
+
+  const handleMouseDown = () => {
+    isMouseDownRef.current = true;
+    isDraggingRef.current = false;
+  };
+
+  const handleMouseMove = () => {
+    if (isMouseDownRef.current) {
+      isDraggingRef.current = true;
+    }
+  };
+
+  const handleMouseUp = (regionId) => {
+    if (!isDraggingRef.current) {
+      onClickOverlay(regionId);  // 드래깅 상태가 아니면 클릭 이벤트 실행
+    }
+    isMouseDownRef.current = false;
+    isDraggingRef.current = false;
+  };
 
   // 지도 초기화 및 지도 영역 내 동들 표시
   useEffect(() => {
@@ -67,12 +89,17 @@ const MapContainer = ({ center }) => {
 
           // 지도 레벨이 6 미만일 때 동 마커를 표시
           if (level < 6 && region.umdCd !== '000') {
-            const content = `<div class="customoverlay">
-                              <div class="info">
-                                <span class="title">${lastName}</span>
-                                <span class="price">2.5억</span>
-                              </div>
-                            </div>`;
+            const content = document.createElement('div'); // DOM 요소 생성
+            content.className = 'customoverlay';
+            content.innerHTML = `<div class="info">
+                                  <span class="title">${lastName}</span>
+                                  <span class="price">2.5억</span>
+                                </div>`;
+
+            content.onmousedown = handleMouseDown;
+            content.onmousemove = handleMouseMove;
+            content.onmouseup = () => handleMouseUp(region.id);     
+            
             const customOverlay = new window.kakao.maps.CustomOverlay({
               map: map,
               position: position,
@@ -87,6 +114,7 @@ const MapContainer = ({ center }) => {
                               <div class="info">
                                 <span class="title">${lastName}</span>
                                 <span class="price">2.5억</span>
+                                <span class="d-none">${region.id}</span>
                               </div>
                             </div>`;
             const customOverlay = new window.kakao.maps.CustomOverlay({

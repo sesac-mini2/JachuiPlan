@@ -395,3 +395,8 @@ img.reply-img{
 .board-no-item > p{
     text-align: center;
 }
+
+.umdnm {
+    color: #343C6A;
+    font-weight: bold;
+}

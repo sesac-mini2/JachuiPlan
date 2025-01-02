@@ -4,7 +4,7 @@ import MapContainer from "./MapContainer";
 import DistrictSelector from './DistrictSelector'; // DistrictSelector 컴포넌트 가져오기
 import Scrap from './components/Graph/Scrap';
 import Header from "./components/Header";
-import ScrapButton from "./components/ScrapButton"
+import UmdModal from "./components/UmdModal"
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import './App.css';
 
@@ -14,14 +14,17 @@ function App() {
   const [center, setCenter] = useState({ latitude: 37.5665, longitude: 126.978 }); // 서울시 기본 좌표
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [targetUmd, setTargetUmd] = useState(null);
+  const [isShowUmdModal, setIsShowUmdModal] = useState(false);
 
-  const handleClick = () => {
-    if(!isAuthenticated){
-      if(window.confirm("로그인 하시겠습니까?")){
-        window.location.href = `http://localhost/users/login`;
-      }
-    };
-  };
+  const closeUmdModal = () => {
+    setIsShowUmdModal(false);
+  }
+
+  const showUmdModal= (regioncdId) => {
+    setTargetUmd(regioncdId);
+    setIsShowUmdModal(true);
+  }
 
   useEffect(() => {
     // 로그인 여부 확인
@@ -104,7 +107,10 @@ function App() {
                 </select>
               </div>
             </div>
-            <MapContainer center={center} />
+            <div className="position-relative">
+              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}/>
+              <MapContainer center={center} onClickOverlay={showUmdModal}/>
+            </div>
             <Scrap />
           </main>
         </div>
