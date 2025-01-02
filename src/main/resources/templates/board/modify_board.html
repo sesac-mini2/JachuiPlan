@@ -1,0 +1,26 @@
+<html layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml">
+<th:block layout:fragment="sidebar">
+<nav th:replace="~{users/users_sidebar :: sidebarFragment}"></nav>
+</th:block>
+<th:block layout:fragment="content">
+    <main class="col-md-10 p-4">
+        <form th:action="|/board/modify_board/${board.bno}|" method="post" class="add_form">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+            <input type="hidden" name="_method" value="PUT"/>
+            <input type="hidden" name="bno" th:value="${board?.bno}" />
+
+            <p>제목</p>
+            <input type="text" id="title" name="title" class="add_title"
+                   th:value="${board?.title}" required/>
+            <br>
+            <p>내용</p>
+            <textarea id="content" name="content" class="add_content" required
+                      th:text="${board?.content}"></textarea>
+            <br>
+            <button type="submit" class="btn btn-primary me-2" id="add_board_btn">작성 완료</button>
+        </form>
+    </main>
+</th:block>
+<th:block layout:fragment="script">
+</th:block>
+</html>
