@@ -92,9 +92,9 @@ task installReact(type: Exec) {
     environment "PATH", System.getenv("PATH")
 
 	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-		commandLine 'npm.cmd', 'install'
+		commandLine 'npm.cmd', 'install', '--legacy-peer-deps'
 	} else {
-		commandLine 'npm', 'install'
+		commandLine 'npm', 'install', '--legacy-peer-deps'
 	}
 }
 
