@@ -11,7 +11,7 @@
                 <a th:href="@{/board/detail/{id}(id=${board.bno})}" th:text="${board.title}"/>
             </div>
             <div class="board-details">
-                <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd')}|" class="date"></p>
+                <p th:text="|${#temporals.format(board.regdate, 'yyyy-MM-dd HH:mm')}|" class="date"></p>
                 <span class="board-font">
                     <img class="view-img" th:src="@{/img/view_count.png}" />
                     <span th:text="${board.views}"></span>

@@ -19,11 +19,11 @@
                         </span>
                     <span class="board-font">
                             <img class="like-img" th:src="@{/img/like_count.png}" />
-                            <span th:text="${board.likeCount}"></span> <!-- Changed from board.views to board.likes -->
+                            <span th:text="${board.likeCount}"></span>
                         </span>
                     <span class="board-font">
                             <img class="reply-img" th:src="@{/img/reply_count.png}" />
-                            <span th:text="${board.replyCount}"></span> <!-- Changed from board.views to board.replies -->
+                            <span th:text="${board.replyCount}"></span>
                         </span>
                 </div>
             </div>
@@ -32,7 +32,7 @@
 
     <div class="paging">
         <div>
-            <form th:action="@{/board/add_board}" method="get">
+            <form th:action="@{/board/add_board}" method="get" sec:authorize="hasRole('ROLE_ADMIN')">
                 <input type="hidden" name="type" th:value="${type}"/>
                 <input type="hidden" name="page" th:value="${page}">
                 <input type="hidden" name="size" th:value="${size}">
