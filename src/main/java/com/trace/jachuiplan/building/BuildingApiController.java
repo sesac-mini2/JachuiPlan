@@ -68,4 +68,28 @@ public class BuildingApiController {
                 maxFloor);
         return ResponseEntity.ok(buildings);
     }
+
+    @GetMapping("/transition")
+    public ResponseEntity<List<BuildingTransitionDTO>> transitionBuildingCriteria(
+            @RequestParam(name = "sggcd") @ExactSize(5) String sggcd,
+            @RequestParam(name = "umdnm") String umdnm,
+            @RequestParam(name = "rentType", required = false) String rentType,
+            @RequestParam(name = "minArea", required = false) Double minArea,
+            @RequestParam(name = "maxArea", required = false) Double maxArea,
+            @RequestParam(name = "minBuildYear", required = false) Integer minBuildYear,
+            @RequestParam(name = "maxBuildYear", required = false) Integer maxBuildYear,
+            @RequestParam(name = "minFloor", required = false) Integer minFloor,
+            @RequestParam(name = "maxFloor", required = false) Integer maxFloor) {
+        List<BuildingTransitionDTO> buildings = buildingService.transitionBuildingCriteria(
+                sggcd,
+                umdnm,
+                rentType,
+                minArea,
+                maxArea,
+                minBuildYear,
+                maxBuildYear,
+                minFloor,
+                maxFloor);
+        return ResponseEntity.ok(buildings);
+    }
 }

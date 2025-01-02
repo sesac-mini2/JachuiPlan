@@ -27,14 +27,4 @@ public class HomeController {
     public String map() {
         return "redirect:/map/";
     }
-
-    @ResponseBody
-    @GetMapping("/api/auth")
-    public ResponseEntity<Map<String, Object>> checkAuthentication(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        Map<String, Object> response = new HashMap<>();
-        boolean authenticated = userDetails != null && !userDetails.getAuthorities().isEmpty();
-        response.put("authenticated", authenticated);
-        response.put("nickname", authenticated ? userDetails.getNickname() : "");
-        return ResponseEntity.ok(response);
-    }
 }

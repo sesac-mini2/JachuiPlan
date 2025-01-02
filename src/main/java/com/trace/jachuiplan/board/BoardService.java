@@ -1,7 +1,10 @@
 package com.trace.jachuiplan.board;
 
+import com.trace.jachuiplan.DataNotFoundException;
 import com.trace.jachuiplan.likes.LikesRepository;
+import com.trace.jachuiplan.reply.Reply;
 import com.trace.jachuiplan.reply.ReplyRepository;
+import com.trace.jachuiplan.user.Users;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -82,5 +89,34 @@ public class BoardService {
         board.setViews(board.getViews() + 1);
     }
 
+    // 게시글 삭제
+    public Board deleteBoard(Long bno, UserDetails userDetails) throws Exception {
+        // 게시글이 있는지 확인
+        Optional<Board> board = boardRepository.findById(bno);
+        if(board.isEmpty()){
+            throw new DataNotFoundException("해당 게시글이 없습니다.");
+        }
+
+        // 삭제 권한 확인
+        if (!board.get().getUsers().getUsername().equals(userDetails.getUsername())) {
+            throw new IllegalStateException("삭제 권한이 없습니다.");
+        }
+
+        boardRepository.delete(board.get());
+
+        return board.get();
+    }
+
+    // 게시글 수정
+    public void modifyBoard(Board board) {
+        Board existingBoard = boardRepository.findById(board.getBno())
+                .orElseThrow(() -> new RuntimeException("Board not found with id: " + board.getBno()));
+
+        existingBoard.setTitle(board.getTitle());
+        existingBoard.setContent(board.getContent());
+        existingBoard.setUpdatedate(java.time.LocalDateTime.now());
+
+        boardRepository.save(existingBoard);
+    }
 
 }
