@@ -29,7 +29,7 @@ public class RegioncdApiController {
 
     @GetMapping("/{sidocd}/{sggcd}")
     public ResponseEntity<List<Regioncd>> getSggAndUmdList(@PathVariable("sidocd") @ExactSize(2) String sidocd,
-                                                     @PathVariable("sggcd") @ExactSize(3) String sggcd) {
+            @PathVariable("sggcd") @ExactSize(3) String sggcd) {
         List<Regioncd> regioncds = regioncdService.getSggAndUmdList(sidocd, sggcd);
         return ResponseEntity.ok()
                 .body(regioncds);
@@ -41,10 +41,11 @@ public class RegioncdApiController {
             @RequestParam("north") Double north,
             @RequestParam("east") Double east,
             @RequestParam("south") Double south,
-            @RequestParam("west") Double west) {
+            @RequestParam("west") Double west,
+            @RequestParam("level") Integer level) {
 
-        // 경계 내의 지역들을 조회
-        List<Regioncd> regioncds = regioncdService.getRegionsInBounds(north, east, south, west);
+        // 레벨을 포함하여 지역들을 조회
+        List<Regioncd> regioncds = regioncdService.getRegionsInBounds(north, east, south, west, level);
         return ResponseEntity.ok(regioncds);
     }
 }

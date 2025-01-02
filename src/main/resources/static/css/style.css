@@ -385,3 +385,13 @@ img.reply-img{
 .custom-pw-input{
     width: 350px;
 }
+
+.board-no-item{
+    background-color: white;
+    border-radius: 25px;
+    padding: 3%;
+}
+
+.board-no-item > p{
+    text-align: center;
+}

@@ -17,7 +17,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/board")
@@ -49,6 +52,29 @@ public class BoardController {
 
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getInfoBoards(Pageable.ofSize(size).withPage(page));
+
+        // 오늘 날짜를 체크하여 "X시간 전" 또는 "X분 전" 형식으로 변환
+        boardPage.getContent().forEach(board -> {
+            LocalDateTime regdate = board.getRegdate();
+            if (regdate.toLocalDate().isEqual(LocalDate.now())) {
+                // 오늘인 경우 "X시간 전" 또는 "X분 전"으로 변환
+                Duration duration = Duration.between(regdate, LocalDateTime.now());
+                long minutes = duration.toMinutes();
+                if (minutes < 60) {
+                    // 1시간 이하일 경우 분 단위
+                    board.setFormattedRegdate("약 " + minutes + "분 전");
+                } else {
+                    // 1시간 이상일 경우 시간 단위
+                    long hours = duration.toHours();
+                    board.setFormattedRegdate("약 " + hours + "시간 전");
+                }
+            } else {
+                // 오늘이 아닌 경우 기존 형식으로 변환
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                board.setFormattedRegdate(regdate.format(formatter));
+            }
+        });
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -63,6 +89,29 @@ public class BoardController {
                                    @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getGeneralBoards(Pageable.ofSize(size).withPage(page));
+
+        // 오늘 날짜를 체크하여 "X시간 전" 또는 "X분 전" 형식으로 변환
+        boardPage.getContent().forEach(board -> {
+            LocalDateTime regdate = board.getRegdate();
+            if (regdate.toLocalDate().isEqual(LocalDate.now())) {
+                // 오늘인 경우 "X시간 전" 또는 "X분 전"으로 변환
+                Duration duration = Duration.between(regdate, LocalDateTime.now());
+                long minutes = duration.toMinutes();
+                if (minutes < 60) {
+                    // 1시간 이하일 경우 분 단위
+                    board.setFormattedRegdate("약 " + minutes + "분 전");
+                } else {
+                    // 1시간 이상일 경우 시간 단위
+                    long hours = duration.toHours();
+                    board.setFormattedRegdate("약 " + hours + "시간 전");
+                }
+            } else {
+                // 오늘이 아닌 경우 기존 형식으로 변환
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                board.setFormattedRegdate(regdate.format(formatter));
+            }
+        });
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -77,6 +126,29 @@ public class BoardController {
                                @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getQnABoards(Pageable.ofSize(size).withPage(page));
+
+        // 오늘 날짜를 체크하여 "X시간 전" 또는 "X분 전" 형식으로 변환
+        boardPage.getContent().forEach(board -> {
+            LocalDateTime regdate = board.getRegdate();
+            if (regdate.toLocalDate().isEqual(LocalDate.now())) {
+                // 오늘인 경우 "X시간 전" 또는 "X분 전"으로 변환
+                Duration duration = Duration.between(regdate, LocalDateTime.now());
+                long minutes = duration.toMinutes();
+                if (minutes < 60) {
+                    // 1시간 이하일 경우 분 단위
+                    board.setFormattedRegdate("약 " + minutes + "분 전");
+                } else {
+                    // 1시간 이상일 경우 시간 단위
+                    long hours = duration.toHours();
+                    board.setFormattedRegdate("약 " + hours + "시간 전");
+                }
+            } else {
+                // 오늘이 아닌 경우 기존 형식으로 변환
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                board.setFormattedRegdate(regdate.format(formatter));
+            }
+        });
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
