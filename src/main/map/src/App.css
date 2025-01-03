@@ -3,9 +3,6 @@
   align-items: center;
   gap: 10px;
   justify-content: space-between;
-}
-
-.select-container {
   height: 50px;
 }
 
@@ -50,7 +47,20 @@ select {
   font-size: 16px;
   font-weight: bold;
   color: #718EBF;
-  /* border: 3px #718EBF; */
+  border: 1px solid #718EBF;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.map-container {
+  position: relative;
+  z-index: 1;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .filter {
@@ -65,4 +75,207 @@ select {
 
 .select-day {
   display: flex;
+}
+
+/* MonthRangePicker.css */
+
+.month-range-picker {
+  position: relative;
+  z-index: 1000;
+}
+
+.datepicker {
+  padding: 5px;
+  border: 1px solid #718EBF;
+  position: relative;
+  z-index: 1001;
+  cursor: pointer;
+}
+
+.datepicker::placeholder {
+  color: #718EBF;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.react-datepicker__month-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* 한 줄에 3개 */
+  gap: 10px;
+  /* 월 사이 간격 */
+  justify-content: center;
+  /* 가운데 정렬 */
+}
+
+.react-datepicker__month {
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* BuildYearSelect.css */
+
+.year-picker-container {
+  position: relative;
+  display: inline-block;
+  width: 170px;
+  z-index: 1002;
+}
+
+.year-picker {
+  width: 100%;
+  border: 1px solid #718EBF;
+  border-radius: 15px;
+  padding: 3px;
+  color: #718EBF;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  z-index: 1002;
+}
+
+.year-picker::placeholder {
+  color: #718EBF;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.react-datepicker__triangle {
+  display: none;
+}
+
+.year-picker-popup {
+  width: 151px;
+  font-size: 14px;
+  z-index: 1003;
+}
+
+/*AreaSelect.css*/
+.area-select-container {
+  position: relative;
+}
+
+.area-select-button {
+  width: 97px;
+  padding: 3px 15px;
+  font-size: 16px;
+  border: 1px solid #718EBF;
+  border-radius: 15px;
+  background-color: white;
+  color: #718EBF;
+  font-weight: bold;
+}
+
+.area-select-modal {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  z-index: 9999;
+  /* 모달을 최상위로 */
+}
+
+.area-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 30px;
+}
+
+.slider-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: #ddd;
+  transform: translateY(-50%);
+  border-radius: 4px;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  background: #718ebf;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  cursor: pointer;
+}
+
+.slider-thumb.left {
+  left: var(--value-left);
+}
+
+.slider-thumb.right {
+  left: var(--value-right);
+}
+
+.area-range {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.area-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.area-button {
+  width: 86px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.area-button:hover {
+  background: #eaeaea;
+}
+
+.reset-button {
+  display: block;
+  margin: 0 auto;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #ff5a5a;
+  color: #fff;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background: #e04e4e;
 }
