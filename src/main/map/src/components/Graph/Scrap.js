@@ -15,7 +15,9 @@ function Scarp() {
     const containerHeight = 500;
 
     const transitionDuration = 500;
-    
+
+    const countColor = '#69b3a2';
+
     function getData(sggcds, startYearMonth, endYearMonth) {
       axios.get(`/api/building/average`, {
         params: {
@@ -64,7 +66,7 @@ function Scarp() {
 
       // y축
       const yScale = scaleLinear()
-        .domain([min(data.map(r => r.avgMonthlyRent)) * 0.7, max(data.map(r => r.avgMonthlyRent))])
+        .domain([min(data.map(d => d.avgMonthlyRent)) * 0.7, max(data.map(d => d.avgMonthlyRent))])
         .range([height - margin.bottom, margin.top]);
       svg.selectAll(".y-axis")
         .join(
@@ -88,23 +90,29 @@ function Scarp() {
             .attr("x", d => xScale(d.umdnm))
             .attr("y", d => yScale(d.avgMonthlyRent))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent)),
+            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent))
+            .attr("opacity", 0)
+            .transition()
+            .delay(transitionDuration)
+            .attr("opacity", 1),
         update => update
             .transition()
             .duration(transitionDuration)
             .attr("x", d => xScale(d.umdnm))
             .attr("y", d => yScale(d.avgMonthlyRent))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent)),
+            .attr("height", d => height - margin.top - yScale(d.avgMonthlyRent))
+            .attr("opacity", 1),
         exit => exit.remove()
       )
-      .attr("fill", "#69b3a2");
+      .attr("fill", countColor);
     }
 
     useEffect(() => {
       updateGraph(data);
     }, [data]);
 
+    // 초기 데이터 로드
     useEffect(() => {
       getData(['11590', '11305'], '202307', '202312');
     }, []);
@@ -119,7 +127,7 @@ function Scarp() {
 
             시군구코드: <input type="text" value={sggcds} onChange={e => setSggcds(e.target.value)} /><br />
             시작년월: <input type="number" value={startYearMonth} onChange={e => setStartYearMonth(e.target.value)} /><br />
-            끝년월: <input type="number" value={endYearMonth}  onChange={e => setEndYearMonth(e.target.value)} />
+            끝년월: <input type="number" value={endYearMonth} onChange={e => setEndYearMonth(e.target.value)} />
 
             <button onClick={() => getData(sggcds, startYearMonth, endYearMonth)}>업데이트</button>
         </div>

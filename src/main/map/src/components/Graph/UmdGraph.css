@@ -1,0 +1,23 @@
+.dong-group > rect {
+    fill: #f0f0f0;
+}
+
+.count {
+    fill: #69b3a2;
+}
+
+.avgMonthlyRent {
+    fill: #F3b3a2;
+}
+
+.avgMonthlyRentAxis text {
+    color: #F3b3a2;
+}
+
+.avgDeposit {
+    fill: #1372a2;
+}
+
+.avgDepositAxis text {
+    color: #1372a2;
+}
