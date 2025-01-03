@@ -20,7 +20,7 @@ const ScrapButton = ({ isAuthenticated, targetUmd }) => {
     });
   }, [targetUmd])
 
-  const handleMarkClick = (regioncdId) => {
+  const handleScrapClick = (regioncdId) => {
     if(!isAuthenticated){
       if(window.confirm("로그인 하시겠습니까?")){
         window.location.href = `http://localhost/users/login`;
@@ -55,7 +55,7 @@ const ScrapButton = ({ isAuthenticated, targetUmd }) => {
   };
 
   return (
-      <span className="align-middle" onClick={() => handleMarkClick(targetUmd)}>
+      <span className="align-middle" onClick={() => handleScrapClick(targetUmd)}>
         <img src={isActive ? "/img/bookmark_active.png" : "/img/bookmark.png"} alt="bookmark" style={{width:"20px", height:"20px"}}/>
       </span>
   );
