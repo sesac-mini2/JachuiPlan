@@ -4,6 +4,7 @@ import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.likes.LikesService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -205,6 +206,55 @@ public class UserController {
         response.put("authenticated", authenticated);
         response.put("nickname", authenticated ? userDetails.getNickname() : "");
         return ResponseEntity.ok(response);
+    }
+
+    // 소셜 로그인 회원 정보 재설정
+    @GetMapping("/social-signup")
+    public String socialSignup(@AuthenticationPrincipal CustomUserDetails userDetails,
+                               Model model){
+
+        if(userDetails == null || userDetails.getPassword() != null && !"SOCIAL_LOGIN".equals(userDetails.getPassword())){
+            return "redirect:/map";
+        }
+
+        model.addAttribute("user", userDetails);
+        return "users/socialSignup_form";
+    }
+
+    @PostMapping("/social-signup")
+    @ResponseBody
+    public ResponseEntity<String> socialSignupProcess(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam("nickname") String nickname,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword) {
+
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("소셜 로그인 유저 정보가 없습니다.");
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+        }
+
+        try {
+            userService.changePassword(userDetails.getUsername(), newPassword);
+            userService.changeNickname(userDetails.getUsername(), nickname);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        UserDetails updatedUser = userDetailsService.loadUserByUsername(userDetails.getUsername());
+        UsernamePasswordAuthenticationToken newAuth =
+                new UsernamePasswordAuthenticationToken(
+                        updatedUser,
+                        updatedUser.getPassword(),
+                        updatedUser.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        return ResponseEntity.ok("추가 정보가 설정되었습니다.");
     }
 }
 

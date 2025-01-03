@@ -37,19 +37,20 @@
                     </div>
                 </form>
 
-                <!-- 회원가입 링크 -->
+                <a href="/oauth2/authorization/google" class="d-flex justify-content-center">
+                    <img th:src="@{/img/google_signup.png}" class="gs-btn"/>
+                </a>
+
+            <!-- 회원가입 링크 -->
                 <p class="text-center mt-3">
                     계정이 없으신가요? <a th:href="@{/users/signup}" class="text-decoration-none">회원가입</a>
                 </p>
-            </div>
+
+        </div>
         </div>
     </div>
     </main>
 </th:block>
 <th:block layout:fragment="script">
-    <script>
-
-
-    </script>
 </th:block>
 </html>
