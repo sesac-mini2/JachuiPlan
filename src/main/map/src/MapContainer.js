@@ -14,6 +14,7 @@ const MapContainer = ({
   maxArea,
   selectedSggCd,
   selectedSidoCd,
+  onClickOverlay,
 }) => {
   const mapContainerRef = useRef(null);
   const [map, setMap] = useState(null);
@@ -32,6 +33,28 @@ const MapContainer = ({
     minArea,
     maxArea,
   });
+
+  const isMouseDownRef = useRef(false);  // 마우스 버튼 눌림 여부
+  const isDraggingRef = useRef(false);  // 드래깅 상태 여부
+
+  const handleMouseDown = () => {
+    isMouseDownRef.current = true;
+    isDraggingRef.current = false;
+  };
+
+  const handleMouseMove = () => {
+    if (isMouseDownRef.current) {
+      isDraggingRef.current = true;
+    }
+  };
+
+  const handleMouseUp = (regionId) => {
+    if (!isDraggingRef.current) {
+      onClickOverlay(regionId);  // 드래깅 상태가 아니면 클릭 이벤트 실행
+    }
+    isMouseDownRef.current = false;
+    isDraggingRef.current = false;
+  };
 
   // 최신 props 업데이트
   useEffect(() => {
@@ -136,12 +159,17 @@ const MapContainer = ({
           const priceLabel = averagePrice === 0 ? '원' : '만원';
 
           if (level < 6 && region.umdCd !== '000') {
-            const content = `<div class="customoverlay">
-                              <div class="info">
-                                <span class="title">${lastName}</span>
-                                <span class="price">${averagePrice}${priceLabel}</span>
-                              </div>
-                            </div>`;
+            const content = document.createElement('div'); // DOM 요소 생성
+            content.className = 'customoverlay';
+            content.innerHTML = `<div class="info">
+                                   <span class="title">${lastName}</span>
+                                   <span class="price">${averagePrice}${priceLabel}</span>
+                                 </div>`;
+
+            content.onmousedown = handleMouseDown;
+            content.onmousemove = handleMouseMove;
+            content.onmouseup = () => handleMouseUp(region.id);     
+            
             const customOverlay = new window.kakao.maps.CustomOverlay({
               map: map,
               position: position,

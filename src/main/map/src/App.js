@@ -7,6 +7,8 @@ import AreaSelect from './AreaSelect';
 import Scrap from './components/Graph/Scrap';
 import UmdGraph from './components/Graph/UmdGraph';
 import Header from "./components/Header";
+import UmdModal from "./components/UmdModal"
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import ScrapButton from "./components/ScrapButton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,6 +20,17 @@ function App() {
   const [center, setCenter] = useState({ latitude: 37.5665, longitude: 126.978 }); // 서울시 기본 좌표
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [targetUmd, setTargetUmd] = useState(null);
+  const [isShowUmdModal, setIsShowUmdModal] = useState(false);
+
+  const closeUmdModal = () => {
+    setIsShowUmdModal(false);
+  }
+
+  const showUmdModal= (regioncdId) => {
+    setTargetUmd(regioncdId);
+    setIsShowUmdModal(true);
+  }
   const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
   const [startYearMonth, setStartYearMonth] = useState('202101');
   const [endYearMonth, setEndYearMonth] = useState('202412');
@@ -128,20 +141,24 @@ function App() {
                 </select>
               </div>
             </div>
-            <MapContainer
-              center={center}
-              startYearMonth={startYearMonth}
-              endYearMonth={endYearMonth}
-              selectedType={selectedType}
-              rentType={rentType}
-              startYear={startYear}
-              endYear={endYear}
-              selectedFloor={selectedFloor}
-              minArea={minArea}
-              maxArea={maxArea}
-              selectedSidoCd={selectedSidoCd}
-              selectedSggCd={selectedSggCd}
-            />
+            <div className="position-relative">
+              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}/>
+              <MapContainer
+                center={center}
+                startYearMonth={startYearMonth}
+                endYearMonth={endYearMonth}
+                selectedType={selectedType}
+                rentType={rentType}
+                startYear={startYear}
+                endYear={endYear}
+                selectedFloor={selectedFloor}
+                minArea={minArea}
+                maxArea={maxArea}
+                selectedSidoCd={selectedSidoCd}
+                selectedSggCd={selectedSggCd}
+                onClickOverlay={showUmdModal}
+              />
+            </div>
             <Scrap />
             <UmdGraph />
           </main>

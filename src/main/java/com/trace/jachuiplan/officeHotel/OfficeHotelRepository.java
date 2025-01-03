@@ -1,6 +1,5 @@
 package com.trace.jachuiplan.officeHotel;
 
-import com.trace.jachuiplan.building.BuildingTransitionDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -82,7 +81,7 @@ public interface OfficeHotelRepository extends JpaRepository<OfficeHotel, Long> 
             @Param("maxFloor") Integer maxFloor);
 
     // 하나의 동에 대한 월별 평균가격 추이, 거래량
-    @Query("SELECT new com.trace.jachuiplan.officeHotel.OfficeHotelTransitionDTO(o.umdnm, TO_CHAR(o.dealdate, 'YYYY-MM'), ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM Building o WHERE "
+    @Query("SELECT new com.trace.jachuiplan.officeHotel.OfficeHotelTransitionDTO(o.umdnm, TO_CHAR(o.dealdate, 'YYYY-MM'), ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM OfficeHotel o WHERE "
             + "o.dealdate >= ADD_MONTHS(TO_DATE(TO_CHAR(SYSDATE, 'YYYYMM'), 'YYYYMM'), -13) "
             + "AND o.dealdate < TO_DATE(TO_CHAR(SYSDATE, 'YYYYMM'), 'YYYYMM') "
             + "AND o.sggcd LIKE :sggcd "
@@ -91,8 +90,8 @@ public interface OfficeHotelRepository extends JpaRepository<OfficeHotel, Long> 
             + "( :rentType = '전세' AND o.monthlyRent = 0 ) OR "
             + "( :rentType = '반전세' AND o.monthlyRent IS NOT NULL AND o.deposit > o.monthlyRent * 12 ) OR "
             + "( :rentType = '월세' AND o.monthlyRent IS NOT NULL AND o.deposit <= o.monthlyRent * 12 ) ) "
-            + "AND ( :minArea IS NULL OR o.totalFloorAr >= :minArea ) "
-            + "AND ( :maxArea IS NULL OR o.totalFloorAr <= :maxArea ) "
+            + "AND ( :minArea IS NULL OR o.exclu_use_ar >= :minArea ) "
+            + "AND ( :maxArea IS NULL OR o.exclu_use_ar <= :maxArea ) "
             + "AND ( :minBuildYear IS NULL OR o.buildYear >= :minBuildYear ) "
             + "AND ( :maxBuildYear IS NULL OR o.buildYear <= :maxBuildYear ) "
             + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "

@@ -1,6 +1,9 @@
 package com.trace.jachuiplan.user;
 
+import com.trace.jachuiplan.CustomAnnotation.ExactSize;
 import com.trace.jachuiplan.board.Board;
+import com.trace.jachuiplan.scrap.ScrapedListDTO;
+import com.trace.jachuiplan.building.BuildingService;
 import com.trace.jachuiplan.likes.LikesService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final LikesService likesService;
     private final UserDetailsService userDetailsService;
+    private final BuildingService buildingService;
 
     @ModelAttribute("menu")
     public String menu(){
@@ -190,8 +194,18 @@ public class UserController {
 
     // 스크랩한 지역
     @GetMapping("/mypage/region")
-    public String myRegion(Model model){
-        model.addAttribute("currentUri", "");
+    public String myRegion(@RequestParam(name = "startYearMonth", required = false) @ExactSize(6) String startYearMonth,
+                           @RequestParam(name = "endYearMonth", required = false) @ExactSize(6) String endYearMonth,
+                           @RequestParam(name = "rentType", required = false) String rentType,
+                           @RequestParam(name = "minArea", required = false) Double minArea,
+                           @RequestParam(name = "maxArea", required = false) Double maxArea,
+                           @RequestParam(name = "minBuildYear", required = false) Integer minBuildYear,
+                           @RequestParam(name = "maxBuildYear", required = false) Integer maxBuildYear,
+                           @RequestParam(name = "minFloor", required = false) Integer minFloor,
+                           @RequestParam(name = "maxFloor", required = false) Integer maxFloor,
+                           @AuthenticationPrincipal UserDetails userDetails,
+                           Model model){
+        Users users = userService.findByUsername(userDetails.getUsername()).get();
         model.addAttribute("type", MypageTab.REGION.getType());
 
         return "users/myRegion_form";

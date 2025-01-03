@@ -1,6 +1,5 @@
 package com.trace.jachuiplan.officeHotel;
 
-import com.trace.jachuiplan.building.BuildingTransitionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,7 @@ public class OfficeHotelService {
         return officeHotelRepository.averageByCriteria(startYearMonth, endYearMonth, sggcds, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);
     }
 
-    public List<OfficeHotelTransitionDTO> transitionBuildingCriteria(String sggcd, String umdnm,
+    public List<OfficeHotelTransitionDTO> transitionOfficeHotelCriteria(String sggcd, String umdnm,
                                                                   String rentType, Double minArea, Double maxArea, Integer minBuildYear,
                                                                   Integer maxBuildYear, Integer minFloor, Integer maxFloor) {
         return officeHotelRepository.averageAndCountByMonthlyAndUmd(sggcd, umdnm, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);

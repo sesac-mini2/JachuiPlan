@@ -84,7 +84,7 @@ public class OfficeHotelApiController {
             @RequestParam(name = "maxBuildYear", required = false) Integer maxBuildYear,
             @RequestParam(name = "minFloor", required = false) Integer minFloor,
             @RequestParam(name = "maxFloor", required = false) Integer maxFloor) {
-        List<OfficeHotelTransitionDTO> buildings = officeHotelService.transitionBuildingCriteria(
+        List<OfficeHotelTransitionDTO> buildings = officeHotelService.transitionOfficeHotelCriteria(
                 sggcd,
                 umdnm,
                 rentType,
