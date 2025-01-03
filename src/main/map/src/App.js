@@ -4,13 +4,9 @@ import MapContainer from "./MapContainer";
 import DistrictSelector from './DistrictSelector';
 import BuildYearSelect from './BuildYearSelect';
 import AreaSelect from './AreaSelect';
-import Scrap from './components/Graph/Scrap';
-import UmdGraph from './components/Graph/UmdGraph';
 import Header from "./components/Header";
 import UmdModal from "./components/UmdModal"
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import ScrapButton from "./components/ScrapButton";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import './App.css';
 
@@ -159,8 +155,6 @@ function App() {
                 onClickOverlay={showUmdModal}
               />
             </div>
-            <Scrap />
-            <UmdGraph />
           </main>
         </div>
       </div>

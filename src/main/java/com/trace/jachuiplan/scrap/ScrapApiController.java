@@ -39,8 +39,14 @@ public class ScrapApiController {
 
     @GetMapping("/scrap/{regioncdId}")
     public ResponseEntity<Boolean> isScrapRegioncd(@PathVariable("regioncdId") Long regioncdId, @AuthenticationPrincipal UserDetails userDetails){
+        Boolean isScraped = false;
+        if(userDetails == null){
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(isScraped);
+        }
         Scrap scrap = scrapService.getScrap(regioncdId, userDetails.getUsername());
-        Boolean isScraped = scrap != null;
+        isScraped = scrap != null;
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(isScraped);
