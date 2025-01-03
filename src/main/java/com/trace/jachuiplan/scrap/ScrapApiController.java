@@ -31,8 +31,7 @@ public class ScrapApiController {
     @DeleteMapping("/scrap/{regioncdId}")
     @ResponseBody
     public ResponseEntity<Boolean> deleteScrapRegioncd(@PathVariable("regioncdId") Long regioncdId, @AuthenticationPrincipal UserDetails userDetails) {
-//        scrapService.removeScrap(regioncdId, userDetails.getUsername());
-        Boolean result = scrapService.removeScrap(regioncdId, "user99");
+        Boolean result = scrapService.removeScrap(regioncdId, userDetails.getUsername());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(result);
@@ -40,8 +39,7 @@ public class ScrapApiController {
 
     @GetMapping("/scrap/{regioncdId}")
     public ResponseEntity<Boolean> isScrapRegioncd(@PathVariable("regioncdId") Long regioncdId, @AuthenticationPrincipal UserDetails userDetails){
-//        Scrap scrap = scrapService.getScrap(regioncdId, userDetails.getUsername());
-        Scrap scrap = scrapService.getScrap(regioncdId, "user99");
+        Scrap scrap = scrapService.getScrap(regioncdId, userDetails.getUsername());
         Boolean isScraped = scrap != null;
         return ResponseEntity
                 .status(HttpStatus.OK)

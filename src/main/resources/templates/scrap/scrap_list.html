@@ -1,0 +1,14 @@
+<div th:fragment="scrapFragment" class="pt-3">
+    <div th:if="${buildingList.size() < 1}" class="text-muted p-3 text-center">등록된 스크랩이 없습니다.</div>
+    <div class="row scrap-body" th:each="item : ${buildingList}">
+        <div class="col-1">
+            <button class="btn btn-link p-0 border-0 scrap-btn">
+                <img class="active" th:data-regioncd-id="${item.id}" th:src="@{/img/bookmark_active.png}" width="20px" />
+            </button>
+        </div>
+        <div class="col-4" th:text="${item.locataddNm}"></div>
+        <div class="col-3" th:text="|${item.avgDeposit}만원|"></div>
+        <div class="col-2" th:text="|${item.avgMonthlyRent}만원|"></div>
+        <div class="col-2" th:text="${item.count}"></div>
+    </div>
+</div>

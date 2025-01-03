@@ -28,7 +28,7 @@ public class SecurityConfig {
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-password"))
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/api/scrap/**"))
                 )
-                .securityMatcher("/users/**", "/board/**", "/reply/**", "/admin/**", "/api/**")
+                .securityMatcher("/users/**", "/board/**", "/reply/**", "/admin/**", "/api/**", "/scrap/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login", "/users/check-auth",  // 로그인 및 회원가입 페이지, 권한 확인은 누구나 접근 가능

@@ -4,7 +4,33 @@
 </th:block>
 <th:block layout:fragment="content">
     <main class="col-md-10 p-4">
+        <div class="m-2">
+            <!-- Filters Section -->
+            <div class="d-flex flex-wrap justify-content-start align-items-center mb-3 w-auto">
+                <div class="dropdown">
+                    <button class="filter-select dropdown-toggle dropdown-type" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        다가구/단독/다세대/연립
+                    </button>
+                    <ul class="dropdown-menu filter-type" aria-labelledby="dropdownMenuButton1">
+                        <li class="dropdown-item" data-type="building">다가구/단독/다세대/연립</li>
+                        <li class="dropdown-item" data-type="officeHotel">오피스텔</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row scrap-header">
+                <div class="col-1"></div>
+                <div class="col-4">지역</div>
+                <div class="col-3">전세/보증금</div>
+                <div class="col-2">월세</div>
+                <div class="col-2">거래수</div>
+            </div>
+
+            <!-- Table Section -->
+            <div id="scrapFragment"></div>
+        </div>
     </main>
 </th:block>
 <th:block layout:fragment="script">
+    <script th:src="@{/js/scrap.js}"></script>
 </th:block>

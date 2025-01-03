@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -59,4 +60,20 @@ public class ScrapService {
         }
         return scrap.get();
     }
+
+    // 스크랩한 지역
+    public List<ScrapedListDTO> findScrapedBuilding(String startYearMonth, String endYearMonth,
+                                                    String rentType, Double minArea, Double maxArea, Integer minBuildYear,
+                                                    Integer maxBuildYear, Integer minFloor, Integer maxFloor, Long uno) {
+        return scrapRepository.findScrapedBuilding(startYearMonth, endYearMonth, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor, uno);
+    }
+
+    // 스크랩한 지역
+    public List<ScrapedListDTO> findScrapedOfficeHotel(String startYearMonth, String endYearMonth,
+                                                              String rentType, Double minArea, Double maxArea, Integer minBuildYear,
+                                                              Integer maxBuildYear, Integer minFloor, Integer maxFloor, Long uno) {
+        return scrapRepository.findScrapedOfficeHotel(startYearMonth, endYearMonth, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor, uno);
+    }
+
+
 }

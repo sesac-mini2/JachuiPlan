@@ -26,6 +26,7 @@ public class BuildingService {
         return buildingRepository.averageByCriteria(startYearMonth, endYearMonth, sggcds, rentType, minArea, maxArea, minBuildYear, maxBuildYear, minFloor, maxFloor);
     }
 
+    // 월별 가격 추이
     public List<BuildingTransitionDTO> transitionBuildingCriteria(String sggcd, String umdnm,
                                                            String rentType, Double minArea, Double maxArea, Integer minBuildYear,
                                                            Integer maxBuildYear, Integer minFloor, Integer maxFloor) {
