@@ -47,6 +47,8 @@ out/
 /src/main/resources/static/map
 /src/main/resources/templates/map
 
+/src/main/resources/application.yml
+
 # misc
 .DS_Store
 .env.local

@@ -42,63 +42,6 @@
     </div>
 </th:block>
 <th:block layout:fragment="script">
-<script>
-  function toggleLike(boardId, button) {
-    const csrfToken = document.getElementById(`csrfToken`).value;
-
-    fetch("/board/like?boardId=" + boardId, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken
-        }
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data === "unliked") {
-            button.src = '/img/unlike.png'; // 좋아요 취소 상태로 변경
-        } else if (data === "liked") {
-            button.src = '/img/like.png'; // 좋아요 상태로 변경
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("좋아요 처리 중 오류가 발생했습니다.");
-    });
-}
-
-
-
-<!--  function toggleLike(boardId) {-->
-
-<!--    const likeButton = document.getElementById(`likeButton`);-->
-<!--    const csrfToken = document.getElementById(`csrfToken`).value;-->
-
-<!--      if (!likeButton) {-->
-<!--          console.error(`Like button for board ID ${boardId} not found.`);-->
-<!--          return;-->
-<!--      }-->
-
-<!--      fetch("/board/like?boardId=" + boardId, {-->
-<!--          method: "POST",-->
-<!--          headers: {-->
-<!--              "Content-Type": "application/json",-->
-<!--              "X-CSRF-TOKEN": csrfToken-->
-<!--          }-->
-<!--      })-->
-<!--      .then(response => response.text())-->
-<!--      .then(data => {-->
-<!--          if (data === "unliked") {-->
-<!--              likeButton.src = '/img/unlike.png'; // 좋아요 취소 상태로 변경-->
-<!--          } else if (data === "liked") {-->
-<!--              likeButton.src = '/img/like.png'; // 좋아요 상태로 변경-->
-<!--          }-->
-<!--      })-->
-<!--      .catch(error => {-->
-<!--          console.error("Error:", error);-->
-<!--          alert("좋아요 처리 중 오류가 발생했습니다.");-->
-<!--      });-->
-<!--  }-->
-</script>
+  <script th:src="@{/js/toggleLike.js}"></script>
 </th:block>
 </html>
