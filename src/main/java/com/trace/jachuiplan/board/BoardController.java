@@ -4,18 +4,24 @@ import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.likes.LikesService;
 import com.trace.jachuiplan.user.UserService;
 import com.trace.jachuiplan.user.Users;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.nio.channels.AcceptPendingException;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/board")
@@ -47,6 +53,29 @@ public class BoardController {
 
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getInfoBoards(Pageable.ofSize(size).withPage(page));
+
+        // 오늘 날짜를 체크하여 "X시간 전" 또는 "X분 전" 형식으로 변환
+        boardPage.getContent().forEach(board -> {
+            LocalDateTime regdate = board.getRegdate();
+            if (regdate.toLocalDate().isEqual(LocalDate.now())) {
+                // 오늘인 경우 "X시간 전" 또는 "X분 전"으로 변환
+                Duration duration = Duration.between(regdate, LocalDateTime.now());
+                long minutes = duration.toMinutes();
+                if (minutes < 60) {
+                    // 1시간 이하일 경우 분 단위
+                    board.setFormattedRegdate("약 " + minutes + "분 전");
+                } else {
+                    // 1시간 이상일 경우 시간 단위
+                    long hours = duration.toHours();
+                    board.setFormattedRegdate("약 " + hours + "시간 전");
+                }
+            } else {
+                // 오늘이 아닌 경우 기존 형식으로 변환
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                board.setFormattedRegdate(regdate.format(formatter));
+            }
+        });
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -61,6 +90,29 @@ public class BoardController {
                                    @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getGeneralBoards(Pageable.ofSize(size).withPage(page));
+
+        // 오늘 날짜를 체크하여 "X시간 전" 또는 "X분 전" 형식으로 변환
+        boardPage.getContent().forEach(board -> {
+            LocalDateTime regdate = board.getRegdate();
+            if (regdate.toLocalDate().isEqual(LocalDate.now())) {
+                // 오늘인 경우 "X시간 전" 또는 "X분 전"으로 변환
+                Duration duration = Duration.between(regdate, LocalDateTime.now());
+                long minutes = duration.toMinutes();
+                if (minutes < 60) {
+                    // 1시간 이하일 경우 분 단위
+                    board.setFormattedRegdate("약 " + minutes + "분 전");
+                } else {
+                    // 1시간 이상일 경우 시간 단위
+                    long hours = duration.toHours();
+                    board.setFormattedRegdate("약 " + hours + "시간 전");
+                }
+            } else {
+                // 오늘이 아닌 경우 기존 형식으로 변환
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                board.setFormattedRegdate(regdate.format(formatter));
+            }
+        });
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -75,6 +127,29 @@ public class BoardController {
                                @AuthenticationPrincipal UserDetails userDetails) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Board> boardPage = boardService.getQnABoards(Pageable.ofSize(size).withPage(page));
+
+        // 오늘 날짜를 체크하여 "X시간 전" 또는 "X분 전" 형식으로 변환
+        boardPage.getContent().forEach(board -> {
+            LocalDateTime regdate = board.getRegdate();
+            if (regdate.toLocalDate().isEqual(LocalDate.now())) {
+                // 오늘인 경우 "X시간 전" 또는 "X분 전"으로 변환
+                Duration duration = Duration.between(regdate, LocalDateTime.now());
+                long minutes = duration.toMinutes();
+                if (minutes < 60) {
+                    // 1시간 이하일 경우 분 단위
+                    board.setFormattedRegdate("약 " + minutes + "분 전");
+                } else {
+                    // 1시간 이상일 경우 시간 단위
+                    long hours = duration.toHours();
+                    board.setFormattedRegdate("약 " + hours + "시간 전");
+                }
+            } else {
+                // 오늘이 아닌 경우 기존 형식으로 변환
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                board.setFormattedRegdate(regdate.format(formatter));
+            }
+        });
+
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -108,6 +183,11 @@ public class BoardController {
             Users currentUser = userService.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));  // Optional에서 값 꺼내기
             board.setUsers(currentUser);  // 게시판에 작성자 설정
+        }
+
+        if(type == '0' && !userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))){
+            throw new AccessDeniedException("관리자만 글을 등록할 수 있습니다.");
         }
 
         board.setType(type);
@@ -169,4 +249,58 @@ public class BoardController {
         // 좋아요 상태 확인 및 토글
         return likesService.toggleLike(board, currentUser);
     }
+
+    // 게시글 삭제
+    @DeleteMapping("/{bno}")
+    public String getBoardDelete(@PathVariable("bno") Long bno,
+                                 @AuthenticationPrincipal UserDetails userDetails,
+                                 RedirectAttributes redirectAttributes,
+                                 HttpServletRequest request) {
+        try {
+            Board board = boardService.deleteBoard(bno, userDetails);
+            if (board.getType() == BoardType.INFO.getType()) {
+                return "redirect:/board/infolist";
+            } else if (board.getType() == BoardType.GENERAL.getType()) {
+                return "redirect:/board/generallist";
+            } else if (board.getType() == BoardType.QNA.getType()) {
+                return "redirect:/board/qnalist";
+            } else {
+                return "redirect:/board/menu";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:" + request.getHeader("referer"); // 실패 시 현재 페이지로 리다이렉트
+        }
+    }
+
+    // 게시물 수정
+    @GetMapping("/modify/{id}")
+    public String boardModify(@PathVariable("id") Long id,
+                              @AuthenticationPrincipal UserDetails userDetails,
+                              HttpServletRequest request,
+                              Model model) {
+        Board board = boardService.getBoardById(id);
+
+        model.addAttribute("board", board);
+        model.addAttribute("user", userDetails);
+        model.addAttribute("currentUri", request.getRequestURI()); // sidebar 설정
+        return "board/modify_board";
+    }
+
+    @PutMapping("/modify_board/{bno}")
+    public String modifyBoard(
+            @PathVariable("bno") Long bno,
+            @ModelAttribute Board board, // 수정된 게시글 데이터
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        Board existingBoard = boardService.getBoardById(bno);
+        existingBoard.setTitle(board.getTitle());
+        existingBoard.setContent(board.getContent());
+        boardService.modifyBoard(existingBoard);
+
+        return "redirect:/board/detail/" + bno;
+    }
+
+
+
 }

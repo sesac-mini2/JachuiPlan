@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +25,11 @@ public class UserService {
 
     // 회원가입 로직
     public void registerUser(UserSignupDTO dto) {
+
+        if(userRepository.findByUsername(dto.getUsername()).isPresent()){
+            throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
+        }
+
         // 비밀번호 확인
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
@@ -54,6 +57,12 @@ public class UserService {
 
         // 사용자 저장
         userRepository.save(user);
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public void deleteUser(String username){
+        userRepository.deleteByUsername(username);
     }
 
     // 아이디 중복 확인
@@ -98,6 +107,8 @@ public class UserService {
     public List<Board> getPosts(String username){
         Users user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        Collections.sort(user.getDboardList(), Comparator.comparing(Board::getRegdate).reversed());
         return user.getDboardList();
     }
 
@@ -113,6 +124,10 @@ public class UserService {
         for (Likes like : likesList) {
             likedBoards.add(like.getBoard());
         }
+
+        // 최신 날짜순 정렬
+        Collections.sort(likedBoards, Comparator.comparing(Board::getRegdate).reversed());
+
         return likedBoards;
     }
 }

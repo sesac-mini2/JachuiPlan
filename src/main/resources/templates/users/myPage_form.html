@@ -10,8 +10,8 @@
             <label for="password" class="form-pw-label mb-3">비밀번호 인증 후 이용 가능합니다.</label>
             <input type="password" id="password" class="form-control custom-pw-input mb-4" placeholder="비밀번호 입력"
             style="diplay: inline">
-            <button id="verifyPasswordBtn" class="btn btn-primary custom-btn">확인</button>
             <p id="verifyMessage" class="error-message"></p>
+            <button id="verifyPasswordBtn" class="btn btn-primary custom-btn">확인</button>
         </div>
 
         <!-- 마이페이지 -->
@@ -20,20 +20,20 @@
                 <form id="infoForm" method="PUT">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group mx-5 mt-5">
+                            <div class="my-form-group mx-5 mt-5">
                                 <label for="username" class="form-label">아이디</label>
                                 <div class="input-group">
                                     <input type="text" id="username" class="form-control custom-input" th:value="${user.username}" readonly>
                                 </div>
                             </div>
-                            <div class="form-group mx-5 mt-5">
+                            <div class="my-form-group mx-5 mt-5">
                                 <label for="username" class="form-label">닉네임</label>
                                 <div class="input-group">
                                     <input type="text" id="preNickname" class="form-control custom-input" th:value="${user.nickname}" readonly>
                                 </div>
                             </div>
 
-                            <div class="form-group mx-5 mt-5">
+                            <div class="my-form-group mx-5 mt-5">
                                 <label for="nickname" class="form-label">닉네임 변경</label>
                                 <div class="input-group">
                                     <input type="text" id="nickname" name="nickname"
@@ -47,7 +47,7 @@
 
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group mx-5 mt-5">
+                            <div class="my-form-group mx-5 mt-5">
                                 <label for="newPassword" class="form-label">새 비밀번호</label>
                                 <div class="input-group">
                                     <input type="password" id="newPassword" name="newPassword"
@@ -55,7 +55,7 @@
                                            placeholder="새 비밀번호 입력">
                                 </div>
                             </div>
-                            <div class="form-group mx-5 mt-5">
+                            <div class="my-form-group mx-5 mt-5">
                                 <label for="confirmPassword" class="form-label">비밀번호 확인</label>
                                 <div class="input-group">
                                     <input type="password" id="confirmPassword" name="confirmPassword"
@@ -64,6 +64,11 @@
                                 </div>
                                 <p id="passwordMessage"></p>
                             </div>
+                            <div>
+                                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+                                <button type="button" id="deleteAccountBtn" class="btn btn-danger custom-btn">회원 탈퇴</button>
+                            </div>
+
                         </div>
                     </div>
 
@@ -77,6 +82,10 @@
 <th:block layout:fragment="script">
     <script>
         $(document).ready(function () {
+
+            const csrfToken = $('#csrfToken').val();
+
+
             // 비밀번호 확인 버튼 클릭 이벤트
             $('#verifyPasswordBtn').click(function () {
                 const password = $('#password').val();
@@ -171,6 +180,7 @@
                             data: { newPassword: newPassword, confirmPassword: confirmPassword },
                             success: function () {
                                 passwordMessage.text("비밀번호가 변경되었습니다.").removeClass("error-message").addClass("success-message");
+                                location.reload();
                             },
                             error: function () {
                                 passwordMessage.text("비밀번호 변경에 실패했습니다.").addClass("error-message");
@@ -181,8 +191,27 @@
                     },
                     error: function () {
                         $('#nicknameMessage').text("닉네임 변경에 실패했습니다.").addClass("error-message");
+                        location.reload();
                     }
                 });
+            });
+            $('#deleteAccountBtn').click(function() {
+                if(confirm("정말로 회원 탈퇴를 진행하시겠습니까?")) {
+                    $.ajax({
+                        url: "/users/delete",
+                        type: "DELETE",
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // 기본 헤더 이름 사용
+                        },
+                        success: function(){
+                            alert("회원 탈퇴가 완료되었습니다.");
+                            window.location.href = "/map/";
+                        },
+                        error: function () {
+                            alert("회원 탈퇴 중 문제가 발생했습니다. 다시 시도해 주세요.");
+                        }
+                    });
+                }
             });
         });
     </script>

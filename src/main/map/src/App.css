@@ -2,9 +2,67 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  /* 사이 간격을 조절할 수 있습니다. */
+  justify-content: space-between;
 }
 
 .select-container {
   height: 50px;
+}
+
+.customoverlay .info {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+}
+
+.customoverlay .info:hover {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.customoverlay .title {
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  background: white;
+}
+
+.customoverlay .price {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: orange;
+  padding: 5px 10px;
+  border-radius: 0 20px 20px 0;
+}
+
+select {
+  padding: 5px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #718EBF;
+  /* border: 3px #718EBF; */
+}
+
+.filter {
+  padding: 3px;
+  font-size: 16px;
+  color: #718EBF;
+  border: 1px solid #718EBF;
+  border-radius: 15px;
+  text-align: center;
+  margin-right: 5px;
+}
+
+.select-day {
+  display: flex;
 }

@@ -1,21 +1,21 @@
 package com.trace.jachuiplan.user;
 
 import com.trace.jachuiplan.board.Board;
-import com.trace.jachuiplan.board.BoardService;
-import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.likes.LikesService;
-import jakarta.transaction.Transactional;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -24,6 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private final LikesService likesService;
+    private final UserDetailsService userDetailsService;
 
     @ModelAttribute("menu")
     public String menu(){
@@ -46,6 +47,18 @@ public class UserController {
             model.addAttribute("errorMessage", e.getMessage());
             return "users/signup_form";
         }
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteAccount(@AuthenticationPrincipal UserDetails userDetails,
+                                           HttpSession session){
+        String username = userDetails.getUsername();
+        userService.deleteUser(username);
+        SecurityContextHolder.clearContext();
+        session.invalidate();
+
+        return ResponseEntity.ok().build();
     }
 
     // 아이디 중복 확인
@@ -89,16 +102,6 @@ public class UserController {
         }
     }
 
-    // 임시 myPage
-    @GetMapping("/mypage")
-    public String myPage(Model model,
-                         @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        model.addAttribute("user", userDetails);
-        model.addAttribute("type", MypageTab.INFO.getType());
-        return "users/myPage_form";
-    }
-
     // 비밀번호 변경
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(
@@ -114,32 +117,49 @@ public class UserController {
         return ResponseEntity.ok("비밀번호가 변경되었습니다.");
     }
 
-    // 닉네임 변경
     @PutMapping("/change-nickname")
     public ResponseEntity<String> changeNickname(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam("nickname") String nickname){
+            @RequestParam("nickname") String nickname) {
 
+        // DB에 닉네임 변경
         userService.changeNickname(userDetails.getUsername(), nickname);
+
+        // 변경된 정보로 UserDetails 다시 불러오기
+        UserDetails updatedUserDetails = userDetailsService.loadUserByUsername(userDetails.getUsername());
+
+        // 새로운 Authentication 토큰 생성
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(
+                updatedUserDetails,
+                updatedUserDetails.getPassword(),
+                updatedUserDetails.getAuthorities()
+        );
+
+        // 현재 SecurityContext에 새로운 Authentication 교체
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
         return ResponseEntity.ok("닉네임이 변경되었습니다.");
     }
 
+    // 마이페이지
+    @GetMapping("/mypage")
+    public String myPage(Model model,
+                         @AuthenticationPrincipal CustomUserDetails userDetails) {
 
+        model.addAttribute("user", userDetails);
+        model.addAttribute("type", MypageTab.INFO.getType());
+        model.addAttribute("currentUri", "");
+
+        return "users/myPage_form";
+    }
+
+    // 작성한 글
     @GetMapping("/mypage/myposts")
     public String myPosts(Model model,
                             @AuthenticationPrincipal UserDetails userDetails){
         List<Board> postBoards = userService.getPosts(userDetails.getUsername());
-        List<Board> likedBoards = userService.likedBoards(userDetails.getUsername());
-
-        // 좋아요 수 계산
-        Map<Long, Long> likesCountMap = new HashMap<>();
-        for (Board board : likedBoards) {
-            long likesCount = likesService.getLikesCount(board);
-            likesCountMap.put(board.getBno(), likesCount);
-        }
 
         model.addAttribute("postBoards", postBoards);
-        model.addAttribute("likesCountMap", likesCountMap);
+        model.addAttribute("currentUri", "");
         model.addAttribute("type", MypageTab.POSTS.getType());
 
         return "users/myposts_form";
@@ -151,7 +171,7 @@ public class UserController {
                           @AuthenticationPrincipal UserDetails userDetails,
                           @RequestParam(value="page", defaultValue="0") int page) {
         List<Board> likedBoards = userService.likedBoards(userDetails.getUsername());
-
+        
         // 좋아요 수 계산
         Map<Long, Long> likesCountMap = new HashMap<>();
         for (Board board : likedBoards) {
@@ -161,14 +181,18 @@ public class UserController {
 
         model.addAttribute("likedBoards", likedBoards);
         model.addAttribute("likesCountMap", likesCountMap);
+        model.addAttribute("currentUri", "");
         model.addAttribute("type", MypageTab.LIKES.getType());
+
         return "users/mylikes_form";
     }
 
     // 스크랩한 지역
     @GetMapping("/mypage/region")
     public String myRegion(Model model){
+        model.addAttribute("currentUri", "");
         model.addAttribute("type", MypageTab.REGION.getType());
+
         return "users/myRegion_form";
     }
 
