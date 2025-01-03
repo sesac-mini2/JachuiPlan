@@ -25,6 +25,11 @@ public class UserService {
 
     // 회원가입 로직
     public void registerUser(UserSignupDTO dto) {
+
+        if(userRepository.findByUsername(dto.getUsername()).isPresent()){
+            throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
+        }
+
         // 비밀번호 확인
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
@@ -52,6 +57,12 @@ public class UserService {
 
         // 사용자 저장
         userRepository.save(user);
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public void deleteUser(String username){
+        userRepository.deleteByUsername(username);
     }
 
     // 아이디 중복 확인

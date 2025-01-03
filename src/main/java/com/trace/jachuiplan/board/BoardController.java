@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import java.nio.channels.AcceptPendingException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -184,6 +185,11 @@ public class BoardController {
             board.setUsers(currentUser);  // 게시판에 작성자 설정
         }
 
+        if(type == '0' && !userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))){
+            throw new AccessDeniedException("관리자만 글을 등록할 수 있습니다.");
+        }
+
         board.setType(type);
         board.setRegdate(LocalDateTime.now());
         board.setViews(0);
@@ -271,12 +277,13 @@ public class BoardController {
     @GetMapping("/modify/{id}")
     public String boardModify(@PathVariable("id") Long id,
                               @AuthenticationPrincipal UserDetails userDetails,
+                              HttpServletRequest request,
                               Model model) {
         Board board = boardService.getBoardById(id);
 
         model.addAttribute("board", board);
         model.addAttribute("user", userDetails);
-
+        model.addAttribute("currentUri", request.getRequestURI()); // sidebar 설정
         return "board/modify_board";
     }
 

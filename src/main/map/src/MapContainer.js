@@ -1,10 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const MapContainer = ({ center, onClickOverlay }) => {
-  const mapContainerRef = useRef(null); // 지도 컨테이너를 참조하기 위한 ref
-  const [map, setMap] = useState(null); // 지도 객체 상태
-  const guOverlaysRef = useRef([]); // 구 마커 오버레이 상태를 담을 ref
-  const dongOverlaysRef = useRef([]); // 동 마커 오버레이 상태를 담을 ref
+const MapContainer = ({
+  center,
+  isGuSelected,
+  startYearMonth,
+  endYearMonth,
+  selectedType,
+  rentType,
+  startYear,
+  endYear,
+  selectedFloor,
+  minArea,
+  maxArea,
+  selectedSggCd,
+  selectedSidoCd,
+  onClickOverlay,
+}) => {
+  const mapContainerRef = useRef(null);
+  const [map, setMap] = useState(null);
+  const guOverlaysRef = useRef([]);
+  const dongOverlaysRef = useRef([]);
+  const regionDataRef = useRef([]);
+
+  const propsRef = useRef({
+    startYearMonth,
+    endYearMonth,
+    selectedType,
+    rentType,
+    startYear,
+    endYear,
+    selectedFloor,
+    minArea,
+    maxArea,
+  });
 
   const isMouseDownRef = useRef(false);  // 마우스 버튼 눌림 여부
   const isDraggingRef = useRef(false);  // 드래깅 상태 여부
@@ -28,73 +56,115 @@ const MapContainer = ({ center, onClickOverlay }) => {
     isDraggingRef.current = false;
   };
 
-  // 지도 초기화 및 지도 영역 내 동들 표시
+  // 최신 props 업데이트
   useEffect(() => {
-    if (mapContainerRef.current && !map) {
-      const container = mapContainerRef.current; // 지도 컨테이너 DOM 참조
-      const options = {
-        center: new window.kakao.maps.LatLng(center.latitude, center.longitude), // 지도 중심 좌표
-        level: 5, // 초기 지도 확대 레벨
-      };
-      const newMap = new window.kakao.maps.Map(container, options); // 새 지도 객체 생성
+    propsRef.current = {
+      startYearMonth,
+      endYearMonth,
+      selectedType,
+      rentType,
+      startYear,
+      endYear,
+      selectedFloor,
+      minArea,
+      maxArea,
+    };
+  }, [startYearMonth, endYearMonth, selectedType, rentType, startYear, endYear, selectedFloor, minArea, maxArea]);
 
-      setMap(newMap); // 상태에 지도 객체 저장
-
-      updateMarkersInView(newMap); // 지도 영역 내 마커 업데이트
-
-      // 지도 범위가 바뀔 때마다 동들을 표시
-      window.kakao.maps.event.addListener(newMap, 'idle', () => {
-        updateMarkersInView(newMap); // 범위 변경 시 마커 갱신
-      });
-    } else if (map) {
-      // 지도 객체가 이미 생성된 경우 (새로운 center로 지도 이동)
-      const latLng = new window.kakao.maps.LatLng(center.latitude, center.longitude); // 새로운 중심 좌표
-      map.setLevel(5);
-      map.setCenter(latLng); // 지도 중심을 새로운 좌표로 이동
-    }
-  }, [center, map]); // center 상태가 변경될 때마다 실행
-
-  // 오버레이 배열을 초기화하는 함수
   const clearOverlays = (overlays) => {
-    overlays.forEach((overlay) => overlay.setMap(null)); // 각 오버레이를 지도에서 제거
-    overlays.length = 0; // 배열 비우기
+    overlays.forEach((overlay) => overlay.setMap(null));
+    overlays.length = 0;
   };
 
-  // 지도 영역 내 동들을 가져와 커스텀 오버레이를 표시하는 함수
+  const calculateFloorValues = (selectedFloor) => {
+    let minFloor = null;
+    let maxFloor = null;
+
+    if (selectedFloor === '지하') {
+      maxFloor = 0;
+      minFloor = -99;
+    } else if (selectedFloor === '1층') {
+      maxFloor = 1;
+      minFloor = 1;
+    } else if (selectedFloor === '2층') {
+      maxFloor = 2;
+      minFloor = 2;
+    } else if (selectedFloor === '3층이상') {
+      minFloor = 3;
+      maxFloor = 999;
+    }
+
+    return { minFloor, maxFloor };
+  };
+
   const updateMarkersInView = (map) => {
-    // 지도 영역의 경계를 가져옴
+    if (!map) return;
+
+    const currentProps = propsRef.current;
+
     const bounds = map.getBounds();
     const north = bounds.getNorthEast().getLat();
     const east = bounds.getNorthEast().getLng();
     const south = bounds.getSouthWest().getLat();
     const west = bounds.getSouthWest().getLng();
-
-    // 현재 지도 레벨을 가져옴
     const level = map.getLevel();
 
-    // 서버에 현재 지도 영역 및 레벨 값 전달하여 동 데이터를 가져옴
     fetch(`http://localhost/api/regioncd/regionsInBounds?north=${north}&east=${east}&south=${south}&west=${west}&level=${level}`)
-      .then(response => response.json())
-      .then(data => {
-        clearOverlays(guOverlaysRef.current); // 구 오버레이 초기화
-        clearOverlays(dongOverlaysRef.current); // 동 오버레이 초기화
+      .then((response) => response.json())
+      .then((regionData) => {
+        regionDataRef.current = regionData;
+        const sggcdsSet = new Set();
 
-        const newGuOverlays = []; // 새 구 오버레이 배열
-        const newDongOverlays = []; // 새 동 오버레이 배열
+        regionData.forEach((region) => {
+          if (region.umdCd !== '000') {
+            sggcdsSet.add(region.sidoCd + region.sggCd);
+          }
+        });
 
-        // 응답 데이터 처리하여 마커 생성
-        data.forEach(region => {
+        const minAreaInSquareMeters = currentProps.minArea * 3.3058;
+        const maxAreaInSquareMeters = currentProps.maxArea * 3.3058;
+
+        const { minFloor, maxFloor } = calculateFloorValues(currentProps.selectedFloor);
+
+        const apiUrl =
+          currentProps.selectedType === 'building'
+            ? `http://localhost/api/building/average?sggcds=${Array.from(sggcdsSet).join(',')}&startYearMonth=${currentProps.startYearMonth}&endYearMonth=${currentProps.endYearMonth}&rentType=${currentProps.rentType}&minBuildYear=${currentProps.startYear || ''}&maxBuildYear=${currentProps.endYear || ''}&minFloor=${minFloor || ''}&maxFloor=${maxFloor || ''}&minArea=${minAreaInSquareMeters}&maxArea=${maxAreaInSquareMeters}`
+            : `http://localhost/api/officeHotel/average?sggcds=${Array.from(sggcdsSet).join(',')}&startYearMonth=${currentProps.startYearMonth}&endYearMonth=${currentProps.endYearMonth}&rentType=${currentProps.rentType}&minBuildYear=${currentProps.startYear || ''}&maxBuildYear=${currentProps.endYear || ''}&minFloor=${minFloor || ''}&maxFloor=${maxFloor || ''}&minArea=${minAreaInSquareMeters}&maxArea=${maxAreaInSquareMeters}`;
+
+        return fetch(apiUrl)
+          .then((response) => response.json())
+          .then((avgPriceData) => ({ regionData, avgPriceData }));
+      })
+      .then(({ regionData, avgPriceData }) => {
+        clearOverlays(guOverlaysRef.current);
+        clearOverlays(dongOverlaysRef.current);
+
+        const newGuOverlays = [];
+        const newDongOverlays = [];
+
+        const avgPriceMap = new Map(
+          avgPriceData.map((item) => {
+            const price =
+              currentProps.rentType === '전세' || currentProps.rentType === '반전세'
+                ? item.avgDeposit
+                : item.avgMonthlyRent;
+            return [item.umdnm, price];
+          })
+        );
+
+        regionData.forEach((region) => {
           const position = new window.kakao.maps.LatLng(region.latitude, region.longitude);
           const lastName = region.locataddNm.split(' ').pop();
+          const averagePrice = Math.floor(avgPriceMap.get(lastName) || 0);
+          const priceLabel = averagePrice === 0 ? '원' : '만원';
 
-          // 지도 레벨이 6 미만일 때 동 마커를 표시
           if (level < 6 && region.umdCd !== '000') {
             const content = document.createElement('div'); // DOM 요소 생성
             content.className = 'customoverlay';
             content.innerHTML = `<div class="info">
-                                  <span class="title">${lastName}</span>
-                                  <span class="price">2.5억</span>
-                                </div>`;
+                                   <span class="title">${lastName}</span>
+                                   <span class="price">${averagePrice}${priceLabel}</span>
+                                 </div>`;
 
             content.onmousedown = handleMouseDown;
             content.onmousemove = handleMouseMove;
@@ -106,15 +176,12 @@ const MapContainer = ({ center, onClickOverlay }) => {
               content: content,
               yAnchor: 1,
             });
-            newDongOverlays.push(customOverlay); // 동 오버레이 배열에 추가
-          }
-          // 지도 레벨이 6 이상일 때 구 마커를 표시
-          else if (level >= 6 && region.umdCd === '000' && region.sggCd !== '000') {
+            newDongOverlays.push(customOverlay);
+          } else if (level >= 6 && region.umdCd === '000' && region.sggCd !== '000') {
             const content = `<div class="customoverlay">
                               <div class="info">
                                 <span class="title">${lastName}</span>
-                                <span class="price">2.5억</span>
-                                <span class="d-none">${region.id}</span>
+                                <span class="price">${averagePrice}${priceLabel}</span>
                               </div>
                             </div>`;
             const customOverlay = new window.kakao.maps.CustomOverlay({
@@ -123,21 +190,61 @@ const MapContainer = ({ center, onClickOverlay }) => {
               content: content,
               yAnchor: 1,
             });
-            newGuOverlays.push(customOverlay); // 구 오버레이 배열에 추가
+            newGuOverlays.push(customOverlay);
           }
         });
 
-        guOverlaysRef.current = newGuOverlays; // 구 오버레이 상태 업데이트
-        dongOverlaysRef.current = newDongOverlays; // 동 오버레이 상태 업데이트
+        guOverlaysRef.current = newGuOverlays;
+        dongOverlaysRef.current = newDongOverlays;
       })
-      .catch(err => {
-        console.error('Error fetching markers: ', err);
+      .catch((err) => {
+        console.error('Error updating markers: ', err);
       });
   };
 
-  return (
-    <div ref={mapContainerRef} style={{ width: '100%', height: 'calc(100vh - 174px)' }} />
-  );
+  useEffect(() => {
+    console.log('map:', map);  // map 객체 확인
+    console.log('selectedSggCd:', selectedSggCd);  // selectedSggCd 값 확인
+    if (map && selectedSggCd) {
+      fetch(`/api/regioncd/${selectedSidoCd}/${selectedSggCd}`) // RegioncdApiController에 요청
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.length > 0) {
+            const region = data.find((region) => region.umdCd === '000');
+            if (region) {
+              const latLng = new window.kakao.maps.LatLng(region.latitude, region.longitude);
+              map.setCenter(latLng);  // 지도 중앙 위치 업데이트
+            }
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching region data:", error);
+        });
+    }
+  }, [selectedSggCd, map]);  // `selectedSggCd` 변경 시, 지도 중앙 업데이트
+
+  useEffect(() => {
+    if (mapContainerRef.current && !map) {
+      const container = mapContainerRef.current;
+      const options = {
+        center: new window.kakao.maps.LatLng(center.latitude, center.longitude),
+        level: 5,
+      };
+      const newMap = new window.kakao.maps.Map(container, options);
+      setMap(newMap);
+
+      window.kakao.maps.event.addListener(newMap, 'idle', () => updateMarkersInView(newMap));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (map) {
+      updateMarkersInView(map);
+    }
+  }, [map, startYearMonth, endYearMonth, selectedType, rentType, startYear, endYear, selectedFloor, minArea, maxArea]);
+
+  return <div ref={mapContainerRef} style={{ width: '100%', height: 'calc(100vh - 174px)' }} />;
+
 };
 
 export default MapContainer;

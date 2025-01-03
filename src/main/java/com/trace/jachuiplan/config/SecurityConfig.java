@@ -1,5 +1,7 @@
 package com.trace.jachuiplan.config;
 
+import com.trace.jachuiplan.auth.CustomOAuth2UserService;
+import com.trace.jachuiplan.user.CustomUserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +19,12 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class SecurityConfig {
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -26,21 +34,23 @@ public class SecurityConfig {
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/myPage/verify-password"))
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-nickname"))
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/users/change-password"))
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/users/social-signup"))
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/api/scrap/**"))
                 )
-                .securityMatcher("/users/**", "/board/**", "/reply/**", "/admin/**", "/api/**", "/scrap/**")
+                .securityMatcher("/users/**", "/board/**", "/reply/**", "/api/**", "/oauth2/**", "/login/**", "/scrap/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/users/signup", "/users/check-username", "/users/check-nickname", "/users/login", "/users/check-auth",  // 로그인 및 회원가입 페이지, 권한 확인은 누구나 접근 가능
-                                "/board/infolist", "/board/generallist", "/board/qnalist", "/board/menu", "/map/**", "/api/**") // 게시판 목록 누구나 접근 가능
+                                "/board/infolist", "/board/generallist", "/board/qnalist", "/board/menu", // 게시판 목록 누구나 접근 가능
+                                "/map/**", "/api/**", "/oauth2/**", "/login/**")
                         .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/users/login")
                         .loginProcessingUrl("/users/login")
                         .successHandler((request, response, authentication) -> {
+                            // 로그인 성공 시 이전 요청한 페이지로 이동
                             var savedRequest = (SavedRequest) request.getSession()
                                     .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
                             if (savedRequest != null) {
@@ -52,6 +62,7 @@ public class SecurityConfig {
                         .failureUrl("/users/login?error=true") // 실패 시 로그인 페이지로 리다이렉트
                         .permitAll()
                 )
+
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
                         .logoutSuccessUrl("/map")
@@ -63,6 +74,24 @@ public class SecurityConfig {
                         .authenticationEntryPoint(
                                 (request, response, authException) -> response.sendRedirect("/users/login")
                         )
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/users/login")
+                        .defaultSuccessUrl("/map")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler((request, response, authentication) -> {
+                            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+                            if(userDetails.getPassword() == null || "SOCIAL_LOGIN".equals(userDetails.getPassword())){
+                                response.sendRedirect("/users/social-signup");
+                            } else{
+                                response.sendRedirect("/map");
+                            }
+
+                        })
+                        .failureUrl("/users/login?error=true")
                 );
 
         return http.build();

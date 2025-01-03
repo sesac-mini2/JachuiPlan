@@ -5,6 +5,7 @@
 <th:block layout:fragment="content">
     <main class="col-md-10 p-4">
         <div class="mypage-container" style="text-align: center">
+
         <!-- 비밀번호 확인 -->
         <div id="passwordVerifySection">
             <label for="password" class="form-pw-label mb-3">비밀번호 인증 후 이용 가능합니다.</label>
@@ -64,9 +65,12 @@
                                 </div>
                                 <p id="passwordMessage"></p>
                             </div>
+                            <div>
+                                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+                                <button type="button" id="deleteAccountBtn" class="btn btn-danger custom-btn">회원 탈퇴</button>
+                            </div>
                         </div>
                     </div>
-
                     <button type="button" id="updateInfoBtn" class="btn btn-primary signup-btn">수정 완료</button>
                 </form>
             </div>
@@ -75,118 +79,6 @@
     </main>
 </th:block>
 <th:block layout:fragment="script">
-    <script>
-        $(document).ready(function () {
-            // 비밀번호 확인 버튼 클릭 이벤트
-            $('#verifyPasswordBtn').click(function () {
-                const password = $('#password').val();
-                const message = $('#verifyMessage');
-
-                if (!password) {
-                    message.text("비밀번호를 입력해주세요.")
-                        .removeClass("success-message")
-                        .addClass("error-message");
-                    return;
-                }
-
-                $.ajax({
-                    url: "/users/myPage/verify-password", // 서버 API
-                    type: "POST",
-                    data: { password: password },
-                    success: function () {
-                        message.text("비밀번호가 일치합니다.")
-                            .removeClass("error-message")
-                            .addClass("success-message");
-                        $('#passwordVerifySection').hide();
-                        $('#myPageContent').fadeIn();
-                    },
-                    error: function () {
-                        message.text("비밀번호가 일치하지 않습니다.")
-                            .removeClass("success-message")
-                            .addClass("error-message");
-                    }
-                });
-            });
-
-            // 탭 클릭 이벤트
-            $('.tab-link').click(function () {
-                const targetTab = $(this).data('tab');
-
-                $('.tab-content').removeClass('active');
-                $('.tab-link').removeClass('active');
-                $(`#${targetTab}`).addClass('active');
-                $(this).addClass('active');
-            });
-
-            // 닉네임 중복 확인
-            $('#checkNicknameBtn').click(function () {
-                const nickname = $('#nickname').val();
-                const message = $('#nicknameMessage');
-
-                if (!nickname) {
-                    message.text("닉네임을 입력해주세요.").addClass("error-message");
-                    return;
-                }
-
-                $.ajax({
-                    url: "/users/check-nickname",
-                    type: "GET",
-                    data: { nickname: nickname },
-                    success: function () {
-                        message.text("사용 가능한 닉네임입니다.").removeClass("error-message").addClass("success-message");
-                    },
-                    error: function () {
-                        message.text("이미 사용 중인 닉네임입니다.").removeClass("success-message").addClass("error-message");
-                    }
-                });
-            });
-
-            // 수정 완료 버튼 클릭 이벤트
-            $('#updateInfoBtn').click(function () {
-                const nickname = $('#nickname').val();
-                const newPassword = $('#newPassword').val();
-                const confirmPassword = $('#confirmPassword').val();
-                const passwordMessage = $('#passwordMessage');
-
-                if (!newPassword || !confirmPassword) {
-                    passwordMessage.text("모든 비밀번호 입력 필드를 채워주세요.").addClass("error-message");
-                    return;
-                }
-
-                if (newPassword !== confirmPassword) {
-                    passwordMessage.text("비밀번호가 일치하지 않습니다.").addClass("error-message");
-                    return;
-                }
-
-                $.ajax({
-                    url: "/users/change-nickname",
-                    type: "PUT",
-                    data: { nickname: nickname },
-                    success: function () {
-                        $('#nicknameMessage').text("닉네임이 변경되었습니다.").addClass("success-message");
-
-                        $.ajax({
-                            url: "/users/change-password",
-                            type: "PUT",
-                            data: { newPassword: newPassword, confirmPassword: confirmPassword },
-                            success: function () {
-                                passwordMessage.text("비밀번호가 변경되었습니다.").removeClass("error-message").addClass("success-message");
-                                location.reload();
-                            },
-                            error: function () {
-                                passwordMessage.text("비밀번호 변경에 실패했습니다.").addClass("error-message");
-                            }
-                        });
-
-
-                    },
-                    error: function () {
-                        $('#nicknameMessage').text("닉네임 변경에 실패했습니다.").addClass("error-message");
-                        location.reload();
-                    }
-                });
-            });
-        });
-    </script>
+    <script th:src="@{/js/mypage.js}"></script>
 </th:block>
 </html>

@@ -5,9 +5,12 @@ import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.scrap.ScrapedListDTO;
 import com.trace.jachuiplan.building.BuildingService;
 import com.trace.jachuiplan.likes.LikesService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,6 +54,18 @@ public class UserController {
         }
     }
 
+    // 회원 탈퇴
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteAccount(@AuthenticationPrincipal UserDetails userDetails,
+                                           HttpSession session){
+        String username = userDetails.getUsername();
+        userService.deleteUser(username);
+        SecurityContextHolder.clearContext();
+        session.invalidate();
+
+        return ResponseEntity.ok().build();
+    }
+
     // 아이디 중복 확인
     @GetMapping("/check-username")
     @ResponseBody
@@ -92,16 +107,6 @@ public class UserController {
         }
     }
 
-    // mypage
-    @GetMapping("/mypage")
-    public String myPage(Model model,
-                         @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        model.addAttribute("user", userDetails);
-        model.addAttribute("type", MypageTab.INFO.getType());
-        return "users/myPage_form";
-    }
-
     // 비밀번호 변경
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(
@@ -140,12 +145,26 @@ public class UserController {
         return ResponseEntity.ok("닉네임이 변경되었습니다.");
     }
 
+    // 마이페이지
+    @GetMapping("/mypage")
+    public String myPage(Model model,
+                         @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        model.addAttribute("user", userDetails);
+        model.addAttribute("type", MypageTab.INFO.getType());
+        model.addAttribute("currentUri", "");
+
+        return "users/myPage_form";
+    }
+
+    // 작성한 글
     @GetMapping("/mypage/myposts")
     public String myPosts(Model model,
                             @AuthenticationPrincipal UserDetails userDetails){
         List<Board> postBoards = userService.getPosts(userDetails.getUsername());
 
         model.addAttribute("postBoards", postBoards);
+        model.addAttribute("currentUri", "");
         model.addAttribute("type", MypageTab.POSTS.getType());
 
         return "users/myposts_form";
@@ -167,7 +186,9 @@ public class UserController {
 
         model.addAttribute("likedBoards", likedBoards);
         model.addAttribute("likesCountMap", likesCountMap);
+        model.addAttribute("currentUri", "");
         model.addAttribute("type", MypageTab.LIKES.getType());
+
         return "users/mylikes_form";
     }
 
@@ -186,6 +207,7 @@ public class UserController {
                            Model model){
         Users users = userService.findByUsername(userDetails.getUsername()).get();
         model.addAttribute("type", MypageTab.REGION.getType());
+
         return "users/myRegion_form";
     }
 
@@ -198,6 +220,55 @@ public class UserController {
         response.put("authenticated", authenticated);
         response.put("nickname", authenticated ? userDetails.getNickname() : "");
         return ResponseEntity.ok(response);
+    }
+
+    // 소셜 로그인 회원 정보 재설정
+    @GetMapping("/social-signup")
+    public String socialSignup(@AuthenticationPrincipal CustomUserDetails userDetails,
+                               Model model){
+
+        if(userDetails == null || userDetails.getPassword() != null && !"SOCIAL_LOGIN".equals(userDetails.getPassword())){
+            return "redirect:/map";
+        }
+
+        model.addAttribute("user", userDetails);
+        return "users/socialSignup_form";
+    }
+
+    @PostMapping("/social-signup")
+    @ResponseBody
+    public ResponseEntity<String> socialSignupProcess(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam("nickname") String nickname,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword) {
+
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("소셜 로그인 유저 정보가 없습니다.");
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+        }
+
+        try {
+            userService.changePassword(userDetails.getUsername(), newPassword);
+            userService.changeNickname(userDetails.getUsername(), nickname);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        UserDetails updatedUser = userDetailsService.loadUserByUsername(userDetails.getUsername());
+        UsernamePasswordAuthenticationToken newAuth =
+                new UsernamePasswordAuthenticationToken(
+                        updatedUser,
+                        updatedUser.getPassword(),
+                        updatedUser.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        return ResponseEntity.ok("추가 정보가 설정되었습니다.");
     }
 }
 
