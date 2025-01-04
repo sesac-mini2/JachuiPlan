@@ -25,7 +25,7 @@ const UmdModal = ({ isAuthenticated, targetUmd, isShowUmdModal, closeUmdModal,
     height: "96%",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // 그림자 효과 (선택)
     overflowY: "auto",
-    overflowX: "hidden",
+    overflowX: "auto",
     border: "none",
     backgroundColor: "#ffffff",
     borderRadius: "0.5rem",
