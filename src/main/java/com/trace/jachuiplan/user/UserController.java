@@ -207,6 +207,7 @@ public class UserController {
                            Model model){
         Users users = userService.findByUsername(userDetails.getUsername()).get();
         model.addAttribute("type", MypageTab.REGION.getType());
+        model.addAttribute("currentUri", "");
 
         return "users/myRegion_form";
     }
