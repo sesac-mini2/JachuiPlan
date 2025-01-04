@@ -24,11 +24,10 @@
 
                 <!-- 좋아요 & 수정/삭제 버튼 -->
                 <div class="d-flex">
-                    <button class="btn btn-outline-primary btn-sm me-auto">
+                    <button class="btn btn-outline-primary btn-sm me-auto" th:onclick="|toggleLike(${board.bno})|">
                         <!-- 좋아요 버튼 (AJAX로 좋아요 추가/제거) -->
                         <img id="likeButton" class="align-middle"
-                             th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"
-                             th:onclick="|toggleLike(${board.bno})|" />
+                             th:src="${isLiked} ? @{/img/like.png} : @{/img/unlike.png}"/>
                         <span class="align-middle">좋아요</span>
                     </button>
                     <div>

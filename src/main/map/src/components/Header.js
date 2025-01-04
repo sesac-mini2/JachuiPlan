@@ -5,7 +5,7 @@ const Header = (props) => {
     <header>
       <nav className="navbar navbar-expand-sm navbar-light bg-white shadow-sm text-center">
         <div className="row container-fluid">
-          <a className="d-inline col-sm-2 navbar-brand fw-bold my-2" href="http://localhost/map">
+          <a className="d-inline col-sm-2 navbar-brand fw-bold my-2" href="http://localhost:3000">
             <img src="/img/logo.png" alt="전월세 평균가 아이콘" className="d-inline align-middle me-2 logo" />
             <span className="align-middle">자취플랜</span>
           </a>
@@ -20,7 +20,7 @@ const Header = (props) => {
                 />
                 <a
                   className={`d-inline nav-link align-middle ${props.menu === "home" ? "active" : ""}`}
-                  href="http://localhost/map"
+                  href="http://localhost:3000"
                 >
                   전월세 평균가
                 </a>
@@ -46,7 +46,7 @@ const Header = (props) => {
                 />
                 <a
                   className={`d-inline nav-link align-middle ${props.menu === "mypage" ? "active" : ""}`}
-                   href="http://localhost/users/mypage"
+                  href="http://localhost/users/mypage"
                 >
                   마이페이지
                 </a>
@@ -55,7 +55,7 @@ const Header = (props) => {
           </div>
 
           <div className="col-sm-3 text-end">
-            
+
             {props.isAuthenticated ? (
               <>
                 <span className="me-3 text-muted align-middle">{props.nickname}</span>
