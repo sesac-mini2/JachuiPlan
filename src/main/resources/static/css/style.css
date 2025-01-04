@@ -452,3 +452,12 @@ img.reply-img{
     margin-top: 70px;
 }
 
+/* 스크롤 커스텀 */
+#umdModal::-webkit-scrollbar {
+  width: 10px; /* 스크롤 바 너비 */
+}
+
+#umdModal::-webkit-scrollbar-thumb {
+  background: #f0f0f0; /* 스크롤 색상 */
+  border-radius: 10px; /* 스크롤 바 모서리 둥글게 */
+}
