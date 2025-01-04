@@ -138,7 +138,17 @@ function App() {
               </div>
             </div>
             <div className="position-relative">
-              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}/>
+              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}
+                startYearMonth={startYearMonth}
+                endYearMonth={endYearMonth}
+                selectedType={selectedType}
+                rentType={rentType}
+                startYear={startYear}
+                endYear={endYear}
+                selectedFloor={selectedFloor}
+                minArea={minArea}
+                maxArea={maxArea}
+              />
               <MapContainer
                 center={center}
                 startYearMonth={startYearMonth}

@@ -28,4 +28,7 @@ public interface RegioncdRepository extends JpaRepository<Regioncd, Long> {
             @Param("east") Double east,
             @Param("south") Double south,
             @Param("west") Double west);
+
+    @Query("SELECT new com.trace.jachuiplan.regioncd.RegioncdDTO(r.sidoCd || r.sggCd, r.locataddNm) FROM Regioncd r WHERE r.id = :id")
+    List<RegioncdDTO> findRegionById(@Param("id") String id);
 }
