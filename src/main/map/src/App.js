@@ -108,7 +108,7 @@ function App() {
                   onChange={(e) => setSelectedType(e.target.value)}
                   value={selectedType}
                 >
-                  <option value="building">빌딩</option>
+                  <option value="building">주택</option>
                   <option value="officeHotel">오피스텔</option>
                 </select>
                 <select className="filter" onClick={handleOtherButtonClick}
