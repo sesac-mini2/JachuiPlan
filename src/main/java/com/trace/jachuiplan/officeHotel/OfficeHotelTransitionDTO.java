@@ -1,5 +1,12 @@
 package com.trace.jachuiplan.officeHotel;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class OfficeHotelTransitionDTO {
     private String umdnm;
     private String yearMonth;
