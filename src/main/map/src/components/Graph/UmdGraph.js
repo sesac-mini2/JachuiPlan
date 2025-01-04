@@ -4,6 +4,7 @@ import axios from 'axios';
 import { select, axisBottom, scaleLinear, axisLeft, min, max, scaleTime, timeMonth, timeFormat, timeDay, axisRight } from 'd3';
 import './UmdGraph.css';
 
+// TODO: 층 필터링은 아직 그래프에 적용 안됨!!
 function UmdGraph({ region,
     selectedType,
     rentType,
@@ -11,7 +12,7 @@ function UmdGraph({ region,
     endYear,
     selectedFloor,
     minArea,
-    maxArea 
+    maxArea
 }) {
     const [data, setData] = useState([{"umdnm": "", "yearMonth": "", "avgMonthlyRent": 0, "avgDeposit": 0, "count": 0}]);
     const [testNum, setTestNum] = useState(0);
