@@ -168,8 +168,8 @@ const MapContainer = ({
 
             content.onmousedown = handleMouseDown;
             content.onmousemove = handleMouseMove;
-            content.onmouseup = () => handleMouseUp(region.id);     
-            
+            content.onmouseup = () => handleMouseUp(region.id);
+
             const customOverlay = new window.kakao.maps.CustomOverlay({
               map: map,
               position: position,
@@ -180,8 +180,7 @@ const MapContainer = ({
           } else if (level >= 6 && region.umdCd === '000' && region.sggCd !== '000') {
             const content = `<div class="customoverlay">
                               <div class="info">
-                                <span class="title">${lastName}</span>
-                                <span class="price">${averagePrice}${priceLabel}</span>
+                                <span class="title-Guname">${lastName}</span>
                               </div>
                             </div>`;
             const customOverlay = new window.kakao.maps.CustomOverlay({

@@ -173,8 +173,10 @@ img.reply-img{
     width: 18px;
 }
 .board-font{
+    display: inline-block;
     font-size: 13px;
     margin-right: 1px;
+    width: 50px;
 }
 .date {
 
