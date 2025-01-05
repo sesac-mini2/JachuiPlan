@@ -8,8 +8,18 @@
             <!-- Filters Section -->
             <!-- 건물 종류 -->
             <div class="d-flex flex-wrap justify-content-start align-items-center mb-3 w-auto">
-                <div class="dropdown">
-                    <button class="filter-select dropdown-toggle dropdown-type" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <!-- 거래일 -->
+                <div class="dropdown mb-2">
+                    <button class="filter-select dropdown-toggle" type="button" aria-expanded="false">
+                        <input class="dropdown-deal-date" type="text" id="start-year-month" value="2023년 01월" />
+                    </button>~
+                    <button class="filter-select dropdown-toggle" type="button" aria-expanded="false">
+                        <input class="dropdown-deal-date" type="text" id="end-year-month" placeholder="----년 --월" />
+                    </button>
+                </div>
+
+                <div class="dropdown mb-2">
+                    <button class="filter-select dropdown-toggle dropdown-building-type" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         주택
                     </button>
                     <ul class="dropdown-menu filter-type" aria-labelledby="dropdownMenuButton1">
@@ -17,16 +27,75 @@
                         <li class="dropdown-item" data-type="officeHotel">오피스텔</li>
                     </ul>
                 </div>
-            </div>
-            <!-- 거래일 -->
-            <div class="d-flex flex-wrap justify-content-start align-items-center mb-3 w-auto">
-                <div class="dropdown">
-                    <button class="filter-select dropdown-toggle dropdown-type" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        주택
+
+                <!-- 거래종류 -->
+                <div class="dropdown mb-2">
+                    <button class="filter-select dropdown-toggle dropdown-rent-type" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        월세
                     </button>
                     <ul class="dropdown-menu filter-type" aria-labelledby="dropdownMenuButton1">
-                        <li class="dropdown-item" data-type="building">주택</li>
-                        <li class="dropdown-item" data-type="officeHotel">오피스텔</li>
+                        <li class="dropdown-item" data-type="월세">월세</li>
+                        <li class="dropdown-item" data-type="반전세">반전세</li>
+                        <li class="dropdown-item" data-type="전세">전세</li>
+                    </ul>
+                </div>
+
+                <!-- 면적 -->
+                <div class="dropdown mb-2">
+                    <button class="filter-select dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        면적
+                    </button>
+                    <ul class="dropdown-menu filter-area" aria-labelledby="dropdownMenuButton1">
+                        <li>
+                            <div class="slider-container">
+                                <input type="range" id="start-range" min="0" max="30" value="0">
+                                <input type="range" id="end-range" min="0" max="30" value="30">
+                                <div class="slider-track"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="slider-values">
+                                <span id="start-value"></span>
+                                <span> - </span>
+                                <span id="end-value">30</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4 p-2"><button class="btn btn-outline-primary w-100 area-item">~5평</button></div>
+                                <div class="col-4 p-2"><button class="btn btn-outline-primary w-100 area-item">6~10평</button></div>
+                                <div class="col-4 p-2"><button class="btn btn-outline-primary w-100 area-item">11~15평</button></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 p-2"><button class="btn btn-outline-primary w-100 area-item">16~20평</button></div>
+                                <div class="col-4 p-2"><button class="btn btn-outline-primary w-100 area-item">21~30평</button></div>
+                                <div class="col-4 p-2"><button class="btn btn-outline-primary w-100 area-item">30평~</button></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 연식 -->
+                <div class="mb-2">
+                    <button class="filter-select dropdown-toggle" type="button" aria-expanded="false">
+                        <input class="dropdown-building-year" type="text" id="min-buiding-year" placeholder="연식" />
+                    </button>~
+                    <button class="filter-select dropdown-toggle" type="button" aria-expanded="false">
+                        <input class="dropdown-building-year" type="text" id="max-buiding-year" placeholder="연식" />
+                    </button>
+                </div>
+
+                <!-- 층 -->
+                <div class="dropdown mb-2">
+                    <button class="filter-select dropdown-toggle dropdown-floor" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        층
+                    </button>
+                    <ul class="dropdown-menu filter-type" aria-labelledby="dropdownMenuButton1">
+                        <li class="dropdown-item" data-type="전체">전체</li>
+                        <li class="dropdown-item" data-type="지하">지하</li>
+                        <li class="dropdown-item" data-type="1층">1층</li>
+                        <li class="dropdown-item" data-type="2층">2층</li>
+                        <li class="dropdown-item" data-type="3층 이상">3층 이상</li>
                     </ul>
                 </div>
             </div>
@@ -46,4 +115,126 @@
 </th:block>
 <th:block layout:fragment="script">
     <script th:src="@{/js/scrap.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js" integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $("#start-year-month").datepicker({
+            autoclose: true,
+            format: "yyyy년 mm월",
+            viewMode: "months",
+            minViewMode: "months",
+            endDate: "2024y 12m"
+        }).on('changeDate', function (e) {
+            startYearMonth = $("#start-year-month").val().replace(/[^\d]/g, '').slice(0, 6);
+            getScrapList();
+        });
+
+        $("#end-year-month").datepicker({
+            autoclose: true,
+            format: "yyyy년 mm월",
+            viewMode: "months",
+            minViewMode: "months",
+            endDate: "2024y 12m"
+        }).on('changeDate', function (e) {
+            endYearMonth = $("#end-year-month").val().replace(/[^\d]/g, '').slice(0, 6);
+            getScrapList();
+        });
+
+        $("#min-buiding-year").datepicker({
+            autoclose: true,
+            format: "yyyy년",
+            viewMode: "years",
+            minViewMode: "years",
+            endDate: "2024y"
+        }).on('changeDate', function (e) {
+            minBuildYear = $("#min-buiding-year").val().slice(0, -1);
+            getScrapList();
+        });
+
+        $("#max-buiding-year").datepicker({
+            autoclose: true,
+            format: "yyyy년",
+            viewMode: "years",
+            minViewMode: "years",
+            endDate: "2024y"
+        }).on('changeDate', function (e) {
+            maxBuildYear = $("#max-buiding-year").val().slice(0, -1);
+            getScrapList();
+        });
+
+        // 면적
+        const startRange = document.getElementById("start-range");
+        const endRange = document.getElementById("end-range");
+        const startValue = document.getElementById("start-value");
+        const endValue = document.getElementById("end-value");
+        const sliderTrack = document.querySelector(".slider-track");
+
+        function updateSlider(e) {
+            const start = parseInt(startRange.value);
+            const end = parseInt(endRange.value);
+
+            // Prevent start from exceeding or equaling end
+            if(start >= end) {
+                if (e.target.getAttribute('id') === 'start-range') {
+                    startRange.value = end;
+                }
+                else if (e.target.getAttribute('id') === 'end-range') {
+                    endRange.value = start;
+                }
+            }
+
+            // Update displayed values
+            startValue.textContent = `${startRange.value}평`;
+            endValue.textContent = `${endRange.value}평`;
+
+            // Update track fill
+            const startPercent = (startRange.value / startRange.max) * 100;
+            const endPercent = (endRange.value / endRange.max) * 100;
+
+            sliderTrack.style.setProperty(
+                "background",
+                `linear-gradient(to right, #ddd ${startPercent}%, #007bff ${startPercent}%, #007bff ${endPercent}%, #ddd ${endPercent}%)`
+            );
+        }
+        startRange.addEventListener("input", updateSlider);
+        startRange.addEventListener("mouseup", function(e){
+            minArea = parseInt(startRange.value);
+            getScrapList();
+        });
+        endRange.addEventListener("input", updateSlider);
+        endRange.addEventListener("mouseup", function(e){
+            maxArea = parseInt(endRange.value);
+            getScrapList();
+        });
+
+        // Initialize the slider
+        updateSlider();
+
+        $(".area-item").click(function(e){
+            const range = e.target.textContent;
+            const numbers = range.match(/\d+/g);
+            console.log(range);
+            let s = 0;
+            let en = 0;
+            if (range.startsWith("~")) {
+                // "~5평"
+                s = 0;
+                en = parseInt(numbers[0]);
+            } else if (range.endsWith("~")) {
+                // "30평~"
+                s = parseInt(numbers[0]);
+                en = null;
+            } else {
+                s = parseInt(numbers[0]);
+                en = parseInt(numbers[1]);
+            }
+            startRange.value = s;
+            minArea = s;
+            startRange.dispatchEvent(new Event("input"));
+            endRange.value = en;
+            maxArea = en;
+            endRange.dispatchEvent(new Event("input"));
+            getScrapList();
+        })
+    </script>
 </th:block>

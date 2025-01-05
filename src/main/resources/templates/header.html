@@ -12,7 +12,7 @@
                     <li class="nav-item me-3">
                         <img th:if="${menu == 'home'}" th:src="@{/img/home_active.png}" alt="전월세 평균가 아이콘" class="d-inline nav-icon align-middle">
                         <img th:unless="${menu == 'home'}" th:src="@{/img/home.png}" alt="전월세 평균가 아이콘" class="d-inline nav-icon align-middle">
-                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'home' ? 'active' : ''}" href="http://localhost:3000">전월세 평균가</a>
+                        <a class="d-inline nav-link align-middle" th:classappend="${menu == 'home' ? 'active' : ''}" href="/map">전월세 평균가</a>
                     </li>
                     <li class="nav-item me-3">
                         <img th:if="${menu == 'community'}" th:src="@{/img/community_active.png}" alt="커뮤니티 아이콘" class="d-inline nav-icon align-middle">
