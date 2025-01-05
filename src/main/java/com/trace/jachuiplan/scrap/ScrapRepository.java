@@ -17,8 +17,8 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
             + "FROM Scrap s JOIN Regioncd r ON s.regioncd.id = r.id "
             + "WHERE s.users.uno = :uno) sr ON sr.sggcd = o.sggcd "
             + "AND sr.locataddNm LIKE CONCAT('%', o.umdnm, '%') "
-            + "AND ( :startYearMonth IS NULL OR (o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM')) "
-            + "AND ( :endYearMonth IS NULL OR o.dealdate < ADD_MONTHS(TO_DATE(:endYearMonth, 'YYYYMM'), 1)) "
+            + "AND (( :startYearMonth IS NULL OR (o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM'))) "
+            + "AND ( :endYearMonth IS NULL OR o.dealdate < ADD_MONTHS(TO_DATE(:endYearMonth, 'YYYYMM'), 1))) "
             + "AND ( :rentType IS NULL OR "
             + "( :rentType = '전세' AND o.monthlyRent = 0 ) OR "
             + "( :rentType = '반전세' AND o.monthlyRent IS NOT NULL AND o.deposit > o.monthlyRent * 12 ) OR "
@@ -28,7 +28,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
             + "AND ( :minBuildYear IS NULL OR o.buildYear >= :minBuildYear ) "
             + "AND ( :maxBuildYear IS NULL OR o.buildYear <= :maxBuildYear ) "
             + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "
-            + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor )) "
+            + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor ) "
             + "GROUP BY sr.id, o.umdnm, sr.locataddNm")
     List<ScrapedListDTO> findScrapedBuilding(
             @Param("startYearMonth") String startYearMonth,
@@ -49,8 +49,8 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
             + "FROM Scrap s JOIN Regioncd r ON s.regioncd.id = r.id "
             + "WHERE s.users.uno = :uno) sr ON sr.sggcd = o.sggcd "
             + "AND sr.locataddNm LIKE CONCAT('%', o.umdnm, '%') "
-            + "AND ( :startYearMonth IS NULL OR (o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM')) "
-            + "AND ( :endYearMonth IS NULL OR o.dealdate < ADD_MONTHS(TO_DATE(:endYearMonth, 'YYYYMM'), 1)) "
+            + "AND (( :startYearMonth IS NULL OR (o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM'))) "
+            + "AND ( :endYearMonth IS NULL OR o.dealdate < ADD_MONTHS(TO_DATE(:endYearMonth, 'YYYYMM'), 1))) "
             + "AND ( :rentType IS NULL OR "
             + "( :rentType = '전세' AND o.monthlyRent = 0 ) OR "
             + "( :rentType = '반전세' AND o.monthlyRent IS NOT NULL AND o.deposit > o.monthlyRent * 12 ) OR "
@@ -60,7 +60,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
             + "AND ( :minBuildYear IS NULL OR o.buildYear >= :minBuildYear ) "
             + "AND ( :maxBuildYear IS NULL OR o.buildYear <= :maxBuildYear ) "
             + "AND ( :minFloor IS NULL OR o.floor >= :minFloor ) "
-            + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor )) "
+            + "AND ( :maxFloor IS NULL OR o.floor <= :maxFloor ) "
             + "GROUP BY sr.id, o.umdnm, sr.locataddNm")
     List<ScrapedListDTO>findScrapedOfficeHotel(
             @Param("startYearMonth") String startYearMonth,
