@@ -17,12 +17,11 @@ public class ScrapApiController {
     private final ScrapService scrapService;
 
     // 스크랩 등록
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/scrap/{regioncdId}")
     @ResponseBody
     public ResponseEntity<Boolean> createScrapRegioncd(@PathVariable("regioncdId") Long regioncdId, @AuthenticationPrincipal UserDetails userDetails){
-//        scrapService.addScrap(regioncdId, userDetails.getUsername());
-        Boolean result = scrapService.addScrap(regioncdId, "user99");
+        Boolean result = scrapService.addScrap(regioncdId, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

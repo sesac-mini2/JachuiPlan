@@ -6,10 +6,23 @@
     <main class="col-md-10 p-4">
         <div class="m-2">
             <!-- Filters Section -->
+            <!-- 건물 종류 -->
             <div class="d-flex flex-wrap justify-content-start align-items-center mb-3 w-auto">
                 <div class="dropdown">
                     <button class="filter-select dropdown-toggle dropdown-type" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        다가구/단독/다세대/연립
+                        주택
+                    </button>
+                    <ul class="dropdown-menu filter-type" aria-labelledby="dropdownMenuButton1">
+                        <li class="dropdown-item" data-type="building">주택</li>
+                        <li class="dropdown-item" data-type="officeHotel">오피스텔</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 거래일 -->
+            <div class="d-flex flex-wrap justify-content-start align-items-center mb-3 w-auto">
+                <div class="dropdown">
+                    <button class="filter-select dropdown-toggle dropdown-type" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        주택
                     </button>
                     <ul class="dropdown-menu filter-type" aria-labelledby="dropdownMenuButton1">
                         <li class="dropdown-item" data-type="building">주택</li>

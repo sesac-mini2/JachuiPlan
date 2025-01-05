@@ -456,7 +456,8 @@ img.reply-img{
 
 /* 스크롤 커스텀 */
 #umdModal::-webkit-scrollbar {
-  width: 10px; /* 스크롤 바 너비 */
+  width: 10px; /* 가로 스크롤 바 너비 */
+  height: 10px; /* 세로 스크롤 바 너비 */
 }
 
 #umdModal::-webkit-scrollbar-thumb {
