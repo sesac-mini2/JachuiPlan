@@ -17,7 +17,7 @@
                 </div>
                 <!-- 본문 -->
                 <div class ="board-content mb-3 px-4">
-                    <p class ="b-content" th:utext="${@commonUtil.markdown(board.content)}"></p>
+                    <div class ="b-content" th:utext="${@commonUtil.markdown(board.content)}"></div>
                 </div>
 
                 <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
