@@ -1,6 +1,5 @@
 package com.trace.jachuiplan.reply;
 
-import com.trace.jachuiplan.user.UserRole;
 import com.trace.jachuiplan.user.UserService;
 import com.trace.jachuiplan.user.Users;
 import jakarta.validation.Valid;
@@ -78,7 +77,7 @@ public class ReplyController {
         }
         // Reply Entity 가져오기
         Reply reply = replyService.getReply(rno);
-        if (!reply.getUsers().getUsername().equals(userDetails.getUsername()) && !userDetails.getAuthorities().toString().contains(UserRole.ADMIN.getValue())) {
+        if (!reply.getUsers().getUsername().equals(userDetails.getUsername()) && !userDetails.getAuthorities().toString().contains("ROLE_ADMIN")) {
             List<String> errorMessages = new ArrayList<>();
             errorMessages.add("수정권한이 없습니다.");
             return ResponseEntity.badRequest().body(errorMessages);
@@ -98,7 +97,7 @@ public class ReplyController {
     public ResponseEntity<?> delete(@PathVariable("rno") Long rno, @AuthenticationPrincipal UserDetails userDetails){
         // Reply Entity 가져오기
         Reply reply = replyService.getReply(rno);
-        if (!reply.getUsers().getUsername().equals(userDetails.getUsername()) && !userDetails.getAuthorities().toString().contains(UserRole.ADMIN.getValue())) {
+        if (!reply.getUsers().getUsername().equals(userDetails.getUsername()) && !userDetails.getAuthorities().toString().contains("ROLE_ADMIN")) {
             List<String> errorMessages = new ArrayList<>();
             errorMessages.add("삭제권한이 없습니다.");
             return ResponseEntity.badRequest().body(errorMessages);
