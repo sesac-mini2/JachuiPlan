@@ -65,7 +65,7 @@ public class SecurityConfig {
 
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
-                        .logoutSuccessUrl("http://localhost:3000")
+                        .logoutSuccessUrl("http://localhost/map")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()
