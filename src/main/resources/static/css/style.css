@@ -84,6 +84,10 @@ main {
     padding: 1rem;
 }
 
+.reply-textarea {
+    height: 140px !important;
+}
+
 textarea {
     resize: none;
 }

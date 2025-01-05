@@ -1,20 +1,21 @@
 package com.trace.jachuiplan.reply;
 
-import com.trace.jachuiplan.DataNotFoundException;
+import com.trace.jachuiplan.user.UserRole;
 import com.trace.jachuiplan.user.UserService;
 import com.trace.jachuiplan.user.Users;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @RequestMapping("/reply")
 @RequiredArgsConstructor
 @Controller
+@Log4j2
 public class ReplyController {
 
     private final ReplyService replyService;
@@ -66,7 +68,7 @@ public class ReplyController {
 
     // 댓글 수정
     @PutMapping("/{rno}")
-    public ResponseEntity<?> modify(@PathVariable("rno") Long rno, @Valid @RequestBody ReplyRequest replyRequest, BindingResult bindingResult, Principal principal){
+    public ResponseEntity<?> modify(@PathVariable("rno") Long rno, @Valid @RequestBody ReplyRequest replyRequest, BindingResult bindingResult, @AuthenticationPrincipal UserDetails userDetails){
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             bindingResult.getAllErrors().forEach(error -> {
@@ -76,15 +78,15 @@ public class ReplyController {
         }
         // Reply Entity 가져오기
         Reply reply = replyService.getReply(rno);
-        if (!reply.getUsers().getUsername().equals(principal.getName())) {
+        if (!reply.getUsers().getUsername().equals(userDetails.getUsername()) && !userDetails.getAuthorities().toString().contains(UserRole.ADMIN.getValue())) {
             List<String> errorMessages = new ArrayList<>();
             errorMessages.add("수정권한이 없습니다.");
             return ResponseEntity.badRequest().body(errorMessages);
         }
 
-        Users users = this.userService.findByUsername(principal.getName()).get();
+        Users users = this.userService.findByUsername(userDetails.getUsername()).get();
 
-        ReplyResponse replyResponse = new ReplyResponse(replyService.modify(reply, replyRequest, users));
+        ReplyResponse replyResponse = new ReplyResponse(replyService.modify(reply, replyRequest));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -93,10 +95,10 @@ public class ReplyController {
 
     // 댓글 삭제
     @DeleteMapping("/{rno}")
-    public ResponseEntity<?> delete(@PathVariable("rno") Long rno, Principal principal){
+    public ResponseEntity<?> delete(@PathVariable("rno") Long rno, @AuthenticationPrincipal UserDetails userDetails){
         // Reply Entity 가져오기
         Reply reply = replyService.getReply(rno);
-        if (!reply.getUsers().getUsername().equals(principal.getName())) {
+        if (!reply.getUsers().getUsername().equals(userDetails.getUsername()) && !userDetails.getAuthorities().toString().contains(UserRole.ADMIN.getValue())) {
             List<String> errorMessages = new ArrayList<>();
             errorMessages.add("삭제권한이 없습니다.");
             return ResponseEntity.badRequest().body(errorMessages);

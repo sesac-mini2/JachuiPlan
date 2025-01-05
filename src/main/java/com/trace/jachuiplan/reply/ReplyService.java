@@ -91,7 +91,7 @@ public class ReplyService {
     }
 
     // 댓글 수정
-    public Reply modify(Reply reply, ReplyRequest replyRequest, Users users){
+    public Reply modify(Reply reply, ReplyRequest replyRequest){
         reply.setReply(replyRequest.getReply());
 
         return replyRepository.save(reply);
