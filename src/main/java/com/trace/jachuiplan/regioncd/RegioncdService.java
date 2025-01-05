@@ -28,4 +28,8 @@ public class RegioncdService {
         return regioncdRepository.findRegionsInBoundsWithLevel(north, east, south, west);
 
     }
+
+    public List<RegioncdDTO> getRegionById(String id) {
+        return regioncdRepository.findRegionById(id);
+    }
 }

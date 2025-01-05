@@ -116,7 +116,7 @@ function App() {
                   onChange={(e) => setSelectedType(e.target.value)}
                   value={selectedType}
                 >
-                  <option value="building">빌딩</option>
+                  <option value="building">주택</option>
                   <option value="officeHotel">오피스텔</option>
                 </select>
                 <select className="filter" onClick={handleOtherButtonClick}
@@ -156,7 +156,17 @@ function App() {
               </div>
             </div>
             <div className="position-relative">
-              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal} />
+              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}
+                startYearMonth={startYearMonth}
+                endYearMonth={endYearMonth}
+                selectedType={selectedType}
+                rentType={rentType}
+                startYear={startYear}
+                endYear={endYear}
+                selectedFloor={selectedFloor}
+                minArea={minArea}
+                maxArea={maxArea}
+              />
               <MapContainer
                 center={center}
                 startYearMonth={startYearMonth}

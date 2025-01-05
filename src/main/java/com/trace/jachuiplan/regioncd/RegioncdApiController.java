@@ -48,4 +48,11 @@ public class RegioncdApiController {
         List<Regioncd> regioncds = regioncdService.getRegionsInBounds(north, east, south, west, level);
         return ResponseEntity.ok(regioncds);
     }
+
+    @GetMapping("/id/{regioncdId}")
+    public ResponseEntity<List<RegioncdDTO>> getSggcdAndUmdnm(@PathVariable("regioncdId") String regioncdId) {
+        List<RegioncdDTO> regioncds = regioncdService.getRegionById(regioncdId);
+        return ResponseEntity.ok()
+                .body(regioncds);
+    }
 }
