@@ -18,41 +18,49 @@ function App() {
   const [nickname, setNickname] = useState('');
   const [targetUmd, setTargetUmd] = useState(null);
   const [isShowUmdModal, setIsShowUmdModal] = useState(false);
+  const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
+  const [startYearMonth, setStartYearMonth] = useState('202101');
+  const [endYearMonth, setEndYearMonth] = useState('202412');
+  const [selectedType, setSelectedType] = useState('building');
+  const [rentType, setRentType] = useState('월세');
+  const [minArea, setMinArea] = useState(null);
+  const [maxArea, setMaxArea] = useState(null);
+  const [minBuildYear, setminBuildYear,] = useState(null);
+  const [maxBuildYear, setmaxBuildYear,] = useState(null);
+  const [minFloor, setMinFloor] = useState(null);
+  const [maxFloor, setMaxFloor] = useState(null);
 
   const closeUmdModal = () => {
     setIsShowUmdModal(false);
   }
 
-  const showUmdModal= (regioncdId) => {
+  const showUmdModal = (regioncdId) => {
     setTargetUmd(regioncdId);
     setIsShowUmdModal(true);
   }
-  const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
-  const [startYearMonth, setStartYearMonth] = useState('202101');
-  const [endYearMonth, setEndYearMonth] = useState('202412');
-  const [selectedType, setSelectedType] = useState('building'); // 추가: 빌딩 또는 오피스텔 선택
-  const [rentType, setRentType] = useState('월세');
-  const [minArea, setMinArea] = useState(0);
-  const [maxArea, setMaxArea] = useState(30);
-  const [startYear, setStartYear] = useState(null);
-  const [endYear, setEndYear] = useState(null);
-  const [selectedFloor, setSelectedFloor] = useState(null);
 
-  // 날짜 범위가 변경되면 호출될 함수
   const handleDateChange = (start, end) => {
     setStartYearMonth(start);
     setEndYearMonth(end);
   };
 
-  const handleYearChange = (startyear, endyear) => {
-    setStartYear(startyear === "null" ? null : startyear);
-    setEndYear(endyear === "null" ? null : endyear);
+  const handleYearChange = (minBuildYear, maxBuildYear) => {
+    setminBuildYear(minBuildYear === "null" ? null : minBuildYear);
+    setmaxBuildYear(maxBuildYear === "null" ? null : maxBuildYear);
   };
 
-  // 면적 변경 함수
   const handleAreaChange = (minArea, maxArea) => {
-    setMinArea(minArea);
-    setMaxArea(maxArea);
+    setMinArea(minArea === "null" ? null : minArea);
+    setMaxArea(maxArea === "null" ? null : maxArea);
+  };
+
+  const handleFloorChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'minFloor') {
+      setMinFloor(value);
+    } else if (name === 'maxFloor') {
+      setMaxFloor(value);
+    }
   };
 
   useEffect(() => {
@@ -125,29 +133,40 @@ function App() {
                   onDateChange={handleAreaChange}  // 면적 변경 함수 전달
                 />
                 <BuildYearSelect onClick={handleOtherButtonClick} onDateChange={handleYearChange} />
-                <select
-                  className="filter"
-                  onChange={(e) => setSelectedFloor(e.target.value)}
-                  value={selectedFloor || ''}>
-                  <option value="">층</option>
-                  <option value="지하">지하</option>
-                  <option value="1층">1층</option>
-                  <option value="2층">2층</option>
-                  <option value="3층이상">3층이상</option>
-                </select>
+                <div className="floor-range">
+                  <input
+                    className="filter"
+                    id='floor'
+                    type="number"
+                    name="minFloor"
+                    value={minFloor}
+                    onChange={handleFloorChange}
+                    placeholder="최소 층"
+                  />
+                  <input
+                    className="filter"
+                    id='floor'
+                    type="number"
+                    name="maxFloor"
+                    value={maxFloor}
+                    onChange={handleFloorChange}
+                    placeholder="최대 층"
+                  />
+                </div>
               </div>
             </div>
             <div className="position-relative">
-              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}/>
+              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal} />
               <MapContainer
                 center={center}
                 startYearMonth={startYearMonth}
                 endYearMonth={endYearMonth}
                 selectedType={selectedType}
                 rentType={rentType}
-                startYear={startYear}
-                endYear={endYear}
-                selectedFloor={selectedFloor}
+                minBuildYear={minBuildYear}
+                maxBuildYear={maxBuildYear}
+                minFloor={minFloor}
+                maxFloor={maxFloor}
                 minArea={minArea}
                 maxArea={maxArea}
                 selectedSidoCd={selectedSidoCd}
