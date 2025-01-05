@@ -98,7 +98,9 @@ public class BoardService {
         }
 
         // 삭제 권한 확인
-        if (!board.get().getUsers().getUsername().equals(userDetails.getUsername())) {
+        if (!board.get().getUsers().getUsername().equals(userDetails.getUsername()) &&
+                userDetails.getAuthorities().stream()
+                        .noneMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
             throw new IllegalStateException("삭제 권한이 없습니다.");
         }
 
@@ -108,10 +110,18 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public void modifyBoard(Board board) {
-        Board existingBoard = boardRepository.findById(board.getBno())
-                .orElseThrow(() -> new RuntimeException("Board not found with id: " + board.getBno()));
+    public void modifyBoard(Long bno, Board board, UserDetails userDetails) {
+        Board existingBoard = boardRepository.findById(bno)
+                .orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다: " + bno));
 
+        // 수정 권한 확인(작성자, 관리자)
+        if (!existingBoard.getUsers().getUsername().equals(userDetails.getUsername()) &&
+                userDetails.getAuthorities().stream()
+                        .noneMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new IllegalStateException("수정 권한이 없습니다.");
+        }
+
+        // 게시글 수정
         existingBoard.setTitle(board.getTitle());
         existingBoard.setContent(board.getContent());
         existingBoard.setUpdatedate(java.time.LocalDateTime.now());

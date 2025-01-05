@@ -17,7 +17,7 @@
                 </div>
                 <!-- 본문 -->
                 <div class ="board-content mb-3 px-4">
-                    <p class ="b-content" th:utext="${@commonUtil.markdown(board.content)}"></p>
+                    <div class ="b-content" th:utext="${@commonUtil.markdown(board.content)}"></div>
                 </div>
 
                 <input type="hidden" id="csrfToken" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
@@ -31,13 +31,16 @@
                         <span class="align-middle">좋아요</span>
                     </button>
                     <div>
-                        <form th:action="|/board/modify/${board.bno}|" th:method="get" class="d-inline">
-                            <button class="btn btn-primary me-2" th:if="${#authentication.principal.username == board.users.username}">수정</button>
-                        </form>
-                        <form th:action="|/board/${board.bno}|" th:method="delete"
-                              th:if="${#authentication.principal.username == board.users.username}" class="d-inline">
-                            <button class="btn btn-outline-primary">삭제</button>
-                        </form>
+                        <!-- 작성자이거나, ROLE_ADMIN 권한일 시 버튼 보임 -->
+                        <th:block th:if="${(board.users.username == #authentication.principal.username)
+                                        or (#authentication.authorities.![authority].contains('ROLE_ADMIN'))}">
+                            <form th:action="|/board/modify/${board.bno}|" th:method="get" class="d-inline">
+                                <button class="btn btn-primary me-2">수정</button>
+                            </form>
+                            <form th:action="|/board/${board.bno}|" th:method="delete" class="d-inline">
+                                <button class="btn btn-outline-primary">삭제</button>
+                            </form>
+                        </th:block>
                     </div>
                 </div>
             </div>

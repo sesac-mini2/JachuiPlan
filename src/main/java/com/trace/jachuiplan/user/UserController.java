@@ -249,10 +249,12 @@ public class UserController {
                     .body("소셜 로그인 유저 정보가 없습니다.");
         }
 
+        // 비밀번호, 비밀번호 확인 일치 확인
         if (!newPassword.equals(confirmPassword)) {
             return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
         }
 
+        // 회원 정보 변경(비밀번호, 닉네임)
         try {
             userService.changePassword(userDetails.getUsername(), newPassword);
             userService.changeNickname(userDetails.getUsername(), nickname);

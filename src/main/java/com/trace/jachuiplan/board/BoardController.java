@@ -291,12 +291,19 @@ public class BoardController {
     public String modifyBoard(
             @PathVariable("bno") Long bno,
             @ModelAttribute Board board, // 수정된 게시글 데이터
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal UserDetails userDetails,
+            RedirectAttributes redirectAttributes) {
 
-        Board existingBoard = boardService.getBoardById(bno);
-        existingBoard.setTitle(board.getTitle());
-        existingBoard.setContent(board.getContent());
-        boardService.modifyBoard(existingBoard);
+        try{
+            boardService.modifyBoard(bno, board, userDetails);
+            return "redirect:/board/detail/" + bno;
+        } catch (IllegalStateException e) {
+            // 권한이 없는 경우
+            redirectAttributes.addFlashAttribute("error", "수정 권한이 없습니다.");
+        } catch (RuntimeException e) {
+            // 기타 에러 처리
+            redirectAttributes.addFlashAttribute("error", "수정 중 문제가 발생했습니다: " + e.getMessage());
+        }
 
         return "redirect:/board/detail/" + bno;
     }
