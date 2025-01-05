@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const MapContainer = ({
   center,
-  isGuSelected,
   startYearMonth,
   endYearMonth,
   selectedType,
   rentType,
-  startYear,
-  endYear,
-  selectedFloor,
+  minBuildYear,
+  maxBuildYear,
+  minFloor,
+  maxFloor,
   minArea,
   maxArea,
   selectedSggCd,
@@ -27,9 +27,10 @@ const MapContainer = ({
     endYearMonth,
     selectedType,
     rentType,
-    startYear,
-    endYear,
-    selectedFloor,
+    minBuildYear,
+    maxBuildYear,
+    minFloor,
+    maxFloor,
     minArea,
     maxArea,
   });
@@ -63,38 +64,18 @@ const MapContainer = ({
       endYearMonth,
       selectedType,
       rentType,
-      startYear,
-      endYear,
-      selectedFloor,
+      minBuildYear,
+      maxBuildYear,
+      minFloor,
+      maxFloor,
       minArea,
       maxArea,
     };
-  }, [startYearMonth, endYearMonth, selectedType, rentType, startYear, endYear, selectedFloor, minArea, maxArea]);
+  }, [startYearMonth, endYearMonth, selectedType, rentType, minBuildYear, maxBuildYear, minFloor, maxFloor, minArea, maxArea]);
 
   const clearOverlays = (overlays) => {
     overlays.forEach((overlay) => overlay.setMap(null));
     overlays.length = 0;
-  };
-
-  const calculateFloorValues = (selectedFloor) => {
-    let minFloor = null;
-    let maxFloor = null;
-
-    if (selectedFloor === '지하') {
-      maxFloor = 0;
-      minFloor = -99;
-    } else if (selectedFloor === '1층') {
-      maxFloor = 1;
-      minFloor = 1;
-    } else if (selectedFloor === '2층') {
-      maxFloor = 2;
-      minFloor = 2;
-    } else if (selectedFloor === '3층이상') {
-      minFloor = 3;
-      maxFloor = 999;
-    }
-
-    return { minFloor, maxFloor };
   };
 
   const updateMarkersInView = (map) => {
@@ -124,12 +105,10 @@ const MapContainer = ({
         const minAreaInSquareMeters = currentProps.minArea * 3.3058;
         const maxAreaInSquareMeters = currentProps.maxArea * 3.3058;
 
-        const { minFloor, maxFloor } = calculateFloorValues(currentProps.selectedFloor);
-
         const apiUrl =
           currentProps.selectedType === 'building'
-            ? `http://localhost/api/building/average?sggcds=${Array.from(sggcdsSet).join(',')}&startYearMonth=${currentProps.startYearMonth}&endYearMonth=${currentProps.endYearMonth}&rentType=${currentProps.rentType}&minBuildYear=${currentProps.startYear || ''}&maxBuildYear=${currentProps.endYear || ''}&minFloor=${minFloor || ''}&maxFloor=${maxFloor || ''}&minArea=${minAreaInSquareMeters}&maxArea=${maxAreaInSquareMeters}`
-            : `http://localhost/api/officeHotel/average?sggcds=${Array.from(sggcdsSet).join(',')}&startYearMonth=${currentProps.startYearMonth}&endYearMonth=${currentProps.endYearMonth}&rentType=${currentProps.rentType}&minBuildYear=${currentProps.startYear || ''}&maxBuildYear=${currentProps.endYear || ''}&minFloor=${minFloor || ''}&maxFloor=${maxFloor || ''}&minArea=${minAreaInSquareMeters}&maxArea=${maxAreaInSquareMeters}`;
+            ? `http://localhost/api/building/average?sggcds=${Array.from(sggcdsSet).join(',')}&startYearMonth=${currentProps.startYearMonth}&endYearMonth=${currentProps.endYearMonth}&rentType=${currentProps.rentType}&minBuildYear=${currentProps.minBuildYear || ''}&maxBuildYear=${currentProps.maxBuildYear || ''}&minFloor=${currentProps.minFloor || ''}&maxFloor=${currentProps.maxFloor || ''}&minArea=${minAreaInSquareMeters || ''}&maxArea=${maxAreaInSquareMeters || ''}`
+            : `http://localhost/api/officeHotel/average?sggcds=${Array.from(sggcdsSet).join(',')}&startYearMonth=${currentProps.startYearMonth}&endYearMonth=${currentProps.endYearMonth}&rentType=${currentProps.rentType}&minBuildYear=${currentProps.minBuildYear || ''}&maxBuildYear=${currentProps.maxBuildYear || ''}&minFloor=${currentProps.minFloor || ''}&maxFloor=${currentProps.maxFloor || ''}&minArea=${minAreaInSquareMeters || ''}&maxArea=${maxAreaInSquareMeters || ''}`;
 
         return fetch(apiUrl)
           .then((response) => response.json())
@@ -212,6 +191,7 @@ const MapContainer = ({
             const region = data.find((region) => region.umdCd === '000');
             if (region) {
               const latLng = new window.kakao.maps.LatLng(region.latitude, region.longitude);
+              map.setLevel(5);
               map.setCenter(latLng);  // 지도 중앙 위치 업데이트
             }
           }
@@ -240,7 +220,7 @@ const MapContainer = ({
     if (map) {
       updateMarkersInView(map);
     }
-  }, [map, startYearMonth, endYearMonth, selectedType, rentType, startYear, endYear, selectedFloor, minArea, maxArea]);
+  }, [map, startYearMonth, endYearMonth, selectedType, rentType, minBuildYear, maxBuildYear, minFloor, maxFloor, minArea, maxArea]);
 
   return <div ref={mapContainerRef} style={{ width: '100%', height: 'calc(100vh - 174px)' }} />;
 

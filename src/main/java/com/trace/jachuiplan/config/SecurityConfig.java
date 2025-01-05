@@ -56,7 +56,7 @@ public class SecurityConfig {
                             if (savedRequest != null) {
                                 response.sendRedirect(savedRequest.getRedirectUrl());
                             } else {
-                                response.sendRedirect("/map");
+                                response.sendRedirect("http://localhost:3000");
                             }
                         })
                         .failureUrl("/users/login?error=true") // 실패 시 로그인 페이지로 리다이렉트
@@ -65,7 +65,7 @@ public class SecurityConfig {
 
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
-                        .logoutSuccessUrl("/map")
+                        .logoutSuccessUrl("http://localhost:3000")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()
@@ -87,7 +87,7 @@ public class SecurityConfig {
                             if(userDetails.getPassword() == null || "SOCIAL_LOGIN".equals(userDetails.getPassword())){
                                 response.sendRedirect("/users/social-signup");
                             } else{
-                                response.sendRedirect("/map");
+                                response.sendRedirect("http://localhost:3000");
                             }
 
                         })
