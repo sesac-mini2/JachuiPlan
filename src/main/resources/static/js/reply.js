@@ -2,6 +2,7 @@ const replyFragment = $("#replyFragment");
 
 //const csrfToken = $("#csrfToken").val();
 axios.defaults.baseURL = 'http://localhost';
+axios.defaults.withCredentials = true;
 const path = window.location.pathname;
 const bno = path.split("/").pop();
 
@@ -108,7 +109,6 @@ function clickModifyReplyBtn(e) {
     if ($(e).text() === '수정') {
         // p 태그 내용을 textarea로 복사
         const currentContent = replyContent.text();
-        card.find('.reply-textarea').val(currentContent);
 
         // replyContent 숨기고 textarea 표시
         replyContent.addClass('d-none');
@@ -139,7 +139,7 @@ function clickModifyReplyBtn(e) {
         $(e).text('수정');
 
         // 취소 버튼을 '삭제'로 변경
-        cancelBtn.text('취소');
+        cancelBtn.text('삭제');
     }
 }
 
