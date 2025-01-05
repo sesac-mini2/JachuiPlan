@@ -161,9 +161,10 @@ function App() {
                 endYearMonth={endYearMonth}
                 selectedType={selectedType}
                 rentType={rentType}
-                startYear={startYear}
-                endYear={endYear}
-                selectedFloor={selectedFloor}
+                minBuildYear={minBuildYear}
+                maxBuildYear={maxBuildYear}
+                minFloor={minFloor}
+                maxFloor={maxFloor}
                 minArea={minArea}
                 maxArea={maxArea}
               />

@@ -9,9 +9,10 @@ const UmdModal = ({ isAuthenticated, targetUmd, isShowUmdModal, closeUmdModal,
   endYearMonth,
   selectedType,
   rentType,
-  startYear,
-  endYear,
-  selectedFloor,
+  minBuildYear,
+  maxBuildYear,
+  minFloor,
+  maxFloor,
   minArea,
   maxArea
 }) => {
@@ -31,26 +32,26 @@ const UmdModal = ({ isAuthenticated, targetUmd, isShowUmdModal, closeUmdModal,
     borderRadius: "0.5rem",
     padding: "1.2rem 1.5rem",
   };
-  
+
   const closeButtonStyle = {
     position: "absolute",
     top: "1.2rem",
     right: "1.2rem",
   };
-  
-  const [region, setRegion] = useState({cd: '', name: ''});
-  
+
+  const [region, setRegion] = useState({ cd: '', name: '' });
+
   useEffect(() => {
     axios.get(`/api/regioncd/id/${targetUmd}`)
-    .then((res) => {
+      .then((res) => {
         setRegion({
           cd: res.data[0].regioncd,
           name: res.data[0].regionKoreanName
         });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [targetUmd]);
 
   return (
@@ -64,14 +65,15 @@ const UmdModal = ({ isAuthenticated, targetUmd, isShowUmdModal, closeUmdModal,
           <button type="button" className="btn-close" aria-label="Close" style={closeButtonStyle} onClick={closeUmdModal}></button>
         </div>
         <Scrap />
-        <UmdGraph region={region} 
+        <UmdGraph region={region}
           startYearMonth={startYearMonth}
           endYearMonth={endYearMonth}
           selectedType={selectedType}
           rentType={rentType}
-          startYear={startYear}
-          endYear={endYear}
-          selectedFloor={selectedFloor}
+          minBuildYear={minBuildYear}
+          maxBuildYear={maxBuildYear}
+          minFloor={minFloor}
+          maxFloor={maxFloor}
           minArea={minArea}
           maxArea={maxArea}
         />
