@@ -4,9 +4,9 @@ import ScrapButton from "./ScrapButton";
 import Scrap from './Graph/Scrap';
 import UmdGraph from './Graph/UmdGraph';
 
-const UmdModal = ({ isAuthenticated, targetUmd, isShowUmdModal, closeUmdModal,
-  startYearMonth,
-  endYearMonth,
+const UmdModal = ({ isAuthenticated, targetUmd, targetUmdSggcd, isShowUmdModal, closeUmdModal,
+  startYearMonth, 
+  endYearMonth, 
   selectedType,
   rentType,
   minBuildYear,
@@ -42,6 +42,7 @@ const UmdModal = ({ isAuthenticated, targetUmd, isShowUmdModal, closeUmdModal,
   const [region, setRegion] = useState({ cd: '', name: '' });
 
   useEffect(() => {
+    if(!targetUmd) return;
     axios.get(`/api/regioncd/id/${targetUmd}`)
       .then((res) => {
         setRegion({
@@ -64,7 +65,10 @@ const UmdModal = ({ isAuthenticated, targetUmd, isShowUmdModal, closeUmdModal,
           </div>
           <button type="button" className="btn-close" aria-label="Close" style={closeButtonStyle} onClick={closeUmdModal}></button>
         </div>
-        <Scrap />
+        <Scrap targetUmdSggcd={targetUmdSggcd} 
+          startYearMonth={startYearMonth}
+          endYearMonth={endYearMonth}
+          />
         <UmdGraph region={region}
           startYearMonth={startYearMonth}
           endYearMonth={endYearMonth}

@@ -2,16 +2,16 @@ import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { select, scaleBand, axisBottom, scaleLinear, axisLeft, min, max } from 'd3';
 
-function Scarp() {
+function Scarp({targetUmdSggcd, startYearMonth, endYearMonth}) {
     const [data, setData] = useState([]);
 
-    const [sggcds, setSggcds] = useState(['11590', '11305']);
-    const [startYearMonth, setStartYearMonth] = useState('202301');
-    const [endYearMonth, setEndYearMonth] = useState('202307');
+    // const [sggcds, setSggcds] = useState(['11590', '11305']);
+    // const [startYearMonth, setStartYearMonth] = useState('202301');
+    // const [endYearMonth, setEndYearMonth] = useState('202307');
 
     const ref = useRef();
 
-    const containerWidth = 500;
+    const containerWidth = 800;
     const containerHeight = 500;
 
     const transitionDuration = 500;
@@ -63,6 +63,10 @@ function Scarp() {
         )
         .attr("class", "x-axis")
         .attr("transform", `translate(0,${height - margin.bottom})`)
+        .selectAll("text") // x축 텍스트 선택
+        .attr("transform", "rotate(-45)")
+        .style("text-anchor", "end") // 텍스트 정렬 (끝쪽 정렬)
+        .attr("dx", "-0.5em") // x축 텍스트의 위치를 약간 조정
 
       // y축
       const yScale = scaleLinear()
@@ -114,8 +118,11 @@ function Scarp() {
 
     // 초기 데이터 로드
     useEffect(() => {
-      getData(['11590', '11305'], '202307', '202312');
-    }, []);
+      if(!targetUmdSggcd) {
+        return;
+      }
+      getData([targetUmdSggcd], startYearMonth, endYearMonth);
+    }, [targetUmdSggcd, startYearMonth, endYearMonth]);
 
     return (
         <div>
@@ -125,11 +132,11 @@ function Scarp() {
                 <g className="mybar" />
             </svg><br />
 
-            시군구코드: <input type="text" value={sggcds} onChange={e => setSggcds(e.target.value)} /><br />
+            {/* 시군구코드: <input type="text" value={sggcds} onChange={e => setSggcds(e.target.value)} /><br />
             시작년월: <input type="number" value={startYearMonth} onChange={e => setStartYearMonth(e.target.value)} /><br />
             끝년월: <input type="number" value={endYearMonth} onChange={e => setEndYearMonth(e.target.value)} />
 
-            <button onClick={() => getData(sggcds, startYearMonth, endYearMonth)}>업데이트</button>
+            <button onClick={() => getData(sggcds, startYearMonth, endYearMonth)}>업데이트</button> */}
         </div>
     );
 }

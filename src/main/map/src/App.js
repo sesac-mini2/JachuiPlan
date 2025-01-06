@@ -17,6 +17,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [nickname, setNickname] = useState('');
   const [targetUmd, setTargetUmd] = useState(null);
+  const [targetUmdSggcd, setTargetUmdSggcd] = useState(null);
   const [isShowUmdModal, setIsShowUmdModal] = useState(false);
   const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
   const [startYearMonth, setStartYearMonth] = useState('202101');
@@ -34,8 +35,9 @@ function App() {
     setIsShowUmdModal(false);
   }
 
-  const showUmdModal = (regioncdId) => {
+  const showUmdModal = (regioncdId, sggCd) => {
     setTargetUmd(regioncdId);
+    setTargetUmdSggcd(sggCd);
     setIsShowUmdModal(true);
   }
 
@@ -156,7 +158,7 @@ function App() {
               </div>
             </div>
             <div className="position-relative">
-              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}
+              <UmdModal isAuthenticated={isAuthenticated} targetUmd={targetUmd} targetUmdSggcd={targetUmdSggcd} isShowUmdModal={isShowUmdModal} closeUmdModal={closeUmdModal}
                 startYearMonth={startYearMonth}
                 endYearMonth={endYearMonth}
                 selectedType={selectedType}

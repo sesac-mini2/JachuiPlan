@@ -15,7 +15,6 @@ function UmdGraph({ region,
     maxArea
 }) {
     const [data, setData] = useState([{"umdnm": "", "yearMonth": "", "avgMonthlyRent": 0, "avgDeposit": 0, "count": 0}]);
-    const [testNum, setTestNum] = useState(0);
 
     const ref = useRef();
 
@@ -29,6 +28,7 @@ function UmdGraph({ region,
     const avgDepositColor = '#1372a2';
 
     function getData(sggcd, name) {
+        if(!sggcd) return;
         axios.get(`/api/${selectedType}/transition`, {
             params: {
                 sggcd: sggcd,
@@ -431,11 +431,6 @@ function UmdGraph({ region,
                 <g className="y-axisR" />
                 <text className="nodata" x="300" y="230" text-anchor="start" fill="black" opacity="1" font-size="20px">데이터가 없습니다.</text>
             </svg><br />
-
-            <button onClick={() => {
-                setTestNum((testNum + 1) % 3);
-                getData(testNum);
-            }}>업데이트</button>
         </div>
     );
 }

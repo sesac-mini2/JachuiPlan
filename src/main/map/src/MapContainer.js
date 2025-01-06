@@ -49,9 +49,9 @@ const MapContainer = ({
     }
   };
 
-  const handleMouseUp = (regionId) => {
+  const handleMouseUp = (regionId, sggCd) => {
     if (!isDraggingRef.current) {
-      onClickOverlay(regionId);  // 드래깅 상태가 아니면 클릭 이벤트 실행
+      onClickOverlay(regionId, sggCd);  // 드래깅 상태가 아니면 클릭 이벤트 실행
     }
     isMouseDownRef.current = false;
     isDraggingRef.current = false;
@@ -147,7 +147,7 @@ const MapContainer = ({
 
             content.onmousedown = handleMouseDown;
             content.onmousemove = handleMouseMove;
-            content.onmouseup = () => handleMouseUp(region.id);
+            content.onmouseup = () => handleMouseUp(region.id, region.sidoCd + region.sggCd);
 
             const customOverlay = new window.kakao.maps.CustomOverlay({
               map: map,
