@@ -1,3 +1,4 @@
+// 성현
 function toggleLike(boardId, button) {
     const csrfToken = document.getElementById(`csrfToken`).value;
 

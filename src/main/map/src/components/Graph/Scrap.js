@@ -1,3 +1,4 @@
+// 재혁
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { select, scaleBand, axisBottom, scaleLinear, axisLeft, min, max } from 'd3';
@@ -16,7 +17,7 @@ function Scarp({targetUmdSggcd, startYearMonth, endYearMonth,
 
     const ref = useRef();
 
-    const containerWidth = 800;
+    const containerWidth = 650;
     const containerHeight = 500;
 
     const transitionDuration = 500;

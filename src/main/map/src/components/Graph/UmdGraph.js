@@ -1,3 +1,4 @@
+// 재혁
 // import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
@@ -19,7 +20,7 @@ function UmdGraph({ region,
 
     const ref = useRef();
 
-    const containerWidth = 800;
+    const containerWidth = 650;
     const containerHeight = 500;
 
     const transitionDuration = 500;

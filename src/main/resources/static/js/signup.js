@@ -1,3 +1,4 @@
+// 정은
 // 비밀번호 일치 확인
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirmPassword");

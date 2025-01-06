@@ -1,3 +1,4 @@
+// 화경
 import React, { useState, useEffect } from "react";
 
 const ScrapButton = ({ isAuthenticated, targetUmd }) => {
