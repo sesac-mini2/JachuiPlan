@@ -1,3 +1,4 @@
+// 화경
 //const csrfToken = $("#csrfToken").val();
 axios.defaults.baseURL = 'http://localhost';
 const path = window.location.pathname;

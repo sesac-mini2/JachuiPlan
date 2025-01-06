@@ -1,3 +1,4 @@
+<!-- 화경 -->
 <div th:fragment="scrapFragment" class="pt-3">
     <div th:if="${buildingList.size() < 1}" class="text-muted p-3 text-center">등록된 스크랩이 없습니다.</div>
     <div class="row scrap-body" th:each="item : ${buildingList}">

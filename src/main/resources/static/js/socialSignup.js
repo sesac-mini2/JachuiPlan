@@ -1,3 +1,4 @@
+// 정은
 document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('socialSignupForm');
             const passwordField = document.getElementById('password');

@@ -1,3 +1,4 @@
+// 화경
 const replyFragment = $("#replyFragment");
 
 //const csrfToken = $("#csrfToken").val();

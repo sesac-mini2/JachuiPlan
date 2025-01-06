@@ -1,3 +1,4 @@
+// 성현, 화경, 재혁
 import React, { useState, useEffect } from 'react';
 import MonthRangePicker from './MonthRangePicker';
 import MapContainer from "./MapContainer";
