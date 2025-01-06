@@ -65,10 +65,6 @@ const UmdModal = ({ isAuthenticated, targetUmd, targetUmdSggcd, isShowUmdModal, 
           </div>
           <button type="button" className="btn-close" aria-label="Close" style={closeButtonStyle} onClick={closeUmdModal}></button>
         </div>
-        <Scrap targetUmdSggcd={targetUmdSggcd} 
-          startYearMonth={startYearMonth}
-          endYearMonth={endYearMonth}
-          />
         <UmdGraph region={region}
           startYearMonth={startYearMonth}
           endYearMonth={endYearMonth}
@@ -81,6 +77,18 @@ const UmdModal = ({ isAuthenticated, targetUmd, targetUmdSggcd, isShowUmdModal, 
           minArea={minArea}
           maxArea={maxArea}
         />
+        <Scrap targetUmdSggcd={targetUmdSggcd} 
+          startYearMonth={startYearMonth}
+          endYearMonth={endYearMonth}
+          selectedType={selectedType}
+          rentType={rentType}
+          minBuildYear={minBuildYear}
+          maxBuildYear={maxBuildYear}
+          minFloor={minFloor}
+          maxFloor={maxFloor}
+          minArea={minArea}
+          maxArea={maxArea}
+          />
       </div>
     </>
   )
