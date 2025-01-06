@@ -1,3 +1,4 @@
+/// 이화경
 package com.trace.jachuiplan.scrap;
 
 import org.springframework.data.jpa.repository.JpaRepository;

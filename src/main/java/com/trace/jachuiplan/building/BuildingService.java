@@ -1,5 +1,8 @@
+/// 이재혁, 김성현
 package com.trace.jachuiplan.building;
 
+import com.trace.jachuiplan.building.Building;
+import com.trace.jachuiplan.building.BuildingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

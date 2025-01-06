@@ -1,7 +1,6 @@
+/// 이화경
 package com.trace.jachuiplan.reply;
 
-import com.trace.jachuiplan.board.Board;
-import com.trace.jachuiplan.user.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

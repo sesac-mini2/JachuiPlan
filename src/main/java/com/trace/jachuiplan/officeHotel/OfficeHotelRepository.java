@@ -1,3 +1,4 @@
+/// 이재혁, 김성현, 이화경
 package com.trace.jachuiplan.officeHotel;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -6,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/// 이재혁, 김성현
 public interface OfficeHotelRepository extends JpaRepository<OfficeHotel, Long> {
     // 시군구코드 (5자리)와 시작년월 종료년월을 받아서 기간 내 거래 내역을 불러옴
     @Query("SELECT o FROM OfficeHotel o " +
@@ -80,6 +82,7 @@ public interface OfficeHotelRepository extends JpaRepository<OfficeHotel, Long> 
             @Param("minFloor") Integer minFloor,
             @Param("maxFloor") Integer maxFloor);
 
+    /// 이화경
     // 하나의 동에 대한 월별 평균가격 추이, 거래량
     @Query("SELECT new com.trace.jachuiplan.officeHotel.OfficeHotelTransitionDTO(o.umdnm, TO_CHAR(o.dealdate, 'YYYYMM'), ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM OfficeHotel o WHERE "
             + "o.dealdate >= ADD_MONTHS(TO_DATE(TO_CHAR(SYSDATE, 'YYYYMM'), 'YYYYMM'), -13) "

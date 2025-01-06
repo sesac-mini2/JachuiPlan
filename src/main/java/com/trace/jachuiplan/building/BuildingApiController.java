@@ -1,3 +1,4 @@
+/// 이재혁, 이화경
 package com.trace.jachuiplan.building;
 
 import com.trace.jachuiplan.CustomAnnotation.ExactSize;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/// 이재혁
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/building")
@@ -69,7 +71,8 @@ public class BuildingApiController {
         return ResponseEntity.ok(buildings);
     }
 
-    @GetMapping("/transition")
+    /// 이화경
+     @GetMapping("/transition")
     public ResponseEntity<List<BuildingTransitionDTO>> transitionBuildingCriteria(
             @RequestParam(name = "sggcd") @ExactSize(5) String sggcd,
             @RequestParam(name = "umdnm") String umdnm,

@@ -1,6 +1,6 @@
+/// 이재혁
 package com.trace.jachuiplan.map;
 
-import groovy.util.logging.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

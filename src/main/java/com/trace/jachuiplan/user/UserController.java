@@ -1,8 +1,8 @@
+/// 김정은
 package com.trace.jachuiplan.user;
 
 import com.trace.jachuiplan.CustomAnnotation.ExactSize;
 import com.trace.jachuiplan.board.Board;
-import com.trace.jachuiplan.scrap.ScrapedListDTO;
 import com.trace.jachuiplan.building.BuildingService;
 import com.trace.jachuiplan.likes.LikesService;
 import jakarta.servlet.http.HttpSession;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +25,7 @@ import java.util.*;
 @RequestMapping("/users")
 public class UserController {
 
+    /// 김정은
     private final UserService userService;
     private final LikesService likesService;
     private final UserDetailsService userDetailsService;
@@ -192,6 +192,7 @@ public class UserController {
         return "users/mylikes_form";
     }
 
+    /// 이화경
     // 스크랩한 지역
     @GetMapping("/mypage/region")
     public String myRegion(@RequestParam(name = "startYearMonth", required = false) @ExactSize(6) String startYearMonth,
@@ -212,6 +213,7 @@ public class UserController {
         return "users/myRegion_form";
     }
 
+    /// 김정은
     // 권한 확인
     @ResponseBody
     @GetMapping("/check-auth")

@@ -1,5 +1,9 @@
+/// 김성현, 이화경, 김정은
 package com.trace.jachuiplan.board;
 
+import com.trace.jachuiplan.board.Board;
+import com.trace.jachuiplan.board.BoardService;
+import com.trace.jachuiplan.board.BoardType;
 import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.likes.LikesService;
 import com.trace.jachuiplan.user.UserService;
@@ -27,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/board")
 public class BoardController {
 
+    /// 김성현
     @Autowired
     private final BoardService boardService;
 
@@ -185,11 +190,13 @@ public class BoardController {
             board.setUsers(currentUser);  // 게시판에 작성자 설정
         }
 
+        // 김정은
         if(type == '0' && !userDetails.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))){
             throw new AccessDeniedException("관리자만 글을 등록할 수 있습니다.");
         }
 
+        /// 김성현
         board.setType(type);
         board.setRegdate(LocalDateTime.now());
         board.setViews(0);
@@ -250,6 +257,7 @@ public class BoardController {
         return likesService.toggleLike(board, currentUser);
     }
 
+    /// 이화경
     // 게시글 삭제
     @DeleteMapping("/{bno}")
     public String getBoardDelete(@PathVariable("bno") Long bno,
@@ -273,6 +281,7 @@ public class BoardController {
         }
     }
 
+    /// 김정은
     // 게시물 수정
     @GetMapping("/modify/{id}")
     public String boardModify(@PathVariable("id") Long id,
@@ -307,7 +316,4 @@ public class BoardController {
 
         return "redirect:/board/detail/" + bno;
     }
-
-
-
 }

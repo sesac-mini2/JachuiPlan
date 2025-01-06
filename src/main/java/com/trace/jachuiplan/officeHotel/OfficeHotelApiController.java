@@ -1,7 +1,7 @@
+/// 이재혁, 김성현, 이화경
 package com.trace.jachuiplan.officeHotel;
 
 import com.trace.jachuiplan.CustomAnnotation.ExactSize;
-import com.trace.jachuiplan.building.BuildingTransitionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +17,7 @@ import java.util.List;
 public class OfficeHotelApiController {
     private final OfficeHotelService officeHotelService;
 
+    /// 김성현
     @GetMapping("/search")
     public ResponseEntity<List<OfficeHotel>> searchOfficeHotels(
             @RequestParam(name = "sggcds") List<@ExactSize(5) String> sggcds,
@@ -45,6 +46,7 @@ public class OfficeHotelApiController {
         return ResponseEntity.ok(officeHotels);
     }
 
+    /// 이재혁
     @GetMapping("/average")
     public ResponseEntity<List<OfficeHotelFilterDTO>> averageOfficeHotels(
             @RequestParam(name = "sggcds") List<@ExactSize(5) String> sggcds,
@@ -73,6 +75,7 @@ public class OfficeHotelApiController {
         return ResponseEntity.ok(officeHotels);
     }
 
+    /// 이화경
     @GetMapping("/transition")
     public ResponseEntity<List<OfficeHotelTransitionDTO>> transitionBuildingCriteria(
             @RequestParam(name = "sggcd") @ExactSize(5) String sggcd,
