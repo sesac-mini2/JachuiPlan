@@ -2,12 +2,17 @@ import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { select, scaleBand, axisBottom, scaleLinear, axisLeft, min, max } from 'd3';
 
-function Scarp({targetUmdSggcd, startYearMonth, endYearMonth}) {
+function Scarp({targetUmdSggcd, startYearMonth, endYearMonth,
+  selectedType,
+  rentType,
+  minBuildYear,
+  maxBuildYear,
+  minFloor,
+  maxFloor,
+  minArea,
+  maxArea
+}) {
     const [data, setData] = useState([]);
-
-    // const [sggcds, setSggcds] = useState(['11590', '11305']);
-    // const [startYearMonth, setStartYearMonth] = useState('202301');
-    // const [endYearMonth, setEndYearMonth] = useState('202307');
 
     const ref = useRef();
 
@@ -18,21 +23,27 @@ function Scarp({targetUmdSggcd, startYearMonth, endYearMonth}) {
 
     const countColor = '#69b3a2';
 
-    function getData(sggcds, startYearMonth, endYearMonth) {
-      axios.get(`/api/building/average`, {
+    function getData(sggcd, startYearMonth, endYearMonth) {
+      axios.get(`/api/${selectedType}/average`, {
         params: {
-          sggcds: sggcds,
+          sggcds: sggcd,
           startYearMonth: startYearMonth,
           endYearMonth: endYearMonth,
-          rentType: '월세'
+          rentType: rentType,
+          minBuildYear: minBuildYear,
+          maxBuildYear: maxBuildYear,
+          minFloor: minFloor,
+          maxFloor: maxFloor,
+          minArea: minArea,
+          maxArea: maxArea
         },
-        paramsSerializer: function(paramObj) {
-          const params = new URLSearchParams();
-          for (const key in paramObj) {
-              params.append(key, paramObj[key]);
-          }
-          return params.toString();
-        }
+        // paramsSerializer: function(paramObj) {
+        //   const params = new URLSearchParams();
+        //   for (const key in paramObj) {
+        //       params.append(key, paramObj[key]);
+        //   }
+        //   return params.toString();
+        // }
       })
       .then((res) => {
         setData(res.data);
@@ -121,22 +132,26 @@ function Scarp({targetUmdSggcd, startYearMonth, endYearMonth}) {
       if(!targetUmdSggcd) {
         return;
       }
-      getData([targetUmdSggcd], startYearMonth, endYearMonth);
-    }, [targetUmdSggcd, startYearMonth, endYearMonth]);
+      getData(targetUmdSggcd, startYearMonth, endYearMonth);
+    }, [targetUmdSggcd, startYearMonth, endYearMonth, 
+      selectedType,
+      rentType,
+      minBuildYear,
+      maxBuildYear,
+      minFloor,
+      maxFloor,
+      minArea,
+      maxArea]);
 
     return (
         <div>
+            <h3>최근 1년간 평균 월세</h3>
+
             <svg className="svg-top" ref={ref} style={{ width: containerWidth, height: containerHeight }}>
                 <g className="x-axis" />
                 <g className="y-axis" />
                 <g className="mybar" />
             </svg><br />
-
-            {/* 시군구코드: <input type="text" value={sggcds} onChange={e => setSggcds(e.target.value)} /><br />
-            시작년월: <input type="number" value={startYearMonth} onChange={e => setStartYearMonth(e.target.value)} /><br />
-            끝년월: <input type="number" value={endYearMonth} onChange={e => setEndYearMonth(e.target.value)} />
-
-            <button onClick={() => getData(sggcds, startYearMonth, endYearMonth)}>업데이트</button> */}
         </div>
     );
 }

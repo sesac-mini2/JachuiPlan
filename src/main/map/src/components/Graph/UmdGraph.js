@@ -8,11 +8,12 @@ import './UmdGraph.css';
 function UmdGraph({ region,
     selectedType,
     rentType,
-    startYear,
-    endYear,
-    selectedFloor,
+    minBuildYear,
+    maxBuildYear,
+    minFloor,
+    maxFloor,
     minArea,
-    maxArea
+    maxArea,
 }) {
     const [data, setData] = useState([{"umdnm": "", "yearMonth": "", "avgMonthlyRent": 0, "avgDeposit": 0, "count": 0}]);
 
@@ -34,8 +35,10 @@ function UmdGraph({ region,
                 sggcd: sggcd,
                 umdnm: extractDong(name),
                 rentType: rentType,
-                minBuildYear: startYear,
-                maxBuildYear: endYear,
+                minBuildYear: minBuildYear,
+                maxBuildYear: maxBuildYear,
+                minFloor: minFloor,
+                maxFloor: maxFloor,
                 minArea: minArea,
                 maxArea: maxArea,
             },
@@ -419,10 +422,12 @@ function UmdGraph({ region,
     }, [region,
         selectedType,
         rentType,
-        startYear,
-        endYear,
+        minBuildYear,
+        maxBuildYear,
+        minFloor,
+        maxFloor,
         minArea,
-        maxArea ]);
+        maxArea]);
 
     return (
         <div>
