@@ -1,3 +1,4 @@
+/// 이재혁, 이화경
 package com.trace.jachuiplan.officeHotel;
 
 import lombok.RequiredArgsConstructor;

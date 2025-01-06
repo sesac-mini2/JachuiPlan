@@ -1,10 +1,10 @@
+/// 이화경
 package com.trace.jachuiplan.reply;
 
 import com.trace.jachuiplan.board.Board;
 import com.trace.jachuiplan.user.Users;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

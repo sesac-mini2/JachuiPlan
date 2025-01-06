@@ -1,3 +1,4 @@
+/// 김정은, 이화경
 package com.trace.jachuiplan.user;
 
 import lombok.Getter;

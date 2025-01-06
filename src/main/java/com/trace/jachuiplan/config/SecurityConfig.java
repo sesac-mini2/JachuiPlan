@@ -1,3 +1,4 @@
+/// 김정은
 package com.trace.jachuiplan.config;
 
 import com.trace.jachuiplan.auth.CustomOAuth2UserService;
@@ -12,9 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class SecurityConfig {

@@ -1,3 +1,4 @@
+/// 이화경
 package com.trace.jachuiplan.board;
 
 import lombok.Getter;

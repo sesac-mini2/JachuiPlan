@@ -1,3 +1,4 @@
+/// 김성현, 김정은
 package com.trace.jachuiplan.likes;
 
 import com.trace.jachuiplan.board.Board;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LikesService {
 
+    /// 김성현
     @Autowired
     private LikesRepository likesRepository;
 
@@ -31,6 +33,7 @@ public class LikesService {
         }
     }
 
+    /// 김정은
     // 좋아요 상태 확인 및 토글
     public String toggleLike(Board board, Users user){
         LikesId likesId = new LikesId(board, user);
@@ -43,12 +46,14 @@ public class LikesService {
         }
     }
 
+    /// 김성현
     // 특정 게시글에 대해 사용자가 좋아요를 눌렀는지 확인
     public boolean isLiked(Board board, Users users) {
         Likes like = likesRepository.findByBoardAndUsers(board, users);
         return like != null;  // 좋아요가 존재하면 true 반환
     }
 
+    /// 김정은
     // 좋아요 수 가져오기
     public long getLikesCount(Board board){
         return likesRepository.countByBoard(board);

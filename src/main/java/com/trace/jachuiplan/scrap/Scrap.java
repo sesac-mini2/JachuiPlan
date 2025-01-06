@@ -1,7 +1,6 @@
+/// 이화경
 package com.trace.jachuiplan.scrap;
 
-import com.trace.jachuiplan.board.Board;
-import com.trace.jachuiplan.likes.LikesId;
 import com.trace.jachuiplan.regioncd.Regioncd;
 import com.trace.jachuiplan.user.Users;
 import jakarta.persistence.*;

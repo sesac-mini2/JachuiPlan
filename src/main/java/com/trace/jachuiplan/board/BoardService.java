@@ -1,10 +1,9 @@
+/// 김성현, 이화경
 package com.trace.jachuiplan.board;
 
 import com.trace.jachuiplan.DataNotFoundException;
 import com.trace.jachuiplan.likes.LikesRepository;
-import com.trace.jachuiplan.reply.Reply;
 import com.trace.jachuiplan.reply.ReplyRepository;
-import com.trace.jachuiplan.user.Users;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/// 김성현
 @RequiredArgsConstructor
 @Service
 public class BoardService {
@@ -83,6 +82,8 @@ public class BoardService {
         return boardRepository.findById(id)
                 .orElse(null); // 게시글이 없으면 null 반환
     }
+
+    /// 이화경
     // 조회수 증가
     @Transactional
     public void addViewCount(Board board) {
@@ -109,6 +110,7 @@ public class BoardService {
         return board.get();
     }
 
+    /// 김정은
     // 게시글 수정
     public void modifyBoard(Long bno, Board board, UserDetails userDetails) {
         Board existingBoard = boardRepository.findById(bno)

@@ -1,3 +1,4 @@
+/// 이재혁, 김성현, 이화경
 package com.trace.jachuiplan.building;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,6 +36,7 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
             @Param("minFloor") Integer minFloor,
             @Param("maxFloor") Integer maxFloor);
 
+    /// 이재혁
     // 각 동별 평균과 거래량을 알려줌
     @Query("SELECT new com.trace.jachuiplan.building.BuildingFilterDTO(o.umdnm, ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM Building o WHERE "
             + "o.dealdate >= TO_DATE(:startYearMonth, 'YYYYMM') "
@@ -64,6 +66,7 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
             @Param("minFloor") Integer minFloor,
             @Param("maxFloor") Integer maxFloor);
 
+    /// 이화경
     // 하나의 동에 대한 월별 평균가격 추이, 거래량
     @Query("SELECT new com.trace.jachuiplan.building.BuildingTransitionDTO(o.umdnm, TO_CHAR(o.dealdate, 'YYYYMM'), ROUND(AVG(o.monthlyRent), 2), ROUND(AVG(o.deposit), 2), COUNT(o.umdnm)) FROM Building o WHERE "
             + "o.dealdate >= ADD_MONTHS(TO_DATE(TO_CHAR(SYSDATE, 'YYYYMM'), 'YYYYMM'), -13) "

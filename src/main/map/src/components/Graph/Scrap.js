@@ -16,7 +16,7 @@ function Scarp({targetUmdSggcd, startYearMonth, endYearMonth,
 
     const ref = useRef();
 
-    const containerWidth = 800;
+    const containerWidth = 650;
     const containerHeight = 500;
 
     const transitionDuration = 500;
